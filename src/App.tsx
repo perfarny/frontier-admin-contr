@@ -109,8 +109,8 @@ function App() {
         <CardContent>
           <Tabs defaultValue="web-apps" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="web-apps">Web apps</TabsTrigger>
-              <TabsTrigger value="office-win32">Office Desktop Apps</TabsTrigger>
+              <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
+              <TabsTrigger value="office-win32" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
             </TabsList>
 
             <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
