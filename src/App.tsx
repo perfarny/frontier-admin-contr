@@ -618,6 +618,13 @@ function App() {
         <span className="text-lg font-semibold text-foreground">Select Version:</span>
         <div className="flex gap-2">
           <Button
+            variant={selectedVersion === 'alternate' ? "default" : "outline"}
+            onClick={() => setSelectedVersion('alternate')}
+            className="border-black cursor-pointer"
+          >
+            No win32 Toggle
+          </Button>
+          <Button
             variant={selectedVersion === 'original' ? "default" : "outline"}
             onClick={() => setSelectedVersion('original')}
             className="border-black cursor-pointer"
@@ -630,13 +637,6 @@ function App() {
             className="border-black cursor-pointer"
           >
             With win32 Toggle - B
-          </Button>
-          <Button
-            variant={selectedVersion === 'alternate' ? "default" : "outline"}
-            onClick={() => setSelectedVersion('alternate')}
-            className="border-black cursor-pointer"
-          >
-            No win32 Toggle
           </Button>
         </div>
       </div>
