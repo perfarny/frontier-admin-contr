@@ -18,6 +18,8 @@ interface FrontierSettings {
   allApps: 'no-access' | 'all-users' | 'specific-groups'
   allAppsGroups: string[]
   enablePerDeviceAccess: boolean
+  perDeviceAccessType: 'all-users' | 'specific-groups'
+  perDeviceGroups: string[]
 }
 
 const defaultSettings: FrontierSettings = {
@@ -27,7 +29,9 @@ const defaultSettings: FrontierSettings = {
   officeGroups: [],
   allApps: 'no-access',
   allAppsGroups: [],
-  enablePerDeviceAccess: true
+  enablePerDeviceAccess: true,
+  perDeviceAccessType: 'all-users',
+  perDeviceGroups: []
 }
 
 function App() {
@@ -35,6 +39,7 @@ function App() {
   const [newWebGroup, setNewWebGroup] = useState('')
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
   const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
+  const [newPerDeviceGroup, setNewPerDeviceGroup] = useState('')
   const [selectedVersion, setSelectedVersion] = useState('alternate')
   const [activeTab, setActiveTab] = useState('apps')
   const [alternateActiveTab, setAlternateActiveTab] = useState('all-apps')
@@ -141,6 +146,33 @@ function App() {
       ...defaultSettings,
       ...current,
       enablePerDeviceAccess: checked
+    }))
+  }
+
+  const handlePerDeviceAccessTypeChange = (value: string) => {
+    setSettings(current => ({
+      ...defaultSettings,
+      ...current,
+      perDeviceAccessType: value as FrontierSettings['perDeviceAccessType']
+    }))
+  }
+
+  const addPerDeviceGroup = () => {
+    if (newPerDeviceGroup.trim()) {
+      setSettings(current => ({
+        ...defaultSettings,
+        ...current,
+        perDeviceGroups: [...(current?.perDeviceGroups || []), newPerDeviceGroup.trim()]
+      }))
+      setNewPerDeviceGroup('')
+    }
+  }
+
+  const removePerDeviceGroup = (index: number) => {
+    setSettings(current => ({
+      ...defaultSettings,
+      ...current,
+      perDeviceGroups: current?.perDeviceGroups?.filter((_, i) => i !== index) || []
     }))
   }
 
@@ -262,6 +294,67 @@ function App() {
                 <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">Enable per device enrollment on Office applications</Label>
               </div>
               <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. This is a per device setting.</div>
+
+              {/* Sub-menu radio buttons */}
+              <div className={`ml-6 mt-4 space-y-3 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
+                <RadioGroup 
+                  value={currentSettings.perDeviceAccessType} 
+                  onValueChange={handlePerDeviceAccessTypeChange}
+                  className="space-y-2"
+                  disabled={!currentSettings.enablePerDeviceAccess}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="all-users" id="orig-per-device-all-users" className="border-black" />
+                    <Label htmlFor="orig-per-device-all-users" className="font-normal">
+                      All users
+                    </Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="specific-groups" id="orig-per-device-specific-groups" className="border-black" />
+                    <Label htmlFor="orig-per-device-specific-groups" className="font-normal">
+                      Specific user groups
+                    </Label>
+                  </div>
+
+                  {currentSettings.perDeviceAccessType === 'specific-groups' && currentSettings.enablePerDeviceAccess && (
+                    <div className="ml-6 space-y-3">
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Enter group name"
+                          value={newPerDeviceGroup}
+                          onChange={(e) => setNewPerDeviceGroup(e.target.value)}
+                          onKeyPress={(e) => handleKeyPress(e, addPerDeviceGroup)}
+                          className="flex-1 border-black"
+                        />
+                        <Button 
+                          onClick={addPerDeviceGroup}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Add
+                        </Button>
+                      </div>
+                      {currentSettings.perDeviceGroups && currentSettings.perDeviceGroups.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {currentSettings.perDeviceGroups.map((group, index) => (
+                            <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                              {group}
+                              <button
+                                onClick={() => removePerDeviceGroup(index)}
+                                className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
+                              >
+                                <X size={12} />
+                              </button>
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </RadioGroup>
+              </div>
             </div>
           </TabsContent>
 
@@ -620,23 +713,17 @@ function App() {
             variant={selectedVersion === 'alternate' ? "default" : "outline"}
             onClick={() => setSelectedVersion('alternate')}
             className="border-black cursor-pointer"
-          >
-            No win32 Toggle
-          </Button>
+          >A. No Toggle</Button>
           <Button
             variant={selectedVersion === 'original' ? "default" : "outline"}
             onClick={() => setSelectedVersion('original')}
             className="border-black cursor-pointer"
-          >
-            With win32 Toggle - A
-          </Button>
+          >B. Win32 Toggle 1</Button>
           <Button
             variant={selectedVersion === 'versionB' ? "default" : "outline"}
             onClick={() => setSelectedVersion('versionB')}
             className="border-black cursor-pointer"
-          >
-            With win32 Toggle - B
-          </Button>
+          >C. Win32 Toggle 2</Button>
         </div>
       </div>
       {/* Render the selected version */}
