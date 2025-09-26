@@ -595,9 +595,9 @@ function App() {
               <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
               <p className="text-sm text-muted-foreground">
                 The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
-              <p className="text-sm text-muted-foreground">
-                The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
               </p>
+            </div>
+          </TabsContent>
         </Tabs>
 
         <div className="flex justify-end gap-2 pt-4 border-t mt-6">
