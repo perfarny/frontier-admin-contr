@@ -487,6 +487,19 @@ function App() {
                 </div>
               )}
             </RadioGroup>
+
+            <div className="mt-6 pt-4 border-t">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="alt-per-device-access"
+                  checked={currentSettings.enablePerDeviceAccess}
+                  onCheckedChange={handlePerDeviceAccessChange}
+                  className="border-black mt-0.5"
+                />
+                <Label htmlFor="alt-per-device-access" className="font-medium cursor-pointer text-base leading-tight">Allow per device enrollment in Office desktop applications</Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users can make different choices across devices.</div>
+            </div>
           </TabsContent>
 
           <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
@@ -716,7 +729,7 @@ function App() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
       {/* Version Selector */}
-      <div className="flex items-center gap-4 p-6 bg-card rounded-lg border-2 border-primary/20 shadow-lg">
+      <div className="flex items-center gap-4 p-6 bg-card rounded-lg border shadow-lg">
         <span className="text-lg font-semibold text-foreground">Select Version:</span>
         <div className="flex gap-2">
           <Button
