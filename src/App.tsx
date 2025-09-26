@@ -199,7 +199,7 @@ function App() {
   }
 
   const OriginalVersion = () => (
-    <Card className="max-w-2xl w-full h-[850px]">
+    <Card className="max-w-2xl w-full h-[950px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         
@@ -404,7 +404,7 @@ function App() {
   )
 
   const AlternateVersion = () => (
-    <Card className="max-w-2xl w-full h-[680px]">
+    <Card className="max-w-2xl w-full h-[780px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         
@@ -530,7 +530,7 @@ function App() {
   )
 
   const VersionBComponent = () => (
-    <Card className="max-w-2xl w-full h-[680px]">
+    <Card className="max-w-2xl w-full h-[780px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         
