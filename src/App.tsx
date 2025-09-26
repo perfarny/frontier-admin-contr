@@ -17,6 +17,7 @@ interface FrontierSettings {
   officeGroups: string[]
   allApps: 'no-access' | 'all-users' | 'specific-groups'
   allAppsGroups: string[]
+  enablePerDeviceAccess: boolean
 }
 
 const defaultSettings: FrontierSettings = {
@@ -25,7 +26,8 @@ const defaultSettings: FrontierSettings = {
   officeWin32: 'all-users',
   officeGroups: [],
   allApps: 'no-access',
-  allAppsGroups: []
+  allAppsGroups: [],
+  enablePerDeviceAccess: false
 }
 
 function App() {
@@ -33,9 +35,10 @@ function App() {
   const [newWebGroup, setNewWebGroup] = useState('')
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
   const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
-  const [isAlternateVersion, setIsAlternateVersion] = useState(false)
+  const [selectedVersion, setSelectedVersion] = useState('original')
   const [activeTab, setActiveTab] = useState('web-apps')
   const [alternateActiveTab, setAlternateActiveTab] = useState('all-apps')
+  const [versionBActiveTab, setVersionBActiveTab] = useState('apps')
 
   // Ensure proper defaults are always applied
   const currentSettings = {
@@ -130,6 +133,14 @@ function App() {
       ...defaultSettings,
       ...current,
       allApps: value as FrontierSettings['allApps']
+    }))
+  }
+
+  const handlePerDeviceAccessChange = (checked: boolean) => {
+    setSettings(current => ({
+      ...defaultSettings,
+      ...current,
+      enablePerDeviceAccess: checked
     }))
   }
 
@@ -462,6 +473,143 @@ function App() {
     </Card>
   )
 
+  const VersionBComponent = () => (
+    <Card className="max-w-2xl w-full">
+      <CardHeader className="space-y-3">
+        <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
+        <div className="text-sm text-muted-foreground space-y-2">
+          <p>
+            The Frontier program gives your organization early, hands-on access to experimental 
+            and preview features from Microsoft. All Frontier features and agents are previews and 
+            might not be released to general availability. Configure access settings below for where 
+            users can experience Frontier.
+          </p>
+          <p>To get the most out of the Frontier program, we recommend turning on preview features in web apps, desktop apps, and agents.</p>
+        </div>
+      </CardHeader>
+
+      <CardContent>
+        <Tabs value={versionBActiveTab} onValueChange={setVersionBActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
+            <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="apps" className="space-y-4 mt-6 min-h-[320px]">
+            <div>
+              <h3 className="font-medium mb-2">Apps</h3>
+              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
+            </div>
+
+            <RadioGroup 
+              value={currentSettings.allApps} 
+              onValueChange={handleAllAppsAccessChange}
+              className="space-y-3"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="no-access" id="vb-no-access" className="border-black" />
+                <Label htmlFor="vb-no-access" className="font-normal">
+                  No access
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                Users will not have access to Frontier features in web apps.
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="all-users" id="vb-all-users" className="border-black" />
+                <Label htmlFor="vb-all-users" className="font-normal">
+                  All users
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                All users in your organization will automatically receive Frontier features in web apps.
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="specific-groups" id="vb-specific-groups" className="border-black" />
+                <Label htmlFor="vb-specific-groups" className="font-normal">
+                  Specific user groups
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                Only specified user groups will automatically receive Frontier features in web apps.
+              </div>
+
+              {currentSettings.allApps === 'specific-groups' && (
+                <div className="ml-6 space-y-3">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter group name"
+                      value={newAllAppsGroup}
+                      onChange={(e) => setNewAllAppsGroup(e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, addAllAppsGroup)}
+                      className="flex-1 border-black"
+                    />
+                    <Button 
+                      onClick={addAllAppsGroup}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {currentSettings.allAppsGroups && currentSettings.allAppsGroups.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {currentSettings.allAppsGroups.map((group, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                          {group}
+                          <button
+                            onClick={() => removeAllAppsGroup(index)}
+                            className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
+                          >
+                            <X size={12} />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </RadioGroup>
+
+            <div className="mt-6 pt-4 border-t">
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="per-device-access"
+                  checked={currentSettings.enablePerDeviceAccess}
+                  onCheckedChange={handlePerDeviceAccessChange}
+                />
+                <Label htmlFor="per-device-access" className="font-normal">
+                  Enable per device access on Office applications
+                </Label>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
+            <div>
+              <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
+              <p className="text-sm text-muted-foreground">
+                The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+              </p>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <div className="flex justify-end gap-2 pt-4 border-t mt-6">
+          <Button variant="outline" onClick={resetToDefaults}>
+            Cancel
+          </Button>
+          <Button>
+            Save
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
       {/* Version Selector */}
@@ -469,23 +617,32 @@ function App() {
         <span className="text-lg font-semibold text-foreground">Select Version:</span>
         <div className="flex gap-2">
           <Button
-            variant={!isAlternateVersion ? "default" : "outline"}
-            onClick={() => setIsAlternateVersion(false)}
+            variant={selectedVersion === 'original' ? "default" : "outline"}
+            onClick={() => setSelectedVersion('original')}
             className="border-black cursor-pointer"
           >
-            With win32 Toggle
+            With win32 Toggle - A
           </Button>
           <Button
-            variant={isAlternateVersion ? "default" : "outline"}
-            onClick={() => setIsAlternateVersion(true)}
+            variant={selectedVersion === 'alternate' ? "default" : "outline"}
+            onClick={() => setSelectedVersion('alternate')}
             className="border-black cursor-pointer"
           >
             No win32 Toggle
           </Button>
+          <Button
+            variant={selectedVersion === 'versionB' ? "default" : "outline"}
+            onClick={() => setSelectedVersion('versionB')}
+            className="border-black cursor-pointer"
+          >
+            With win32 Toggle - B
+          </Button>
         </div>
       </div>
       {/* Render the selected version */}
-      {isAlternateVersion ? <AlternateVersion /> : <OriginalVersion />}
+      {selectedVersion === 'alternate' ? <AlternateVersion /> : 
+       selectedVersion === 'versionB' ? <VersionBComponent /> : 
+       <OriginalVersion />}
     </div>
   );
 }
