@@ -152,7 +152,7 @@ function App() {
                     No access
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">
                   Users will not have access to Frontier features in web apps.
                 </div>
 
@@ -162,7 +162,7 @@ function App() {
                     All groups of users
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">
                   All users in your organization will automatically receive Frontier features in web apps.
                 </div>
 
@@ -172,7 +172,7 @@ function App() {
                     Specific user groups
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">
                   Only specified user groups will automatically receive Frontier features in web apps.
                 </div>
 
@@ -235,7 +235,7 @@ function App() {
                     No access
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">
                   Users will not see Frontier toggle options in their Office win32 applications.
                 </div>
 
@@ -245,7 +245,7 @@ function App() {
                     All groups of users
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">
                   All users will see a Frontier toggle in their Office win32 apps (off by default). 
                   Users can choose to turn it on to receive Frontier features.
                 </div>
@@ -256,7 +256,7 @@ function App() {
                     Specific user groups
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">
                   Only specified user groups will see a Frontier toggle in their Office win32 apps (off by default). 
                   These users can choose to turn it on to receive Frontier features.
                 </div>
