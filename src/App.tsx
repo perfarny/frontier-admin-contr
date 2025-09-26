@@ -35,7 +35,7 @@ function App() {
   const [newWebGroup, setNewWebGroup] = useState('')
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
   const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
-  const [selectedVersion, setSelectedVersion] = useState('original')
+  const [selectedVersion, setSelectedVersion] = useState('alternate')
   const [activeTab, setActiveTab] = useState('web-apps')
   const [alternateActiveTab, setAlternateActiveTab] = useState('all-apps')
   const [versionBActiveTab, setVersionBActiveTab] = useState('apps')
