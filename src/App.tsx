@@ -8,7 +8,8 @@ import { Label } from './components/ui/label'
 import { Input } from './components/ui/input'
 import { Badge } from './components/ui/badge'
 import { Checkbox } from './components/ui/checkbox'
-import { X } from '@phosphor-icons/react'
+import { Alert, AlertDescription } from './components/ui/alert'
+import { X, Warning } from '@phosphor-icons/react'
 
 interface FrontierSettings {
   webApps: 'no-access' | 'all-users' | 'specific-groups'
@@ -36,6 +37,7 @@ const defaultSettings: FrontierSettings = {
 
 function App() {
   const [settings, setSettings] = useKV<FrontierSettings>('frontier-settings', defaultSettings)
+  const [publishedSettings, setPublishedSettings] = useKV<FrontierSettings>('published-frontier-settings', defaultSettings)
   const [newWebGroup, setNewWebGroup] = useState('')
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
   const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
@@ -51,8 +53,20 @@ function App() {
     ...settings
   }
 
+  const currentPublishedSettings = {
+    ...defaultSettings,
+    ...publishedSettings
+  }
+
+  // Check if there are unpublished changes
+  const hasUnpublishedChanges = JSON.stringify(currentSettings) !== JSON.stringify(currentPublishedSettings)
+
   const resetToDefaults = () => {
     setSettings(defaultSettings)
+  }
+
+  const publishChanges = () => {
+    setPublishedSettings(currentSettings)
   }
 
   // Initialize settings only if empty
@@ -188,6 +202,16 @@ function App() {
     <Card className="max-w-2xl w-full h-[850px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
+        
+        {hasUnpublishedChanges && (
+          <Alert className="border-orange-200 bg-orange-50">
+            <Warning className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-800">
+              You have unpublished changes. Click "Save" to publish your configuration.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <div className="text-sm text-muted-foreground space-y-2">
           <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
           <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
@@ -371,7 +395,7 @@ function App() {
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
-          <Button>
+          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>
             Save
           </Button>
         </div>
@@ -383,9 +407,18 @@ function App() {
     <Card className="max-w-2xl w-full h-[680px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
+        
+        {hasUnpublishedChanges && (
+          <Alert className="border-orange-200 bg-orange-50">
+            <Warning className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-800">
+              You have unpublished changes. Click "Save" to publish your configuration.
+            </AlertDescription>
+          </Alert>
+        )}
         <div className="text-sm text-muted-foreground space-y-2">
-          <p>The Frontier program gives your organization early, hands-on access to experimental and preview features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p>To get the most out of the Frontier program, we recommend turning on preview features in web apps, desktop apps, and agents.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
         </div>
       </CardHeader>
 
@@ -488,7 +521,7 @@ function App() {
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
-          <Button>
+          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>
             Save
           </Button>
         </div>
@@ -500,6 +533,15 @@ function App() {
     <Card className="max-w-2xl w-full h-[680px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
+        
+        {hasUnpublishedChanges && (
+          <Alert className="border-orange-200 bg-orange-50">
+            <Warning className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-800">
+              You have unpublished changes. Click "Save" to publish your configuration.
+            </AlertDescription>
+          </Alert>
+        )}
         <div className="text-sm text-muted-foreground space-y-2">
           <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
           <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
@@ -684,7 +726,7 @@ function App() {
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
-          <Button>
+          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>
             Save
           </Button>
         </div>
