@@ -159,7 +159,7 @@ function App() {
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="all-users" id="web-all-users" className="border-black" />
                   <Label htmlFor="web-all-users" className="font-normal">
-                    All groups of users
+                    All users
                   </Label>
                 </div>
                 <div className="text-xs text-muted-foreground ml-6 -mt-3">
@@ -242,7 +242,7 @@ function App() {
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="all-users" id="office-all-users" className="border-black" />
                   <Label htmlFor="office-all-users" className="font-normal">
-                    All groups of users
+                    All users
                   </Label>
                 </div>
                 <div className="text-xs text-muted-foreground ml-6 -mt-3">
