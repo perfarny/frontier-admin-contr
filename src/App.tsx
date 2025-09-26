@@ -586,9 +586,7 @@ function App() {
                   Enable per device access on Office applications
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 mt-1">
-                By default, all users can enable Frontier features in their Office Desktop applications. This is a per device setting.
-              </div>
+              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can enable Frontier features in their Office Desktop applications. This is a per device setting.</div>
             </div>
           </TabsContent>
 
@@ -597,9 +595,9 @@ function App() {
               <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
               <p className="text-sm text-muted-foreground">
                 The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+              <p className="text-sm text-muted-foreground">
+                The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
               </p>
-            </div>
-          </TabsContent>
         </Tabs>
 
         <div className="flex justify-end gap-2 pt-4 border-t mt-6">
