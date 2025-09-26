@@ -55,19 +55,17 @@ function App() {
     setSettings(defaultSettings)
   }
 
-  // Initialize settings with defaults only if no settings exist
+  // Always ensure enablePerDeviceAccess is true by default
   useEffect(() => {
     if (!settings || Object.keys(settings).length === 0) {
       setSettings(defaultSettings)
     } else {
-      // Ensure enablePerDeviceAccess is always true by default
-      if (settings.enablePerDeviceAccess === undefined || settings.enablePerDeviceAccess === false) {
-        setSettings(current => ({
-          ...defaultSettings,
-          ...current,
-          enablePerDeviceAccess: true
-        }))
-      }
+      // Force enablePerDeviceAccess to always be true on every load
+      setSettings(current => ({
+        ...defaultSettings,
+        ...current,
+        enablePerDeviceAccess: true
+      }))
     }
   }, [])
 
