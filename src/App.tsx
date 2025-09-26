@@ -203,15 +203,6 @@ function App() {
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         
-        {hasUnpublishedChanges && (
-          <Alert className="border-orange-200 bg-orange-50">
-            <Warning className="h-4 w-4 text-orange-600" />
-            <AlertDescription className="text-orange-800">
-              You have unpublished changes. Click "Save" to publish your configuration.
-            </AlertDescription>
-          </Alert>
-        )}
-        
         <div className="text-sm text-muted-foreground space-y-2">
           <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
           <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
@@ -408,14 +399,6 @@ function App() {
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         
-        {hasUnpublishedChanges && (
-          <Alert className="border-orange-200 bg-orange-50">
-            <Warning className="h-4 w-4 text-orange-600" />
-            <AlertDescription className="text-orange-800">
-              You have unpublished changes. Click "Save" to publish your configuration.
-            </AlertDescription>
-          </Alert>
-        )}
         <div className="text-sm text-muted-foreground space-y-2">
           <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
           <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
@@ -534,14 +517,6 @@ function App() {
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         
-        {hasUnpublishedChanges && (
-          <Alert className="border-orange-200 bg-orange-50">
-            <Warning className="h-4 w-4 text-orange-600" />
-            <AlertDescription className="text-orange-800">
-              You have unpublished changes. Click "Save" to publish your configuration.
-            </AlertDescription>
-          </Alert>
-        )}
         <div className="text-sm text-muted-foreground space-y-2">
           <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
           <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
