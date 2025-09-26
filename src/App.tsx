@@ -575,12 +575,12 @@ function App() {
             </RadioGroup>
 
             <div className="mt-6 pt-4 border-t">
-              <div className="flex items-center space-x-2 p-3 border-2 border-black rounded-md bg-muted/20">
+              <div className="flex items-center space-x-2">
                 <Switch
                   id="per-device-access"
                   checked={currentSettings.enablePerDeviceAccess}
                   onCheckedChange={handlePerDeviceAccessChange}
-                  className="data-[state=checked]:bg-primary"
+                  className="data-[state=checked]:bg-primary border-2 border-black cursor-pointer"
                 />
                 <Label htmlFor="per-device-access" className="font-medium cursor-pointer">
                   Enable per device access on Office applications
