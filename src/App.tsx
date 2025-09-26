@@ -147,7 +147,7 @@ function App() {
                 className="space-y-3"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="no-access" id="web-no-access" />
+                  <RadioGroupItem value="no-access" id="web-no-access" className="border-black" />
                   <Label htmlFor="web-no-access" className="font-normal">
                     No access
                   </Label>
@@ -157,7 +157,7 @@ function App() {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="all-users" id="web-all-users" />
+                  <RadioGroupItem value="all-users" id="web-all-users" className="border-black" />
                   <Label htmlFor="web-all-users" className="font-normal">
                     All groups of users
                   </Label>
@@ -167,7 +167,7 @@ function App() {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="specific-groups" id="web-specific-groups" />
+                  <RadioGroupItem value="specific-groups" id="web-specific-groups" className="border-black" />
                   <Label htmlFor="web-specific-groups" className="font-normal">
                     Specific user groups
                   </Label>
@@ -184,7 +184,7 @@ function App() {
                         value={newWebGroup}
                         onChange={(e) => setNewWebGroup(e.target.value)}
                         onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
-                        className="flex-1 border-2 border-black"
+                        className="flex-1 border-black"
                       />
                       <Button 
                         onClick={addWebGroup}
@@ -230,7 +230,7 @@ function App() {
                 className="space-y-3"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="no-access" id="office-no-access" />
+                  <RadioGroupItem value="no-access" id="office-no-access" className="border-black" />
                   <Label htmlFor="office-no-access" className="font-normal">
                     No access
                   </Label>
@@ -240,7 +240,7 @@ function App() {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="all-users" id="office-all-users" />
+                  <RadioGroupItem value="all-users" id="office-all-users" className="border-black" />
                   <Label htmlFor="office-all-users" className="font-normal">
                     All groups of users
                   </Label>
@@ -251,7 +251,7 @@ function App() {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="specific-groups" id="office-specific-groups" />
+                  <RadioGroupItem value="specific-groups" id="office-specific-groups" className="border-black" />
                   <Label htmlFor="office-specific-groups" className="font-normal">
                     Specific user groups
                   </Label>
@@ -269,7 +269,7 @@ function App() {
                         value={newOfficeGroup}
                         onChange={(e) => setNewOfficeGroup(e.target.value)}
                         onKeyPress={(e) => handleKeyPress(e, addOfficeGroup)}
-                        className="flex-1 border-2 border-black"
+                        className="flex-1 border-black"
                       />
                       <Button 
                         onClick={addOfficeGroup}
