@@ -116,10 +116,7 @@ function App() {
             <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
               <div>
                 <h3 className="font-medium mb-2">Enable Frontier features in web apps</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Select which groups of users get access to the Frontier program for the Microsoft 365 
-                  Copilot app and web apps for Word, PowerPoint, Excel.
-                </p>
+                <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in web apps.</p>
               </div>
 
               <RadioGroup 
@@ -198,11 +195,8 @@ function App() {
 
             <TabsContent value="office-win32" className="space-y-4 mt-6 min-h-[320px]">
               <div>
-                <h3 className="font-medium mb-2">Allow users to access Frontier features in Office win32</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Select which groups of users get access to toggle Frontier features in their Office win32 
-                  desktop applications.
-                </p>
+                <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office Desktop applications</h3>
+                <p className="text-sm text-muted-foreground mb-4">Select which users can enable Frontier features in their Office desktop applications. Users can make different choices across devices. </p>
               </div>
 
               <RadioGroup 
@@ -216,9 +210,7 @@ function App() {
                     No access
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-3">
-                  Users will not see Frontier toggle options in their Office win32 applications.
-                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">Users cannot choose to enable Frontier features.</div>
 
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="all-users" id="office-all-users" className="border-black" />
@@ -226,10 +218,7 @@ function App() {
                     All users
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-3">
-                  All users will see a Frontier toggle in their Office win32 apps (off by default). 
-                  Users can choose to turn it on to receive Frontier features.
-                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">All users can choose to enable Frontier features.</div>
 
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="specific-groups" id="office-specific-groups" className="border-black" />
@@ -237,10 +226,7 @@ function App() {
                     Specific user groups
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-3">
-                  Only specified user groups will see a Frontier toggle in their Office win32 apps (off by default). 
-                  These users can choose to turn it on to receive Frontier features.
-                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-3">Only specified user can choose to enable Frontier features.</div>
 
                 {currentSettings.officeWin32 === 'specific-groups' && (
                   <div className="ml-6 space-y-3">
