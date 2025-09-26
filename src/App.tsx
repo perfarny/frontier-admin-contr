@@ -288,7 +288,7 @@ function App() {
               )}
             </RadioGroup>
 
-            <div className="mt-6 pt-4 border-t border-2 border-primary/30 rounded-lg p-4 bg-primary/5">
+            <div className="mt-6 pt-4 border-t">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="orig-per-device-access"
