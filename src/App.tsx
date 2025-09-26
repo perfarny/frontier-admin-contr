@@ -59,6 +59,15 @@ function App() {
   useEffect(() => {
     if (!settings || Object.keys(settings).length === 0) {
       setSettings(defaultSettings)
+    } else {
+      // Ensure enablePerDeviceAccess is always true by default
+      if (settings.enablePerDeviceAccess === undefined || settings.enablePerDeviceAccess === false) {
+        setSettings(current => ({
+          ...defaultSettings,
+          ...current,
+          enablePerDeviceAccess: true
+        }))
+      }
     }
   }, [])
 
@@ -621,7 +630,7 @@ function App() {
           <TabsContent value="office-win32" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office Desktop applications</h3>
-              <p className="text-sm text-muted-foreground mb-4">Select which users can enable Frontier features in their Office desktop applications. Users can make different choices across devices. </p>
+              <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users can make different choices across devices.</p>
             </div>
 
             <RadioGroup 
