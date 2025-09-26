@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Button } from './components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './components/ui/dialog'
+import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
 import { RadioGroup, RadioGroupItem } from './components/ui/radio-group'
 import { Label } from './components/ui/label'
@@ -25,7 +25,6 @@ const defaultSettings: FrontierSettings = {
 
 function App() {
   const [settings, setSettings] = useKV<FrontierSettings>('frontier-settings', defaultSettings)
-  const [isOpen, setIsOpen] = useState(false)
   const [newWebGroup, setNewWebGroup] = useState('')
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
 
@@ -93,39 +92,24 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button className="bg-primary hover:bg-primary/90">
-            Open Frontier Admin Control
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="space-y-3">
-            <div className="flex items-center justify-between">
-              <DialogTitle className="text-xl font-semibold">Turn on Frontier features</DialogTitle>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setIsOpen(false)}
-                className="h-6 w-6 p-0"
-              >
-                <X size={16} />
-              </Button>
-            </div>
-            <div className="text-sm text-muted-foreground space-y-2">
-              <p>
-                The Frontier program gives your organization early, hands-on access to experimental 
-                and preview features from Microsoft. All Frontier features and agents are previews and 
-                might not be released to general availability. Configure access settings below for where 
-                users can experience Frontier.
-              </p>
-              <p>
-                To get the most out of the Frontier program, we recommend turning on preview 
-                features in web apps, desktop apps, and agents.
-              </p>
-            </div>
-          </DialogHeader>
+      <Card className="max-w-2xl w-full">
+        <CardHeader className="space-y-3">
+          <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
+          <div className="text-sm text-muted-foreground space-y-2">
+            <p>
+              The Frontier program gives your organization early, hands-on access to experimental 
+              and preview features from Microsoft. All Frontier features and agents are previews and 
+              might not be released to general availability. Configure access settings below for where 
+              users can experience Frontier.
+            </p>
+            <p>
+              To get the most out of the Frontier program, we recommend turning on preview 
+              features in web apps, desktop apps, and agents.
+            </p>
+          </div>
+        </CardHeader>
 
+        <CardContent>
           <Tabs defaultValue="web-apps" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="web-apps">Web apps</TabsTrigger>
@@ -301,16 +285,16 @@ function App() {
             </TabsContent>
           </Tabs>
 
-          <div className="flex justify-end gap-2 pt-4 border-t">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <div className="flex justify-end gap-2 pt-4 border-t mt-6">
+            <Button variant="outline">
               Cancel
             </Button>
-            <Button onClick={() => setIsOpen(false)}>
+            <Button>
               Save
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </CardContent>
+      </Card>
     </div>
   )
 }
