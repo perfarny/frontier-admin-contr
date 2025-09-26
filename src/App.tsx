@@ -102,10 +102,7 @@ function App() {
               might not be released to general availability. Configure access settings below for where 
               users can experience Frontier.
             </p>
-            <p>
-              To get the most out of the Frontier program, we recommend turning on preview 
-              features in web apps, desktop apps, and agents.
-            </p>
+            <p>To get the most out of the Frontier program, we recommend turning on preview features in web apps, desktop apps, and agents.</p>
           </div>
         </CardHeader>
 
@@ -113,12 +110,12 @@ function App() {
           <Tabs defaultValue="web-apps" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="web-apps">Web apps</TabsTrigger>
-              <TabsTrigger value="office-win32">Desktop and mobile apps</TabsTrigger>
+              <TabsTrigger value="office-win32">OfficeDesktop</TabsTrigger>
             </TabsList>
 
             <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
               <div>
-                <h3 className="font-medium mb-2">Allow users to access Frontier features in the web apps</h3>
+                <h3 className="font-medium mb-2">Enable Frontier features in web apps</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Select which groups of users get access to the Frontier program for the Microsoft 365 
                   Copilot app and web apps for Word, PowerPoint, Excel.
@@ -296,7 +293,7 @@ function App() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 export default App
