@@ -132,7 +132,7 @@ function App() {
                   No access
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
                 Users will not have access to Frontier features in web apps.
               </div>
 
@@ -142,7 +142,7 @@ function App() {
                   All users
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
                 All users in your organization will automatically receive Frontier features in web apps.
               </div>
 
@@ -152,7 +152,7 @@ function App() {
                   Specific user groups
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
                 Only specified user groups will automatically receive Frontier features in web apps.
               </div>
 
@@ -212,7 +212,7 @@ function App() {
                   No access
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">Users cannot choose to enable Frontier features.</div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">Users cannot choose to enable Frontier features.</div>
 
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="all-users" id="office-all-users" className="border-black" />
@@ -220,7 +220,7 @@ function App() {
                   All users
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">All users can choose to enable Frontier features.</div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">All users can choose to enable Frontier features.</div>
 
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="specific-groups" id="office-specific-groups" className="border-black" />
@@ -228,7 +228,7 @@ function App() {
                   Specific user groups
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">Only specified user can choose to enable Frontier features.</div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">Only specified user can choose to enable Frontier features.</div>
 
               {currentSettings.officeWin32 === 'specific-groups' && (
                 <div className="ml-6 space-y-3">
@@ -330,7 +330,7 @@ function App() {
                   No access
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
                 Users will not have access to Frontier features in web apps.
               </div>
 
@@ -340,7 +340,7 @@ function App() {
                   All users
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
                 All users in your organization will automatically receive Frontier features in web apps.
               </div>
 
@@ -350,7 +350,7 @@ function App() {
                   Specific user groups
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">
                 Only specified user groups will automatically receive Frontier features in web apps.
               </div>
 
