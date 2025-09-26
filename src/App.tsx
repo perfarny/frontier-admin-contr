@@ -27,7 +27,7 @@ const defaultSettings: FrontierSettings = {
   officeGroups: [],
   allApps: 'no-access',
   allAppsGroups: [],
-  enablePerDeviceAccess: false
+  enablePerDeviceAccess: true
 }
 
 function App() {
@@ -259,9 +259,7 @@ function App() {
                   onCheckedChange={handlePerDeviceAccessChange}
                   className="border-black"
                 />
-                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">
-                  Enable per device access on Office applications
-                </Label>
+                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">Enable per device enrollment on Office applications</Label>
               </div>
               <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. This is a per device setting.</div>
             </div>
