@@ -293,9 +293,9 @@ function App() {
                   onCheckedChange={handlePerDeviceAccessChange}
                   className="border-black"
                 />
-                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">Enable per device enrollment on Office applications</Label>
+                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">Allow per device enrollment in Office applications</Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. This is a per device setting.</div>
+              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. </div>
 
               {/* Sub-menu radio buttons */}
               <div className={`ml-6 mt-4 space-y-3 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -717,15 +717,15 @@ function App() {
             className="border-black cursor-pointer"
           >A. No Toggle</Button>
           <Button
-            variant={selectedVersion === 'original' ? "default" : "outline"}
-            onClick={() => setSelectedVersion('original')}
-            className="border-black cursor-pointer"
-          >B. Win32 Toggle 1</Button>
-          <Button
             variant={selectedVersion === 'versionB' ? "default" : "outline"}
             onClick={() => setSelectedVersion('versionB')}
             className="border-black cursor-pointer"
           >C. Win32 Toggle 2</Button>
+          <Button
+            variant={selectedVersion === 'original' ? "default" : "outline"}
+            onClick={() => setSelectedVersion('original')}
+            className="border-black cursor-pointer"
+          >B. Win32 Toggle 1</Button>
         </div>
       </div>
       {/* Render the selected version */}
