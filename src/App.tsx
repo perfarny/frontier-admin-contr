@@ -580,7 +580,7 @@ function App() {
                   id="per-device-access"
                   checked={currentSettings.enablePerDeviceAccess}
                   onCheckedChange={handlePerDeviceAccessChange}
-                  className="data-[state=checked]:bg-primary border-2 border-black cursor-pointer"
+                  className="data-[state=checked]:bg-primary border-2 cursor-pointer border-red-600"
                 />
                 <Label htmlFor="per-device-access" className="font-medium cursor-pointer">
                   Enable per device access on Office applications
