@@ -295,7 +295,7 @@ function App() {
                 />
                 <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">Allow per device enrollment in Office applications</Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. </div>
+              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. Users can make different choices across devices.</div>
 
               {/* Sub-menu radio buttons */}
               <div className={`ml-6 mt-4 space-y-3 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -720,12 +720,12 @@ function App() {
             variant={selectedVersion === 'versionB' ? "default" : "outline"}
             onClick={() => setSelectedVersion('versionB')}
             className="border-black cursor-pointer"
-          >C. Win32 Toggle 2</Button>
+          >B. Win32 Toggle v1</Button>
           <Button
             variant={selectedVersion === 'original' ? "default" : "outline"}
             onClick={() => setSelectedVersion('original')}
             className="border-black cursor-pointer"
-          >B. Win32 Toggle 1</Button>
+          >C. Win32 Toggle v2</Button>
         </div>
       </div>
       {/* Render the selected version */}
