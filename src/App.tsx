@@ -15,19 +15,24 @@ interface FrontierSettings {
   webGroups: string[]
   officeWin32: 'no-access' | 'all-users' | 'specific-groups'
   officeGroups: string[]
+  allApps: 'no-access' | 'all-users' | 'specific-groups'
+  allAppsGroups: string[]
 }
 
 const defaultSettings: FrontierSettings = {
   webApps: 'no-access',
   webGroups: [],
   officeWin32: 'all-users',
-  officeGroups: []
+  officeGroups: [],
+  allApps: 'no-access',
+  allAppsGroups: []
 }
 
 function App() {
   const [settings, setSettings] = useKV<FrontierSettings>('frontier-settings', defaultSettings)
   const [newWebGroup, setNewWebGroup] = useState('')
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
+  const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
   const [isAlternateVersion, setIsAlternateVersion] = useState(false)
 
   const currentSettings = settings || defaultSettings
@@ -83,6 +88,33 @@ function App() {
       ...defaultSettings,
       ...current,
       officeWin32: value as FrontierSettings['officeWin32']
+    }))
+  }
+
+  const addAllAppsGroup = () => {
+    if (newAllAppsGroup.trim()) {
+      setSettings(current => ({
+        ...defaultSettings,
+        ...current,
+        allAppsGroups: [...(current?.allAppsGroups || []), newAllAppsGroup.trim()]
+      }))
+      setNewAllAppsGroup('')
+    }
+  }
+
+  const removeAllAppsGroup = (index: number) => {
+    setSettings(current => ({
+      ...defaultSettings,
+      ...current,
+      allAppsGroups: current?.allAppsGroups?.filter((_, i) => i !== index) || []
+    }))
+  }
+
+  const handleAllAppsAccessChange = (value: string) => {
+    setSettings(current => ({
+      ...defaultSettings,
+      ...current,
+      allApps: value as FrontierSettings['allApps']
     }))
   }
 
@@ -320,8 +352,8 @@ function App() {
             </div>
 
             <RadioGroup 
-              value={currentSettings.webApps} 
-              onValueChange={handleWebAccessChange}
+              value={currentSettings.allApps} 
+              onValueChange={handleAllAppsAccessChange}
               className="space-y-3"
             >
               <div className="flex items-center space-x-2">
@@ -354,32 +386,32 @@ function App() {
                 Only specified user groups will automatically receive Frontier features in web apps.
               </div>
 
-              {currentSettings.webApps === 'specific-groups' && (
+              {currentSettings.allApps === 'specific-groups' && (
                 <div className="ml-6 space-y-3">
                   <div className="flex gap-2">
                     <Input
                       placeholder="Enter group name"
-                      value={newWebGroup}
-                      onChange={(e) => setNewWebGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
+                      value={newAllAppsGroup}
+                      onChange={(e) => setNewAllAppsGroup(e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, addAllAppsGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
-                      onClick={addWebGroup}
+                      onClick={addAllAppsGroup}
                       variant="outline"
                       size="sm"
                     >
                       Add
                     </Button>
                   </div>
-                  {currentSettings.webGroups && currentSettings.webGroups.length > 0 && (
+                  {currentSettings.allAppsGroups && currentSettings.allAppsGroups.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {currentSettings.webGroups.map((group, index) => (
+                      {currentSettings.allAppsGroups.map((group, index) => (
                         <Badge key={index} variant="secondary" className="flex items-center gap-1">
                           <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
                           {group}
                           <button
-                            onClick={() => removeWebGroup(index)}
+                            onClick={() => removeAllAppsGroup(index)}
                             className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
                           >
                             <X size={12} />
