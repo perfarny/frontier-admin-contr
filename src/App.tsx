@@ -132,7 +132,7 @@ function App() {
               <TabsTrigger value="office-win32">Desktop and mobile apps</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[400px]">
+            <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
               <div>
                 <h3 className="font-medium mb-2">Allow users to access Frontier features in the web apps</h3>
                 <p className="text-sm text-muted-foreground mb-4">
