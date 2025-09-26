@@ -47,11 +47,9 @@ function App() {
     setSettings(defaultSettings)
   }
 
-  // Ensure defaults are properly set on initial load
+  // Force proper defaults on every app load
   useEffect(() => {
-    if (!settings) {
-      setSettings(defaultSettings)
-    }
+    setSettings(defaultSettings)
   }, [])
 
   const addWebGroup = () => {
