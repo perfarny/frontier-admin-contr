@@ -468,20 +468,15 @@ function App() {
       <div className="flex items-center gap-4 p-4 bg-card rounded-lg border">
         <span className="text-sm font-medium">Control Version:</span>
         <div className="flex items-center gap-2">
-          <Label htmlFor="version-switch" className="text-sm">
-            Original
-          </Label>
+          <Label htmlFor="version-switch" className="text-sm">Original</Label>
           <Switch
             id="version-switch"
             checked={isAlternateVersion}
             onCheckedChange={setIsAlternateVersion}
           />
-          <Label htmlFor="version-switch" className="text-sm">
-            Alternate
-          </Label>
+          <Label htmlFor="version-switch" className="text-sm">Alternate</Label>
         </div>
       </div>
-
       {/* Render the selected version */}
       {isAlternateVersion ? <AlternateVersion /> : <OriginalVersion />}
     </div>
