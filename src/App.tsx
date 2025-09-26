@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from './components/ui/radio-group'
 import { Label } from './components/ui/label'
 import { Input } from './components/ui/input'
 import { Badge } from './components/ui/badge'
-import { Switch } from './components/ui/switch'
+import { Checkbox } from './components/ui/checkbox'
 import { X } from '@phosphor-icons/react'
 
 interface FrontierSettings {
@@ -576,11 +576,11 @@ function App() {
 
             <div className="mt-6 pt-4 border-t">
               <div className="flex items-center space-x-2">
-                <Switch
+                <Checkbox
                   id="per-device-access"
                   checked={currentSettings.enablePerDeviceAccess}
                   onCheckedChange={handlePerDeviceAccessChange}
-                  className="data-[state=checked]:bg-primary cursor-pointer"
+                  className="border-black"
                 />
                 <Label htmlFor="per-device-access" className="font-medium cursor-pointer">
                   Enable per device access on Office applications
