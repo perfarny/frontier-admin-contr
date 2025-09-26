@@ -187,7 +187,7 @@ function App() {
   }
 
   const OriginalVersion = () => (
-    <Card className="max-w-2xl w-full h-[750px]">
+    <Card className="max-w-2xl w-full h-[850px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -201,8 +201,9 @@ function App() {
         </div>
       </CardHeader>
 
-      <CardContent className="flex flex-col h-full">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
+      <CardContent className="flex flex-col flex-1">
+        <div className="flex-1 flex flex-col">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
@@ -287,15 +288,15 @@ function App() {
               )}
             </RadioGroup>
 
-            <div className="mt-6 pt-4 border-t">
+            <div className="mt-6 pt-4 border-t border-2 border-primary/30 rounded-lg p-4 bg-primary/5">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="orig-per-device-access"
                   checked={currentSettings.enablePerDeviceAccess}
                   onCheckedChange={handlePerDeviceAccessChange}
-                  className="border-black"
+                  className="border-black mt-0.5"
                 />
-                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer text-base">Allow per device enrollment in Office desktop applications</Label>
+                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer text-base leading-tight">Allow per device enrollment in Office desktop applications</Label>
               </div>
               <div className="text-xs text-muted-foreground ml-6 mt-1">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users can make different choices across devices.</div>
 
@@ -371,8 +372,9 @@ function App() {
             </div>
           </TabsContent>
         </Tabs>
+        </div>
 
-        <div className="flex justify-end gap-2 pt-4 border-t">
+        <div className="flex justify-end gap-2 pt-4 border-t mt-4">
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
@@ -385,7 +387,7 @@ function App() {
   )
 
   const AlternateVersion = () => (
-    <Card className="max-w-2xl w-full h-[750px]">
+    <Card className="max-w-2xl w-full h-[850px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -399,8 +401,9 @@ function App() {
         </div>
       </CardHeader>
 
-      <CardContent className="flex flex-col h-full">
-        <Tabs value={alternateActiveTab} onValueChange={setAlternateActiveTab} className="w-full flex-1 flex flex-col">
+      <CardContent className="flex flex-col flex-1">
+        <div className="flex-1 flex flex-col">
+          <Tabs value={alternateActiveTab} onValueChange={setAlternateActiveTab} className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="all-apps" className="cursor-pointer">All Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
@@ -495,8 +498,9 @@ function App() {
             </div>
           </TabsContent>
         </Tabs>
+        </div>
 
-        <div className="flex justify-end gap-2 pt-4 border-t">
+        <div className="flex justify-end gap-2 pt-4 border-t mt-4">
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
@@ -509,7 +513,7 @@ function App() {
   )
 
   const VersionBComponent = () => (
-    <Card className="max-w-2xl w-full h-[750px]">
+    <Card className="max-w-2xl w-full h-[850px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -523,8 +527,9 @@ function App() {
         </div>
       </CardHeader>
 
-      <CardContent className="flex flex-col h-full">
-        <Tabs value={versionBActiveTab} onValueChange={setVersionBActiveTab} className="w-full flex-1 flex flex-col">
+      <CardContent className="flex flex-col flex-1">
+        <div className="flex-1 flex flex-col">
+          <Tabs value={versionBActiveTab} onValueChange={setVersionBActiveTab} className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
             <TabsTrigger value="office-win32" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
@@ -694,8 +699,9 @@ function App() {
             </div>
           </TabsContent>
         </Tabs>
+        </div>
 
-        <div className="flex justify-end gap-2 pt-4 border-t">
+        <div className="flex justify-end gap-2 pt-4 border-t mt-4">
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
