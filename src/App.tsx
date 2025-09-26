@@ -148,7 +148,6 @@ function App() {
       ...defaultSettings,
       ...current,
       enablePerDeviceAccess: checked,
-      perDeviceAccessType: checked ? 'all-users' : current?.perDeviceAccessType || 'all-users'
     }))
   }
 
@@ -385,12 +384,7 @@ function App() {
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p>
-            The Frontier program gives your organization early, hands-on access to experimental 
-            and preview features from Microsoft. All Frontier features and agents are previews and 
-            might not be released to general availability. Configure access settings below for where 
-            users can experience Frontier.
-          </p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental and preview features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
           <p>To get the most out of the Frontier program, we recommend turning on preview features in web apps, desktop apps, and agents.</p>
         </div>
       </CardHeader>
