@@ -575,13 +575,14 @@ function App() {
             </RadioGroup>
 
             <div className="mt-6 pt-4 border-t">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 p-3 border-2 border-black rounded-md bg-muted/20">
                 <Switch
                   id="per-device-access"
                   checked={currentSettings.enablePerDeviceAccess}
                   onCheckedChange={handlePerDeviceAccessChange}
+                  className="data-[state=checked]:bg-primary"
                 />
-                <Label htmlFor="per-device-access" className="font-normal">
+                <Label htmlFor="per-device-access" className="font-medium cursor-pointer">
                   Enable per device access on Office applications
                 </Label>
               </div>
@@ -624,18 +625,18 @@ function App() {
             With win32 Toggle - A
           </Button>
           <Button
-            variant={selectedVersion === 'alternate' ? "default" : "outline"}
-            onClick={() => setSelectedVersion('alternate')}
-            className="border-black cursor-pointer"
-          >
-            No win32 Toggle
-          </Button>
-          <Button
             variant={selectedVersion === 'versionB' ? "default" : "outline"}
             onClick={() => setSelectedVersion('versionB')}
             className="border-black cursor-pointer"
           >
             With win32 Toggle - B
+          </Button>
+          <Button
+            variant={selectedVersion === 'alternate' ? "default" : "outline"}
+            onClick={() => setSelectedVersion('alternate')}
+            className="border-black cursor-pointer"
+          >
+            No win32 Toggle
           </Button>
         </div>
       </div>
