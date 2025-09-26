@@ -392,16 +392,17 @@ function App() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
       {/* Version Selector */}
-      <div className="flex items-center gap-4 p-4 bg-card rounded-lg border">
-        <span className="text-sm font-medium">Control Version:</span>
-        <div className="flex items-center gap-2">
-          <Label htmlFor="version-switch" className="text-sm">Original</Label>
+      <div className="flex items-center gap-6 p-6 bg-card rounded-lg border-2 border-primary/20 shadow-lg">
+        <span className="text-lg font-semibold text-foreground">Control Version:</span>
+        <div className="flex items-center gap-4">
+          <Label htmlFor="version-switch" className="text-base font-medium">Original</Label>
           <Switch
             id="version-switch"
             checked={isAlternateVersion}
             onCheckedChange={setIsAlternateVersion}
+            className="scale-125"
           />
-          <Label htmlFor="version-switch" className="text-sm">Alternate</Label>
+          <Label htmlFor="version-switch" className="text-base font-medium">Alternate</Label>
         </div>
       </div>
       {/* Render the selected version */}
