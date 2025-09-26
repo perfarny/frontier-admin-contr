@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Button } from './components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
@@ -37,7 +37,22 @@ function App() {
   const [activeTab, setActiveTab] = useState('web-apps')
   const [alternateActiveTab, setAlternateActiveTab] = useState('all-apps')
 
-  const currentSettings = settings || defaultSettings
+  // Ensure proper defaults are always applied
+  const currentSettings = {
+    ...defaultSettings,
+    ...settings
+  }
+
+  const resetToDefaults = () => {
+    setSettings(defaultSettings)
+  }
+
+  // Ensure defaults are properly set on initial load
+  useEffect(() => {
+    if (!settings) {
+      setSettings(defaultSettings)
+    }
+  }, [])
 
   const addWebGroup = () => {
     if (newWebGroup.trim()) {
@@ -314,7 +329,7 @@ function App() {
         </Tabs>
 
         <div className="flex justify-end gap-2 pt-4 border-t mt-6">
-          <Button variant="outline">
+          <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
           <Button>
@@ -438,7 +453,7 @@ function App() {
         </Tabs>
 
         <div className="flex justify-end gap-2 pt-4 border-t mt-6">
-          <Button variant="outline">
+          <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
           <Button>
