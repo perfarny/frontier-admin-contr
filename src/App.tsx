@@ -301,11 +301,11 @@ function App() {
               <div className="text-xs text-muted-foreground ml-6 mt-1">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users can make different choices across devices.</div>
 
               {/* Sub-menu radio buttons */}
-              <div className={`ml-6 mt-4 space-y-2 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
+              <div className={`ml-6 mt-3 space-y-1 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
                 <RadioGroup 
                   value={currentSettings.enablePerDeviceAccess ? currentSettings.perDeviceAccessType : ''} 
                   onValueChange={handlePerDeviceAccessTypeChange}
-                  className="space-y-1"
+                  className="space-y-0.5"
                   disabled={!currentSettings.enablePerDeviceAccess}
                 >
                   <div className="flex items-center space-x-2">
@@ -323,7 +323,7 @@ function App() {
                   </div>
 
                   {currentSettings.perDeviceAccessType === 'specific-groups' && currentSettings.enablePerDeviceAccess && (
-                    <div className="ml-6 space-y-3">
+                    <div className="ml-6 space-y-2 mt-2">
                       <div className="flex gap-2">
                         <Input
                           placeholder="Enter group name"
