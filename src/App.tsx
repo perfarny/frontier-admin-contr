@@ -293,9 +293,9 @@ function App() {
                   onCheckedChange={handlePerDeviceAccessChange}
                   className="border-black"
                 />
-                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">Allow per device enrollment in Office applications</Label>
+                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer text-base">Allow per device enrollment in Office applications</Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. Users can make different choices across devices.</div>
+              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, Frontier features are turned off, but all users can choose to turn them on in their Office desktop applications. Users can make different choices across devices.</div>
 
               {/* Sub-menu radio buttons */}
               <div className={`ml-6 mt-4 space-y-3 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
