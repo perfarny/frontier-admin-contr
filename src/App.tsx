@@ -109,9 +109,10 @@ function App() {
 
       <CardContent>
         <Tabs defaultValue="web-apps" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
             <TabsTrigger value="office-win32" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
+            <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
           </TabsList>
 
           <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
@@ -267,6 +268,15 @@ function App() {
               )}
             </RadioGroup>
           </TabsContent>
+
+          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
+            <div>
+              <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
+              <p className="text-sm text-muted-foreground">
+                The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+              </p>
+            </div>
+          </TabsContent>
         </Tabs>
 
         <div className="flex justify-end gap-2 pt-4 border-t mt-6">
@@ -297,85 +307,101 @@ function App() {
       </CardHeader>
 
       <CardContent>
-        <div className="space-y-4">
-          <div>
-            <h3 className="font-medium mb-2">All Apps</h3>
-            <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
-          </div>
+        <Tabs defaultValue="all-apps" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="all-apps" className="cursor-pointer">All Apps</TabsTrigger>
+            <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
+          </TabsList>
 
-          <RadioGroup 
-            value={currentSettings.webApps} 
-            onValueChange={handleWebAccessChange}
-            className="space-y-3"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="no-access" id="alt-no-access" className="border-black" />
-              <Label htmlFor="alt-no-access" className="font-normal">
-                No access
-              </Label>
-            </div>
-            <div className="text-xs text-muted-foreground ml-6 -mt-1">
-              Users will not have access to Frontier features in web apps.
+          <TabsContent value="all-apps" className="space-y-4 mt-6 min-h-[320px]">
+            <div>
+              <h3 className="font-medium mb-2">All Apps</h3>
+              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="all-users" id="alt-all-users" className="border-black" />
-              <Label htmlFor="alt-all-users" className="font-normal">
-                All users
-              </Label>
-            </div>
-            <div className="text-xs text-muted-foreground ml-6 -mt-1">
-              All users in your organization will automatically receive Frontier features in web apps.
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="specific-groups" id="alt-specific-groups" className="border-black" />
-              <Label htmlFor="alt-specific-groups" className="font-normal">
-                Specific user groups
-              </Label>
-            </div>
-            <div className="text-xs text-muted-foreground ml-6 -mt-1">
-              Only specified user groups will automatically receive Frontier features in web apps.
-            </div>
-
-            {currentSettings.webApps === 'specific-groups' && (
-              <div className="ml-6 space-y-3">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Enter group name"
-                    value={newWebGroup}
-                    onChange={(e) => setNewWebGroup(e.target.value)}
-                    onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
-                    className="flex-1 border-black"
-                  />
-                  <Button 
-                    onClick={addWebGroup}
-                    variant="outline"
-                    size="sm"
-                  >
-                    Add
-                  </Button>
-                </div>
-                {currentSettings.webGroups && currentSettings.webGroups.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {currentSettings.webGroups.map((group, index) => (
-                      <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                        <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                        {group}
-                        <button
-                          onClick={() => removeWebGroup(index)}
-                          className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
-                        >
-                          <X size={12} />
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                )}
+            <RadioGroup 
+              value={currentSettings.webApps} 
+              onValueChange={handleWebAccessChange}
+              className="space-y-3"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="no-access" id="alt-no-access" className="border-black" />
+                <Label htmlFor="alt-no-access" className="font-normal">
+                  No access
+                </Label>
               </div>
-            )}
-          </RadioGroup>
-        </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+                Users will not have access to Frontier features in web apps.
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="all-users" id="alt-all-users" className="border-black" />
+                <Label htmlFor="alt-all-users" className="font-normal">
+                  All users
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+                All users in your organization will automatically receive Frontier features in web apps.
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="specific-groups" id="alt-specific-groups" className="border-black" />
+                <Label htmlFor="alt-specific-groups" className="font-normal">
+                  Specific user groups
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-1">
+                Only specified user groups will automatically receive Frontier features in web apps.
+              </div>
+
+              {currentSettings.webApps === 'specific-groups' && (
+                <div className="ml-6 space-y-3">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter group name"
+                      value={newWebGroup}
+                      onChange={(e) => setNewWebGroup(e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
+                      className="flex-1 border-black"
+                    />
+                    <Button 
+                      onClick={addWebGroup}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {currentSettings.webGroups && currentSettings.webGroups.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {currentSettings.webGroups.map((group, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                          {group}
+                          <button
+                            onClick={() => removeWebGroup(index)}
+                            className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
+                          >
+                            <X size={12} />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </RadioGroup>
+          </TabsContent>
+
+          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
+            <div>
+              <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
+              <p className="text-sm text-muted-foreground">
+                The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+              </p>
+            </div>
+          </TabsContent>
+        </Tabs>
 
         <div className="flex justify-end gap-2 pt-4 border-t mt-6">
           <Button variant="outline">
