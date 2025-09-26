@@ -393,7 +393,7 @@ function App() {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
       {/* Version Selector */}
       <div className="flex items-center gap-6 p-6 bg-card rounded-lg border-2 border-primary/20 shadow-lg">
-        <span className="text-lg font-semibold text-foreground">Control Version:</span>
+        <span className="text-lg font-semibold text-foreground">Select Version:</span>
         <div className="flex items-center gap-4">
           <Label htmlFor="version-switch" className="text-base font-medium">Original</Label>
           <Switch
