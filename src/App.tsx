@@ -215,7 +215,7 @@ function App() {
               </RadioGroup>
             </TabsContent>
 
-            <TabsContent value="office-win32" className="space-y-4 mt-6 min-h-[400px]">
+            <TabsContent value="office-win32" className="space-y-4 mt-6 min-h-[320px]">
               <div>
                 <h3 className="font-medium mb-2">Allow users to access Frontier features in Office win32</h3>
                 <p className="text-sm text-muted-foreground mb-4">
