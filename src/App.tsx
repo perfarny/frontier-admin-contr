@@ -36,9 +36,9 @@ function App() {
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
   const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
   const [selectedVersion, setSelectedVersion] = useState('alternate')
-  const [activeTab, setActiveTab] = useState('web-apps')
+  const [activeTab, setActiveTab] = useState('apps')
   const [alternateActiveTab, setAlternateActiveTab] = useState('all-apps')
-  const [versionBActiveTab, setVersionBActiveTab] = useState('apps')
+  const [versionBActiveTab, setVersionBActiveTab] = useState('web-apps')
 
   // Ensure proper defaults are always applied
   const currentSettings = {
@@ -167,26 +167,25 @@ function App() {
 
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
-            <TabsTrigger value="office-win32" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="apps" className="space-y-4 mt-6 min-h-[320px]">
             <div>
-              <h3 className="font-medium mb-2">Enable Frontier features in web apps</h3>
-              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in web apps.</p>
+              <h3 className="font-medium mb-2">Apps</h3>
+              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
             </div>
 
             <RadioGroup 
-              value={currentSettings.webApps} 
-              onValueChange={handleWebAccessChange}
+              value={currentSettings.allApps} 
+              onValueChange={handleAllAppsAccessChange}
               className="space-y-3"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="no-access" id="web-no-access" className="border-black" />
-                <Label htmlFor="web-no-access" className="font-normal">
+                <RadioGroupItem value="no-access" id="orig-no-access" className="border-black" />
+                <Label htmlFor="orig-no-access" className="font-normal">
                   No access
                 </Label>
               </div>
@@ -195,8 +194,8 @@ function App() {
               </div>
 
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all-users" id="web-all-users" className="border-black" />
-                <Label htmlFor="web-all-users" className="font-normal">
+                <RadioGroupItem value="all-users" id="orig-all-users" className="border-black" />
+                <Label htmlFor="orig-all-users" className="font-normal">
                   All users
                 </Label>
               </div>
@@ -205,8 +204,8 @@ function App() {
               </div>
 
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="specific-groups" id="web-specific-groups" className="border-black" />
-                <Label htmlFor="web-specific-groups" className="font-normal">
+                <RadioGroupItem value="specific-groups" id="orig-specific-groups" className="border-black" />
+                <Label htmlFor="orig-specific-groups" className="font-normal">
                   Specific user groups
                 </Label>
               </div>
@@ -214,32 +213,32 @@ function App() {
                 Only specified user groups will automatically receive Frontier features in web apps.
               </div>
 
-              {currentSettings.webApps === 'specific-groups' && (
+              {currentSettings.allApps === 'specific-groups' && (
                 <div className="ml-6 space-y-3">
                   <div className="flex gap-2">
                     <Input
                       placeholder="Enter group name"
-                      value={newWebGroup}
-                      onChange={(e) => setNewWebGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
+                      value={newAllAppsGroup}
+                      onChange={(e) => setNewAllAppsGroup(e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, addAllAppsGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
-                      onClick={addWebGroup}
+                      onClick={addAllAppsGroup}
                       variant="outline"
                       size="sm"
                     >
                       Add
                     </Button>
                   </div>
-                  {currentSettings.webGroups && currentSettings.webGroups.length > 0 && (
+                  {currentSettings.allAppsGroups && currentSettings.allAppsGroups.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {currentSettings.webGroups.map((group, index) => (
+                      {currentSettings.allAppsGroups.map((group, index) => (
                         <Badge key={index} variant="secondary" className="flex items-center gap-1">
                           <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
                           {group}
                           <button
-                            onClick={() => removeWebGroup(index)}
+                            onClick={() => removeAllAppsGroup(index)}
                             className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
                           >
                             <X size={12} />
@@ -251,80 +250,21 @@ function App() {
                 </div>
               )}
             </RadioGroup>
-          </TabsContent>
 
-          <TabsContent value="office-win32" className="space-y-4 mt-6 min-h-[320px]">
-            <div>
-              <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office Desktop applications</h3>
-              <p className="text-sm text-muted-foreground mb-4">Select which users can enable Frontier features in their Office desktop applications. Users can make different choices across devices. </p>
+            <div className="mt-6 pt-4 border-t">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="orig-per-device-access"
+                  checked={currentSettings.enablePerDeviceAccess}
+                  onCheckedChange={handlePerDeviceAccessChange}
+                  className="border-black"
+                />
+                <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer">
+                  Enable per device access on Office applications
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. This is a per device setting.</div>
             </div>
-
-            <RadioGroup 
-              value={currentSettings.officeWin32} 
-              onValueChange={handleOfficeAccessChange}
-              className="space-y-3"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="no-access" id="office-no-access" className="border-black" />
-                <Label htmlFor="office-no-access" className="font-normal">
-                  No access
-                </Label>
-              </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-2">Users cannot choose to enable Frontier features.</div>
-
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all-users" id="office-all-users" className="border-black" />
-                <Label htmlFor="office-all-users" className="font-normal">
-                  All users
-                </Label>
-              </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-2">All users can choose to enable Frontier features.</div>
-
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="specific-groups" id="office-specific-groups" className="border-black" />
-                <Label htmlFor="office-specific-groups" className="font-normal">
-                  Specific user groups
-                </Label>
-              </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-2">Only specified user can choose to enable Frontier features.</div>
-
-              {currentSettings.officeWin32 === 'specific-groups' && (
-                <div className="ml-6 space-y-3">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Enter group name"
-                      value={newOfficeGroup}
-                      onChange={(e) => setNewOfficeGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addOfficeGroup)}
-                      className="flex-1 border-black"
-                    />
-                    <Button 
-                      onClick={addOfficeGroup}
-                      variant="outline"
-                      size="sm"
-                    >
-                      Add
-                    </Button>
-                  </div>
-                  {currentSettings.officeGroups && currentSettings.officeGroups.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {currentSettings.officeGroups.map((group, index) => (
-                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                          <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                          {group}
-                          <button
-                            onClick={() => removeOfficeGroup(index)}
-                            className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
-                          >
-                            <X size={12} />
-                          </button>
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </RadioGroup>
           </TabsContent>
 
           <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
@@ -490,25 +430,26 @@ function App() {
 
       <CardContent>
         <Tabs value={versionBActiveTab} onValueChange={setVersionBActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
+            <TabsTrigger value="office-win32" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="apps" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
             <div>
-              <h3 className="font-medium mb-2">Apps</h3>
-              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
+              <h3 className="font-medium mb-2">Enable Frontier features in web apps</h3>
+              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in web apps.</p>
             </div>
 
             <RadioGroup 
-              value={currentSettings.allApps} 
-              onValueChange={handleAllAppsAccessChange}
+              value={currentSettings.webApps} 
+              onValueChange={handleWebAccessChange}
               className="space-y-3"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="no-access" id="vb-no-access" className="border-black" />
-                <Label htmlFor="vb-no-access" className="font-normal">
+                <RadioGroupItem value="no-access" id="vb-web-no-access" className="border-black" />
+                <Label htmlFor="vb-web-no-access" className="font-normal">
                   No access
                 </Label>
               </div>
@@ -517,8 +458,8 @@ function App() {
               </div>
 
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all-users" id="vb-all-users" className="border-black" />
-                <Label htmlFor="vb-all-users" className="font-normal">
+                <RadioGroupItem value="all-users" id="vb-web-all-users" className="border-black" />
+                <Label htmlFor="vb-web-all-users" className="font-normal">
                   All users
                 </Label>
               </div>
@@ -527,8 +468,8 @@ function App() {
               </div>
 
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="specific-groups" id="vb-specific-groups" className="border-black" />
-                <Label htmlFor="vb-specific-groups" className="font-normal">
+                <RadioGroupItem value="specific-groups" id="vb-web-specific-groups" className="border-black" />
+                <Label htmlFor="vb-web-specific-groups" className="font-normal">
                   Specific user groups
                 </Label>
               </div>
@@ -536,32 +477,32 @@ function App() {
                 Only specified user groups will automatically receive Frontier features in web apps.
               </div>
 
-              {currentSettings.allApps === 'specific-groups' && (
+              {currentSettings.webApps === 'specific-groups' && (
                 <div className="ml-6 space-y-3">
                   <div className="flex gap-2">
                     <Input
                       placeholder="Enter group name"
-                      value={newAllAppsGroup}
-                      onChange={(e) => setNewAllAppsGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addAllAppsGroup)}
+                      value={newWebGroup}
+                      onChange={(e) => setNewWebGroup(e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
-                      onClick={addAllAppsGroup}
+                      onClick={addWebGroup}
                       variant="outline"
                       size="sm"
                     >
                       Add
                     </Button>
                   </div>
-                  {currentSettings.allAppsGroups && currentSettings.allAppsGroups.length > 0 && (
+                  {currentSettings.webGroups && currentSettings.webGroups.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {currentSettings.allAppsGroups.map((group, index) => (
+                      {currentSettings.webGroups.map((group, index) => (
                         <Badge key={index} variant="secondary" className="flex items-center gap-1">
                           <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
                           {group}
                           <button
-                            onClick={() => removeAllAppsGroup(index)}
+                            onClick={() => removeWebGroup(index)}
                             className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
                           >
                             <X size={12} />
@@ -573,21 +514,80 @@ function App() {
                 </div>
               )}
             </RadioGroup>
+          </TabsContent>
 
-            <div className="mt-6 pt-4 border-t">
+          <TabsContent value="office-win32" className="space-y-4 mt-6 min-h-[320px]">
+            <div>
+              <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office Desktop applications</h3>
+              <p className="text-sm text-muted-foreground mb-4">Select which users can enable Frontier features in their Office desktop applications. Users can make different choices across devices. </p>
+            </div>
+
+            <RadioGroup 
+              value={currentSettings.officeWin32} 
+              onValueChange={handleOfficeAccessChange}
+              className="space-y-3"
+            >
               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="per-device-access"
-                  checked={currentSettings.enablePerDeviceAccess}
-                  onCheckedChange={handlePerDeviceAccessChange}
-                  className="border-black"
-                />
-                <Label htmlFor="per-device-access" className="font-medium cursor-pointer">
-                  Enable per device access on Office applications
+                <RadioGroupItem value="no-access" id="vb-office-no-access" className="border-black" />
+                <Label htmlFor="vb-office-no-access" className="font-normal">
+                  No access
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, all users can choose to receive Frontier features in their Office Desktop applications. This is a per device setting.</div>
-            </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">Users cannot choose to enable Frontier features.</div>
+
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="all-users" id="vb-office-all-users" className="border-black" />
+                <Label htmlFor="vb-office-all-users" className="font-normal">
+                  All users
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">All users can choose to enable Frontier features.</div>
+
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="specific-groups" id="vb-office-specific-groups" className="border-black" />
+                <Label htmlFor="vb-office-specific-groups" className="font-normal">
+                  Specific user groups
+                </Label>
+              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">Only specified user can choose to enable Frontier features.</div>
+
+              {currentSettings.officeWin32 === 'specific-groups' && (
+                <div className="ml-6 space-y-3">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter group name"
+                      value={newOfficeGroup}
+                      onChange={(e) => setNewOfficeGroup(e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, addOfficeGroup)}
+                      className="flex-1 border-black"
+                    />
+                    <Button 
+                      onClick={addOfficeGroup}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {currentSettings.officeGroups && currentSettings.officeGroups.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {currentSettings.officeGroups.map((group, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                          {group}
+                          <button
+                            onClick={() => removeOfficeGroup(index)}
+                            className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
+                          >
+                            <X size={12} />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </RadioGroup>
           </TabsContent>
 
           <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
