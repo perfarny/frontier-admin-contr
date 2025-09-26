@@ -586,6 +586,9 @@ function App() {
                   Enable per device access on Office applications
                 </Label>
               </div>
+              <div className="text-xs text-muted-foreground ml-6 mt-1">
+                By default, all users can enable Frontier features in their Office Desktop applications. This is a per device setting.
+              </div>
             </div>
           </TabsContent>
 
