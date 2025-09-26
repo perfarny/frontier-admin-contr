@@ -34,6 +34,8 @@ function App() {
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
   const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
   const [isAlternateVersion, setIsAlternateVersion] = useState(false)
+  const [activeTab, setActiveTab] = useState('web-apps')
+  const [alternateActiveTab, setAlternateActiveTab] = useState('all-apps')
 
   const currentSettings = settings || defaultSettings
 
@@ -140,7 +142,7 @@ function App() {
       </CardHeader>
 
       <CardContent>
-        <Tabs defaultValue="web-apps" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
             <TabsTrigger value="office-win32" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
@@ -339,7 +341,7 @@ function App() {
       </CardHeader>
 
       <CardContent>
-        <Tabs defaultValue="all-apps" className="w-full">
+        <Tabs value={alternateActiveTab} onValueChange={setAlternateActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="all-apps" className="cursor-pointer">All Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
