@@ -187,7 +187,7 @@ function App() {
   }
 
   const OriginalVersion = () => (
-    <Card className="max-w-2xl w-full">
+    <Card className="max-w-2xl w-full h-[680px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -201,14 +201,14 @@ function App() {
         </div>
       </CardHeader>
 
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <CardContent className="flex flex-col h-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="apps" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-medium mb-2">Apps</h3>
               <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
@@ -362,7 +362,7 @@ function App() {
             </div>
           </TabsContent>
 
-          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
               <p className="text-sm text-muted-foreground">
@@ -372,7 +372,7 @@ function App() {
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-end gap-2 pt-4 border-t mt-6">
+        <div className="flex justify-end gap-2 pt-4 border-t">
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
@@ -385,7 +385,7 @@ function App() {
   )
 
   const AlternateVersion = () => (
-    <Card className="max-w-2xl w-full">
+    <Card className="max-w-2xl w-full h-[680px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -399,14 +399,14 @@ function App() {
         </div>
       </CardHeader>
 
-      <CardContent>
-        <Tabs value={alternateActiveTab} onValueChange={setAlternateActiveTab} className="w-full">
+      <CardContent className="flex flex-col h-full">
+        <Tabs value={alternateActiveTab} onValueChange={setAlternateActiveTab} className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="all-apps" className="cursor-pointer">All Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="all-apps" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="all-apps" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-medium mb-2">All Apps</h3>
               <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
@@ -486,7 +486,7 @@ function App() {
             </RadioGroup>
           </TabsContent>
 
-          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
               <p className="text-sm text-muted-foreground">
@@ -496,7 +496,7 @@ function App() {
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-end gap-2 pt-4 border-t mt-6">
+        <div className="flex justify-end gap-2 pt-4 border-t">
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
@@ -509,7 +509,7 @@ function App() {
   )
 
   const VersionBComponent = () => (
-    <Card className="max-w-2xl w-full">
+    <Card className="max-w-2xl w-full h-[680px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -523,15 +523,15 @@ function App() {
         </div>
       </CardHeader>
 
-      <CardContent>
-        <Tabs value={versionBActiveTab} onValueChange={setVersionBActiveTab} className="w-full">
+      <CardContent className="flex flex-col h-full">
+        <Tabs value={versionBActiveTab} onValueChange={setVersionBActiveTab} className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
             <TabsTrigger value="office-win32" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="web-apps" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="web-apps" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-medium mb-2">Enable Frontier features in web apps</h3>
               <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in web apps.</p>
@@ -611,7 +611,7 @@ function App() {
             </RadioGroup>
           </TabsContent>
 
-          <TabsContent value="office-win32" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="office-win32" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office Desktop applications</h3>
               <p className="text-sm text-muted-foreground mb-4">Select which users can enable Frontier features in their Office desktop applications. Users can make different choices across devices. </p>
@@ -685,7 +685,7 @@ function App() {
             </RadioGroup>
           </TabsContent>
 
-          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
               <p className="text-sm text-muted-foreground">
@@ -695,7 +695,7 @@ function App() {
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-end gap-2 pt-4 border-t mt-6">
+        <div className="flex justify-end gap-2 pt-4 border-t">
           <Button variant="outline" onClick={resetToDefaults}>
             Cancel
           </Button>
