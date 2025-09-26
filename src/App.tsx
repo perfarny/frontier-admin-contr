@@ -1,369 +1,267 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
-import { ControlSection } from './components/ControlSection'
-import { ControlSlider } from './components/ControlSlider'
-import { PresetManager } from './components/PresetManager'
 import { Button } from './components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './components/ui/dialog'
+import { Label } from './components/ui/label'
+import { Input } from './components/ui/input'
 import { Switch } from './components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select'
-import { Label } from './components/ui/label'
-import { Card } from './components/ui/card'
-import { toast, Toaster } from 'sonner'
+import { Slider } from './components/ui/slider'
+import { Gear, Lightning, Shield, Database, Network } from '@phosphor-icons/react'
 
-interface ControlState {
-  // Audio Controls
-  volume: number
-  pitch: number
-  reverb: number
-  delay: number
-  distortion: number
-  
-  // Visual Controls
-  brightness: number
-  contrast: number
-  saturation: number
-  hue: number
-  blur: number
-  
-  // Motion Controls
-  speed: number
-  acceleration: number
-  damping: number
-  frequency: number
-  amplitude: number
-  
-  // System Controls
-  enabled: boolean
-  mode: string
-  quality: string
+interface AdminSettings {
+  systemEnabled: boolean
+  maintenanceMode: boolean
+  debugLevel: string
+  maxConnections: number
+  cacheSize: number
+  timeout: number
+  encryption: boolean
+  backupInterval: string
+  logRetention: number
 }
 
-interface Preset {
-  id: string
-  name: string
-  data: ControlState
-}
-
-const defaultState: ControlState = {
-  // Audio Controls
-  volume: 0.8,
-  pitch: 1.0,
-  reverb: 0.3,
-  delay: 0.2,
-  distortion: 0.0,
-  
-  // Visual Controls
-  brightness: 1.0,
-  contrast: 1.0,
-  saturation: 1.0,
-  hue: 0.0,
-  blur: 0.0,
-  
-  // Motion Controls
-  speed: 5.0,
-  acceleration: 2.0,
-  damping: 0.8,
-  frequency: 1.0,
-  amplitude: 0.5,
-  
-  // System Controls
-  enabled: true,
-  mode: 'normal',
-  quality: 'high'
+const defaultSettings: AdminSettings = {
+  systemEnabled: true,
+  maintenanceMode: false,
+  debugLevel: 'info',
+  maxConnections: 1000,
+  cacheSize: 512,
+  timeout: 30,
+  encryption: true,
+  backupInterval: '6h',
+  logRetention: 7
 }
 
 function App() {
-  const [controls, setControls] = useKV<ControlState>('frontier-controls', defaultState)
-  const [presets, setPresets] = useKV<Preset[]>('frontier-presets', [])
-  const [openSections, setOpenSections] = useKV<Record<string, boolean>>('frontier-sections', {
-    audio: true,
-    visual: false,
-    motion: false,
-    system: false
-  })
+  const [settings, setSettings] = useKV<AdminSettings>('frontier-admin-settings', defaultSettings)
+  const [isOpen, setIsOpen] = useState(false)
 
-  const currentControls = controls || defaultState
-  const currentPresets = presets || []
-  const currentSections = openSections || { audio: true, visual: false, motion: false, system: false }
+  const currentSettings = settings || defaultSettings
 
-  const updateControl = <K extends keyof ControlState>(key: K, value: ControlState[K]) => {
-    setControls(current => ({ ...defaultState, ...current, [key]: value }))
+  const updateSetting = <K extends keyof AdminSettings>(key: K, value: AdminSettings[K]) => {
+    setSettings(current => ({ ...defaultSettings, ...current, [key]: value }))
   }
 
-  const toggleSection = (section: string) => {
-    setOpenSections(current => ({ 
-      audio: true, 
-      visual: false, 
-      motion: false, 
-      system: false, 
-      ...current, 
-      [section]: !current?.[section] 
-    }))
+  const handleReset = () => {
+    setSettings(defaultSettings)
   }
 
-  const handleSavePreset = (name: string, data: ControlState) => {
-    const newPreset: Preset = {
-      id: Date.now().toString(),
-      name,
-      data
-    }
-    setPresets(current => [...(current || []), newPreset])
-    toast.success(`Preset "${name}" saved`)
-  }
-
-  const handleLoadPreset = (data: ControlState) => {
-    setControls(data)
-    toast.success('Preset loaded')
-  }
-
-  const handleDeletePreset = (id: string) => {
-    const preset = currentPresets.find(p => p.id === id)
-    setPresets(current => (current || []).filter(p => p.id !== id))
-    toast.success(`Preset "${preset?.name}" deleted`)
-  }
-
-  const resetToDefaults = () => {
-    setControls(defaultState)
-    toast.success('Reset to defaults')
+  const handleApply = () => {
+    setIsOpen(false)
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
-      <Toaster position="top-right" />
-      <div className="container mx-auto p-6 max-w-4xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Frontier Control Interface</h1>
-          <p className="text-muted-foreground">
-            Advanced parameter control system with real-time adjustment capabilities
-          </p>
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
+      <div className="text-center space-y-8">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">Frontier System</h1>
+          <p className="text-muted-foreground">Advanced Control Interface</p>
         </div>
 
-        <div className="mb-6">
-          <Card className="p-4">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Switch 
-                    checked={currentControls.enabled} 
-                    onCheckedChange={(checked) => updateControl('enabled', checked)}
-                  />
-                  <Label>System Enabled</Label>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>
+            <Button size="lg" className="gap-2">
+              <Gear size={20} />
+              Open Admin Control
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-xl">
+                <Shield size={24} />
+                Frontier Admin Control
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-6 py-4">
+              {/* System Status Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <Lightning size={16} />
+                  System Status
                 </div>
-                <div className="text-sm text-muted-foreground font-mono">
-                  Status: {currentControls.enabled ? 'Active' : 'Inactive'}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="system-enabled" className="text-sm">System Enabled</Label>
+                    <Switch 
+                      id="system-enabled"
+                      checked={currentSettings.systemEnabled}
+                      onCheckedChange={(checked) => updateSetting('systemEnabled', checked)}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="maintenance-mode" className="text-sm">Maintenance Mode</Label>
+                    <Switch 
+                      id="maintenance-mode"
+                      checked={currentSettings.maintenanceMode}
+                      onCheckedChange={(checked) => updateSetting('maintenanceMode', checked)}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <PresetManager
-                  presets={currentPresets}
-                  currentData={currentControls}
-                  onSave={handleSavePreset}
-                  onLoad={handleLoadPreset}
-                  onDelete={handleDeletePreset}
-                />
-                <Button variant="outline" onClick={resetToDefaults}>
-                  Reset
+
+              {/* Configuration Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <Database size={16} />
+                  Configuration
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="debug-level" className="text-sm">Debug Level</Label>
+                    <Select value={currentSettings.debugLevel} onValueChange={(value) => updateSetting('debugLevel', value)}>
+                      <SelectTrigger id="debug-level">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="error">Error</SelectItem>
+                        <SelectItem value="warn">Warning</SelectItem>
+                        <SelectItem value="info">Info</SelectItem>
+                        <SelectItem value="debug">Debug</SelectItem>
+                        <SelectItem value="trace">Trace</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="backup-interval" className="text-sm">Backup Interval</Label>
+                    <Select value={currentSettings.backupInterval} onValueChange={(value) => updateSetting('backupInterval', value)}>
+                      <SelectTrigger id="backup-interval">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1h">1 Hour</SelectItem>
+                        <SelectItem value="6h">6 Hours</SelectItem>
+                        <SelectItem value="12h">12 Hours</SelectItem>
+                        <SelectItem value="24h">24 Hours</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Performance Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <Network size={16} />
+                  Performance
+                </div>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm">Max Connections</Label>
+                      <span className="text-sm font-mono text-muted-foreground">{currentSettings.maxConnections}</span>
+                    </div>
+                    <Slider
+                      value={[currentSettings.maxConnections]}
+                      onValueChange={([value]) => updateSetting('maxConnections', value)}
+                      max={5000}
+                      min={100}
+                      step={100}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm">Cache Size (MB)</Label>
+                      <span className="text-sm font-mono text-muted-foreground">{currentSettings.cacheSize}</span>
+                    </div>
+                    <Slider
+                      value={[currentSettings.cacheSize]}
+                      onValueChange={([value]) => updateSetting('cacheSize', value)}
+                      max={2048}
+                      min={128}
+                      step={64}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm">Timeout (seconds)</Label>
+                      <span className="text-sm font-mono text-muted-foreground">{currentSettings.timeout}</span>
+                    </div>
+                    <Slider
+                      value={[currentSettings.timeout]}
+                      onValueChange={([value]) => updateSetting('timeout', value)}
+                      max={300}
+                      min={5}
+                      step={5}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Security Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <Shield size={16} />
+                  Security
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="encryption" className="text-sm">End-to-End Encryption</Label>
+                    <Switch 
+                      id="encryption"
+                      checked={currentSettings.encryption}
+                      onCheckedChange={(checked) => updateSetting('encryption', checked)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm">Log Retention (days)</Label>
+                      <span className="text-sm font-mono text-muted-foreground">{currentSettings.logRetention}</span>
+                    </div>
+                    <Slider
+                      value={[currentSettings.logRetention]}
+                      onValueChange={([value]) => updateSetting('logRetention', value)}
+                      max={90}
+                      min={1}
+                      step={1}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-between pt-4 border-t">
+                <Button variant="outline" onClick={handleReset}>
+                  Reset to Defaults
                 </Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setIsOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleApply}>
+                    Apply Changes
+                  </Button>
+                </div>
               </div>
             </div>
-          </Card>
-        </div>
+          </DialogContent>
+        </Dialog>
 
-        <div className="space-y-4">
-          <ControlSection
-            title="Audio Controls"
-            isOpen={currentSections.audio}
-            onToggle={() => toggleSection('audio')}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ControlSlider
-                label="Volume"
-                value={currentControls.volume}
-                min={0}
-                max={1}
-                step={0.01}
-                onChange={(value) => updateControl('volume', value)}
-              />
-              <ControlSlider
-                label="Pitch"
-                value={currentControls.pitch}
-                min={0.5}
-                max={2}
-                step={0.01}
-                onChange={(value) => updateControl('pitch', value)}
-              />
-              <ControlSlider
-                label="Reverb"
-                value={currentControls.reverb}
-                min={0}
-                max={1}
-                step={0.01}
-                onChange={(value) => updateControl('reverb', value)}
-              />
-              <ControlSlider
-                label="Delay"
-                value={currentControls.delay}
-                min={0}
-                max={1}
-                step={0.01}
-                unit="s"
-                onChange={(value) => updateControl('delay', value)}
-              />
-              <ControlSlider
-                label="Distortion"
-                value={currentControls.distortion}
-                min={0}
-                max={1}
-                step={0.01}
-                onChange={(value) => updateControl('distortion', value)}
-              />
+        {/* Status Display */}
+        <div className="bg-card border rounded-lg p-4 max-w-md mx-auto">
+          <div className="text-sm space-y-2">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Status:</span>
+              <span className={currentSettings.systemEnabled ? "text-green-400" : "text-orange-400"}>
+                {currentSettings.systemEnabled ? "Online" : "Offline"}
+              </span>
             </div>
-          </ControlSection>
-
-          <ControlSection
-            title="Visual Controls"
-            isOpen={currentSections.visual}
-            onToggle={() => toggleSection('visual')}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ControlSlider
-                label="Brightness"
-                value={currentControls.brightness}
-                min={0}
-                max={2}
-                step={0.01}
-                onChange={(value) => updateControl('brightness', value)}
-              />
-              <ControlSlider
-                label="Contrast"
-                value={currentControls.contrast}
-                min={0}
-                max={2}
-                step={0.01}
-                onChange={(value) => updateControl('contrast', value)}
-              />
-              <ControlSlider
-                label="Saturation"  
-                value={currentControls.saturation}
-                min={0}
-                max={2}
-                step={0.01}
-                onChange={(value) => updateControl('saturation', value)}
-              />
-              <ControlSlider
-                label="Hue Shift"
-                value={currentControls.hue}
-                min={-180}
-                max={180}
-                step={1}
-                unit="°"
-                onChange={(value) => updateControl('hue', value)}
-              />
-              <ControlSlider
-                label="Blur"
-                value={currentControls.blur}
-                min={0}
-                max={10}
-                step={0.1}
-                unit="px"
-                onChange={(value) => updateControl('blur', value)}
-              />
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Mode:</span>
+              <span className={currentSettings.maintenanceMode ? "text-orange-400" : "text-green-400"}>
+                {currentSettings.maintenanceMode ? "Maintenance" : "Active"}
+              </span>
             </div>
-          </ControlSection>
-
-          <ControlSection
-            title="Motion Controls"
-            isOpen={currentSections.motion}
-            onToggle={() => toggleSection('motion')}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ControlSlider
-                label="Speed"
-                value={currentControls.speed}
-                min={0}
-                max={10}
-                step={0.1}
-                onChange={(value) => updateControl('speed', value)}
-              />
-              <ControlSlider
-                label="Acceleration"
-                value={currentControls.acceleration}
-                min={0}
-                max={5}
-                step={0.1}
-                onChange={(value) => updateControl('acceleration', value)}
-              />
-              <ControlSlider
-                label="Damping"
-                value={currentControls.damping}
-                min={0}
-                max={1}
-                step={0.01}
-                onChange={(value) => updateControl('damping', value)}
-              />
-              <ControlSlider
-                label="Frequency"
-                value={currentControls.frequency}
-                min={0.1}
-                max={5}
-                step={0.1}
-                unit="Hz"
-                onChange={(value) => updateControl('frequency', value)}
-              />
-              <ControlSlider
-                label="Amplitude"
-                value={currentControls.amplitude}
-                min={0}
-                max={2}
-                step={0.01}
-                onChange={(value) => updateControl('amplitude', value)}
-              />
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Connections:</span>
+              <span className="font-mono">{currentSettings.maxConnections}</span>
             </div>
-          </ControlSection>
-
-          <ControlSection
-            title="System Controls"
-            isOpen={currentSections.system}
-            onToggle={() => toggleSection('system')}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Processing Mode</Label>
-                <Select value={currentControls.mode} onValueChange={(value) => updateControl('mode', value)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="normal">Normal</SelectItem>
-                    <SelectItem value="enhanced">Enhanced</SelectItem>
-                    <SelectItem value="performance">Performance</SelectItem>
-                    <SelectItem value="experimental">Experimental</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Quality Setting</Label>
-                <Select value={currentControls.quality} onValueChange={(value) => updateControl('quality', value)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="ultra">Ultra</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </ControlSection>
-        </div>
-
-        <div className="mt-8 p-4 bg-muted rounded-lg">
-          <h3 className="text-sm font-medium mb-2">Current Configuration</h3>
-          <pre className="text-xs font-mono text-muted-foreground overflow-x-auto">
-            {JSON.stringify(currentControls, null, 2)}
-          </pre>
+          </div>
         </div>
       </div>
     </div>
