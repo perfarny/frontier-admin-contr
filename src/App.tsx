@@ -55,17 +55,10 @@ function App() {
     setSettings(defaultSettings)
   }
 
-  // Always ensure enablePerDeviceAccess is true by default
+  // Initialize settings only if empty
   useEffect(() => {
     if (!settings || Object.keys(settings).length === 0) {
       setSettings(defaultSettings)
-    } else {
-      // Force enablePerDeviceAccess to always be true on every load
-      setSettings(current => ({
-        ...defaultSettings,
-        ...current,
-        enablePerDeviceAccess: true
-      }))
     }
   }, [])
 
@@ -155,7 +148,6 @@ function App() {
       ...defaultSettings,
       ...current,
       enablePerDeviceAccess: checked,
-      // Reset to default 'all-users' when enabling, keep current when disabling
       perDeviceAccessType: checked ? 'all-users' : current?.perDeviceAccessType || 'all-users'
     }))
   }
@@ -198,13 +190,8 @@ function App() {
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p>
-            The Frontier program gives your organization early, hands-on access to experimental 
-            and preview features from Microsoft. All Frontier features and agents are previews and 
-            might not be released to general availability. Configure access settings below for where 
-            users can experience Frontier.
-          </p>
-          <p>To get the most out of the Frontier program, we recommend turning on preview features in web apps, desktop apps, and agents.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
         </div>
       </CardHeader>
 
@@ -219,7 +206,7 @@ function App() {
           <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-medium mb-2">Apps</h3>
-              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
+              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in applications. </p>
             </div>
 
             <RadioGroup 
@@ -305,7 +292,7 @@ function App() {
                 />
                 <Label htmlFor="orig-per-device-access" className="font-medium cursor-pointer text-base leading-tight">Allow per device enrollment in Office desktop applications</Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 mt-1">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users can make different choices across devices.</div>
+              <div className="text-muted-foreground ml-6 mt-1 text-sm">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. User choices are device specific.</div>
 
               {/* Sub-menu radio buttons */}
               <div className={`ml-6 mt-3 space-y-1 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -412,14 +399,14 @@ function App() {
         <div className="flex-1 flex flex-col">
           <Tabs value={alternateActiveTab} onValueChange={setAlternateActiveTab} className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="all-apps" className="cursor-pointer">All Apps</TabsTrigger>
+            <TabsTrigger value="all-apps" className="cursor-pointer">Apps</TabsTrigger>
             <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all-apps" className="space-y-4 mt-6 flex-1">
             <div>
-              <h3 className="font-medium mb-2">All Apps</h3>
-              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in all applications.</p>
+              <h3 className="font-medium mb-2">Apps</h3>
+              <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in their M365 applications.</p>
             </div>
 
             <RadioGroup 
@@ -433,9 +420,7 @@ function App() {
                   No access
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-2">
-                Users will not have access to Frontier features in web apps.
-              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">Users will not have access to Frontier features.</div>
 
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="all-users" id="alt-all-users" className="border-black" />
@@ -443,9 +428,7 @@ function App() {
                   All users
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-2">
-                All users in your organization will automatically receive Frontier features in web apps.
-              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">All users in your organization will automatically receive Frontier features.</div>
 
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="specific-groups" id="alt-specific-groups" className="border-black" />
@@ -453,9 +436,7 @@ function App() {
                   Specific user groups
                 </Label>
               </div>
-              <div className="text-xs text-muted-foreground ml-6 -mt-2">
-                Only specified user groups will automatically receive Frontier features in web apps.
-              </div>
+              <div className="text-xs text-muted-foreground ml-6 -mt-2">Only specified user groups will automatically receive Frontier features.</div>
 
               {currentSettings.allApps === 'specific-groups' && (
                 <div className="ml-6 space-y-3">
@@ -526,13 +507,8 @@ function App() {
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p>
-            The Frontier program gives your organization early, hands-on access to experimental 
-            and preview features from Microsoft. All Frontier features and agents are previews and 
-            might not be released to general availability. Configure access settings below for where 
-            users can experience Frontier.
-          </p>
-          <p>To get the most out of the Frontier program, we recommend turning on preview features in web apps, desktop apps, and agents.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
         </div>
       </CardHeader>
 
@@ -628,7 +604,7 @@ function App() {
           <TabsContent value="office-win32" className="space-y-4 mt-6 flex-1">
             <div>
               <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office Desktop applications</h3>
-              <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users can make different choices across devices.</p>
+              <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users choices are device specific.</p>
             </div>
 
             <RadioGroup 
