@@ -184,7 +184,7 @@ function App() {
                         value={newWebGroup}
                         onChange={(e) => setNewWebGroup(e.target.value)}
                         onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
-                        className="flex-1"
+                        className="flex-1 border-2 border-black"
                       />
                       <Button 
                         onClick={addWebGroup}
@@ -269,7 +269,7 @@ function App() {
                         value={newOfficeGroup}
                         onChange={(e) => setNewOfficeGroup(e.target.value)}
                         onKeyPress={(e) => handleKeyPress(e, addOfficeGroup)}
-                        className="flex-1"
+                        className="flex-1 border-2 border-black"
                       />
                       <Button 
                         onClick={addOfficeGroup}
