@@ -400,7 +400,7 @@ function App() {
             id="version-switch"
             checked={isAlternateVersion}
             onCheckedChange={setIsAlternateVersion}
-            className="scale-125"
+            className="scale-125 border-black cursor-pointer hover:cursor-pointer"
           />
           <Label htmlFor="version-switch" className="text-base font-medium">Alternate</Label>
         </div>
