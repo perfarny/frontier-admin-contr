@@ -362,7 +362,7 @@ function App() {
             </div>
           </TabsContent>
 
-          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[320px]">
+          <TabsContent value="agents" className="space-y-4 mt-6 min-h-[460px]">
             <div>
               <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
               <p className="text-sm text-muted-foreground">
