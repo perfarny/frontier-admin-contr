@@ -145,7 +145,9 @@ function App() {
     setSettings(current => ({
       ...defaultSettings,
       ...current,
-      enablePerDeviceAccess: checked
+      enablePerDeviceAccess: checked,
+      // Reset to default 'all-users' when enabling, keep current when disabling
+      perDeviceAccessType: checked ? 'all-users' : current?.perDeviceAccessType || 'all-users'
     }))
   }
 
@@ -298,7 +300,7 @@ function App() {
               {/* Sub-menu radio buttons */}
               <div className={`ml-6 mt-4 space-y-3 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
                 <RadioGroup 
-                  value={currentSettings.perDeviceAccessType} 
+                  value={currentSettings.enablePerDeviceAccess ? currentSettings.perDeviceAccessType : ''} 
                   onValueChange={handlePerDeviceAccessTypeChange}
                   className="space-y-2"
                   disabled={!currentSettings.enablePerDeviceAccess}
