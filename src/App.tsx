@@ -482,8 +482,8 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
 // Main App component
 export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
-  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v3-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [publishedSettings, setPublishedSettings] = useKV<Settings>(`published-frontier-settings-v3-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v4-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [publishedSettings, setPublishedSettings] = useKV<Settings>(`published-frontier-settings-v4-${selectedVersion}`, getDefaultSettings(selectedVersion))
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
   const currentPublishedSettings = { ...getDefaultSettings(selectedVersion), ...publishedSettings }
