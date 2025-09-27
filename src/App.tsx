@@ -68,17 +68,7 @@ const getDefaultSettings = (version: VersionType): Settings => {
   }
 }
 
-const defaultSettings: Settings = {
-  webApps: 'no-access',
-  webGroups: [],
-  officeWin32: 'all-users',
-  officeGroups: [],
-  allApps: 'no-access',
-  allAppsGroups: [],
-  enablePerDeviceAccess: true,
-  perDeviceAccessType: 'all-users',
-  perDeviceGroups: []
-}
+
 
 // Group management component
 interface GroupManagerProps {
@@ -477,7 +467,9 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
 
 export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
-  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v4-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  
+  // Use a fresh key to avoid stale data and ensure proper defaults
+  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v5-${selectedVersion}`, getDefaultSettings(selectedVersion))
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
 
