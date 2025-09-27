@@ -472,10 +472,10 @@ export default function App() {
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v5-${selectedVersion}`, getDefaultSettings(selectedVersion))
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
-
   const updateSettings = (updates: Partial<Settings>) => {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
+
 
   const resetToDefaults = () => setSettings(getDefaultSettings(selectedVersion))
 
