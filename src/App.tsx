@@ -540,32 +540,27 @@ export default function App() {
     enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />
   }
 
-
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
-      <div className="flex items-center gap-4 p-6 bg-card rounded-lg border shadow-lg">
-        <span className="text-lg font-semibold text-foreground" data-editable="true">Select Version:</span>
-        <div className="flex gap-2">
-          <Button
-            variant={selectedVersion === 'unified' ? "default" : "outline"}
-            onClick={() => handleVersionChange('unified')}
-            className="border-black"
-            data-editable="true"
-          >A. No Toggle</Button>
-          <Button
-            variant={selectedVersion === 'separated' ? "default" : "outline"}
-            onClick={() => handleVersionChange('separated')}
-            className="border-black"
-            data-editable="true"
-          >B. Toggle - 3 Tabs</Button>
-          <Button
-            variant={selectedVersion === 'enhanced' ? "default" : "outline"}
-            onClick={() => handleVersionChange('enhanced')}
-            className="border-black"
-            data-editable="true"
-          >C. Toggle - 2 Tabs</Button>
-        </div>
-
+    <div className="min-h-screen bg-background flex flex-col items-center p-8 gap-8">
+      <div className="flex gap-4">
+        <Button
+          variant={selectedVersion === 'unified' ? "default" : "outline"}
+          onClick={() => handleVersionChange('unified')}
+          className="border-black"
+          data-editable="true"
+        >A. No Toggle</Button>
+        <Button
+          variant={selectedVersion === 'separated' ? "default" : "outline"}
+          onClick={() => handleVersionChange('separated')}
+          className="border-black"
+          data-editable="true"
+        >B. Toggle - 3 Tabs</Button>
+        <Button
+          variant={selectedVersion === 'enhanced' ? "default" : "outline"}
+          onClick={() => handleVersionChange('enhanced')}
+          className="border-black"
+          data-editable="true"
+        >C. Toggle - 2 Tabs</Button>
       </div>
       
       {versions[selectedVersion]()}
