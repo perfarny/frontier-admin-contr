@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
+import { toast, Toaster } from 'sonner'
 import { Button } from './components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
@@ -207,7 +208,7 @@ function AccessControl({
 }
 
 // Version A: Unified Apps Interface
-function UnifiedVersion({ settings, updateSettings, resetToDefaults }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void }) {
+function UnifiedVersion({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
@@ -265,7 +266,14 @@ function UnifiedVersion({ settings, updateSettings, resetToDefaults }: { setting
         </div>
         <div className="border-t pt-4 flex justify-end gap-2">
           <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
-          <Button>Save</Button>
+          <Button 
+            onClick={onSave}
+            variant={hasChanges ? "default" : "outline"}
+            className={hasChanges ? "" : "border-black"}
+            disabled={!hasChanges}
+          >
+            Save
+          </Button>
         </div>
       </CardContent>
     </Card>
@@ -273,7 +281,7 @@ function UnifiedVersion({ settings, updateSettings, resetToDefaults }: { setting
 }
 
 // Version B: Separated Apps Interface
-function SeparatedVersion({ settings, updateSettings, resetToDefaults }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void }) {
+function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
   const [activeTab, setActiveTab] = useState('web-apps')
 
   return (
@@ -355,8 +363,15 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults }: { setti
           </Tabs>
         </div>
         <div className="border-t pt-4 flex justify-end gap-2">
-          <Button variant="outline" className="border-black">Cancel</Button>
-          <Button>Save</Button>
+          <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
+          <Button 
+            onClick={onSave}
+            variant={hasChanges ? "default" : "outline"}
+            className={hasChanges ? "" : "border-black"}
+            disabled={!hasChanges}
+          >
+            Save
+          </Button>
         </div>
       </CardContent>
     </Card>
@@ -364,7 +379,7 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults }: { setti
 }
 
 // Version C: Enhanced with Per-Device Controls
-function EnhancedVersion({ settings, updateSettings, resetToDefaults }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void }) {
+function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
@@ -468,8 +483,15 @@ function EnhancedVersion({ settings, updateSettings, resetToDefaults }: { settin
           </Tabs>
         </div>
         <div className="border-t pt-4 flex justify-end gap-2">
-          <Button variant="outline" className="border-black">Cancel</Button>
-          <Button>Save</Button>
+          <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
+          <Button 
+            onClick={onSave}
+            variant={hasChanges ? "default" : "outline"}
+            className={hasChanges ? "" : "border-black"}
+            disabled={!hasChanges}
+          >
+            Save
+          </Button>
         </div>
       </CardContent>
     </Card>
@@ -488,8 +510,19 @@ export default function App() {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
-
   const resetToDefaults = () => setSettings(getDefaultSettings(selectedVersion))
+
+  // Check if current settings differ from defaults
+  const defaultSettings = getDefaultSettings(selectedVersion)
+  const hasChanges = JSON.stringify(currentSettings) !== JSON.stringify(defaultSettings)
+
+  // Save function - just reset changes flag by updating timestamp
+  const handleSave = () => {
+    // In a real app, this would send data to server
+    // For now, we'll just show that the save worked by briefly showing no changes
+    console.log('Settings saved:', currentSettings)
+    toast.success('Settings saved successfully')
+  }
 
   // Handle version switching - reset to version-specific defaults
   const handleVersionChange = (version: VersionType) => {
@@ -499,9 +532,9 @@ export default function App() {
   }
 
   const versions = {
-    unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} />,
-    separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} />,
-    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} />
+    unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
+    separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
+    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />
   }
 
   const SelectedVersion = versions[selectedVersion]
@@ -534,6 +567,7 @@ export default function App() {
       </div>
       
       <SelectedVersion />
+      <Toaster />
     </div>
   )
 }
