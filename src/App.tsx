@@ -510,8 +510,8 @@ export default function App() {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
-  const resetToDefaults = () => setSettings(getDefaultSettings(selectedVersion))
 
+  // Check if current settings differ from defaults
   // Check if current settings differ from defaults
   const defaultSettings = getDefaultSettings(selectedVersion)
   const hasChanges = JSON.stringify(currentSettings) !== JSON.stringify(defaultSettings)
@@ -524,7 +524,6 @@ export default function App() {
     toast.success('Settings saved successfully')
   }
 
-  // Handle version switching - reset to version-specific defaults
   const handleVersionChange = (version: VersionType) => {
     setSelectedVersion(version)
     // Reset settings when switching versions to use version-specific defaults
@@ -535,6 +534,10 @@ export default function App() {
     unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
     separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
     enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />
+  }
+
+  const resetToDefaults = () => {
+    setSettings(getDefaultSettings(selectedVersion))
   }
 
   const SelectedVersion = versions[selectedVersion]
