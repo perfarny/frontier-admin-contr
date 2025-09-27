@@ -265,7 +265,14 @@ function UnifiedVersion({ settings, updateSettings, resetToDefaults, hasChanges,
           </Tabs>
         </div>
         <div className="border-t pt-4 flex justify-end gap-2">
-          <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
+          <Button 
+            variant="outline" 
+            onClick={resetToDefaults} 
+            className="border-black"
+            disabled={!hasChanges}
+          >
+            Cancel
+          </Button>
           <Button 
             onClick={onSave}
             variant={hasChanges ? "default" : "outline"}
@@ -363,7 +370,14 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
           </Tabs>
         </div>
         <div className="border-t pt-4 flex justify-end gap-2">
-          <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
+          <Button 
+            variant="outline" 
+            onClick={resetToDefaults} 
+            className="border-black"
+            disabled={!hasChanges}
+          >
+            Cancel
+          </Button>
           <Button 
             onClick={onSave}
             variant={hasChanges ? "default" : "outline"}
@@ -483,7 +497,14 @@ function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges
           </Tabs>
         </div>
         <div className="border-t pt-4 flex justify-end gap-2">
-          <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
+          <Button 
+            variant="outline" 
+            onClick={resetToDefaults} 
+            className="border-black"
+            disabled={!hasChanges}
+          >
+            Cancel
+          </Button>
           <Button 
             onClick={onSave}
             variant={hasChanges ? "default" : "outline"}
