@@ -76,7 +76,7 @@ function GroupManager({ groups, onAddGroup, onRemoveGroup, placeholder = "Enter 
           onKeyDown={handleKeyDown}
           className="flex-1"
         />
-        <Button onClick={handleAdd} variant="outline" size="sm">
+        <Button onClick={handleAdd} variant="outline" size="sm" className="border-black">
           Add
         </Button>
       </div>
@@ -134,7 +134,7 @@ function AccessControl({
   return (
     <RadioGroup value={value} onValueChange={(v) => onChange(v as AccessLevel)} className="space-y-3">
       <div className="flex items-center space-x-2">
-        <RadioGroupItem value="no-access" id={`${prefix}-no-access`} />
+        <RadioGroupItem value="no-access" id={`${prefix}-no-access`} className="border-black" />
         <Label htmlFor={`${prefix}-no-access`} className="font-normal">
           {labels.noAccess}
         </Label>
@@ -142,9 +142,8 @@ function AccessControl({
       <div className="text-xs text-muted-foreground ml-6 -mt-2">
         {descriptions.noAccess}
       </div>
-
       <div className="flex items-center space-x-2">
-        <RadioGroupItem value="all-users" id={`${prefix}-all-users`} />
+        <RadioGroupItem value="all-users" id={`${prefix}-all-users`} className="border-black" />
         <Label htmlFor={`${prefix}-all-users`} className="font-normal">
           {labels.allUsers}
         </Label>
@@ -152,9 +151,8 @@ function AccessControl({
       <div className="text-xs text-muted-foreground ml-6 -mt-2">
         {descriptions.allUsers}
       </div>
-
       <div className="flex items-center space-x-2">
-        <RadioGroupItem value="specific-groups" id={`${prefix}-specific-groups`} />
+        <RadioGroupItem value="specific-groups" id={`${prefix}-specific-groups`} className="border-black" />
         <Label htmlFor={`${prefix}-specific-groups`} className="font-normal">
           {labels.specificGroups}
         </Label>
@@ -162,7 +160,6 @@ function AccessControl({
       <div className="text-xs text-muted-foreground ml-6 -mt-2">
         {descriptions.specificGroups}
       </div>
-
       {value === 'specific-groups' && (
         <div className="ml-6">
           <GroupManager
@@ -174,7 +171,7 @@ function AccessControl({
         </div>
       )}
     </RadioGroup>
-  )
+  );
 }
 
 // Version A: Unified Apps Interface
@@ -401,12 +398,12 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
                     disabled={!settings.enablePerDeviceAccess}
                   >
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="all-users" id="enhanced-per-device-all-users" />
+                      <RadioGroupItem value="all-users" id="enhanced-per-device-all-users" className="border-black" />
                       <Label htmlFor="enhanced-per-device-all-users" className="font-normal">All users</Label>
                     </div>
 
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="specific-groups" id="enhanced-per-device-specific-groups" />
+                      <RadioGroupItem value="specific-groups" id="enhanced-per-device-specific-groups" className="border-black" />
                       <Label htmlFor="enhanced-per-device-specific-groups" className="font-normal">Specific user groups</Label>
                     </div>
 
@@ -473,18 +470,21 @@ export default function App() {
           <Button
             variant={selectedVersion === 'unified' ? "default" : "outline"}
             onClick={() => setSelectedVersion('unified')}
+            className="border-black"
           >
             A. Unified Apps
           </Button>
           <Button
             variant={selectedVersion === 'separated' ? "default" : "outline"}
             onClick={() => setSelectedVersion('separated')}
+            className="border-black"
           >
             B. Separated Apps
           </Button>
           <Button
             variant={selectedVersion === 'enhanced' ? "default" : "outline"}
             onClick={() => setSelectedVersion('enhanced')}
+            className="border-black"
           >
             C. Enhanced Controls
           </Button>
@@ -494,8 +494,8 @@ export default function App() {
       <div className="relative">
         <SelectedVersion />
         <div className="absolute bottom-4 right-4 flex gap-2">
-          <Button variant="outline" onClick={resetToDefaults}>Cancel</Button>
-          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>Save</Button>
+          <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
+          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges} className="border-black">Save</Button>
         </div>
       </div>
     </div>
