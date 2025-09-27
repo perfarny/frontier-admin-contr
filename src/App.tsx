@@ -43,7 +43,7 @@ const getDefaultSettings = (version: VersionType): Settings => {
       }
     case 'separated': // B. Toggle - 3 Tabs
       return {
-        webApps: 'all-users',
+        webApps: 'no-access',
         webGroups: [],
         officeWin32: 'all-users',
         officeGroups: [],
@@ -537,12 +537,12 @@ export default function App() {
             variant={selectedVersion === 'separated' ? "default" : "outline"}
             onClick={() => handleVersionChange('separated')}
             className="border-black"
-          >B. Toggle 3 Tabs</Button>
+          >B. Toggle - 3 Tabs</Button>
           <Button
             variant={selectedVersion === 'enhanced' ? "default" : "outline"}
             onClick={() => handleVersionChange('enhanced')}
             className="border-black"
-          >C. Toggle 2 Tabs</Button>
+          >C. Toggle - 2 Tabs</Button>
         </div>
       </div>
       <div className="relative">
