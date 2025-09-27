@@ -33,7 +33,7 @@ const getDefaultSettings = (version: VersionType): Settings => {
       return {
         webApps: 'no-access',
         webGroups: [],
-        officeWin32: 'all-users',
+        officeWin32: 'no-access',
         officeGroups: [],
         allApps: 'no-access',
         allAppsGroups: [],
