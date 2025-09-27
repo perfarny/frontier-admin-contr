@@ -192,8 +192,8 @@ function UnifiedVersion({ settings, updateSettings }: { settings: Settings; upda
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="apps">Apps</TabsTrigger>
-              <TabsTrigger value="agents">Agents</TabsTrigger>
+              <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
+              <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
             </TabsList>
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
@@ -255,9 +255,9 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="web-apps">Web apps</TabsTrigger>
-              <TabsTrigger value="office">Office Desktop Apps</TabsTrigger>
-              <TabsTrigger value="agents">Agents</TabsTrigger>
+              <TabsTrigger value="web-apps" className="cursor-pointer">Web apps</TabsTrigger>
+              <TabsTrigger value="office" className="cursor-pointer">Office Desktop Apps</TabsTrigger>
+              <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
             </TabsList>
 
             <TabsContent value="web-apps" className="space-y-4 mt-6 flex-1">
@@ -345,8 +345,8 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="apps">Apps</TabsTrigger>
-              <TabsTrigger value="agents">Agents</TabsTrigger>
+              <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
+              <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
             </TabsList>
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
