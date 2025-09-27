@@ -8,7 +8,7 @@ import { Label } from './components/ui/label'
 import { Input } from './components/ui/input'
 import { Badge } from './components/ui/badge'
 import { Checkbox } from './components/ui/checkbox'
-import { X, CheckCircle, Clock } from '@phosphor-icons/react'
+import { X } from '@phosphor-icons/react'
 
 // Types
 type AccessLevel = 'no-access' | 'all-users' | 'specific-groups'
@@ -474,63 +474,24 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
   );
 }
 
-// Publication Status Component
-function PublishStatus({ hasChanges }: { hasChanges: boolean }) {
-  return (
-    <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-card">
-      {hasChanges ? (
-        <>
-          <Clock size={16} className="text-orange-500" />
-          <span className="text-sm font-medium text-orange-600">Unpublished Changes</span>
-          <Badge variant="outline" className="text-xs border-orange-200 text-orange-600">
-            Pending
-          </Badge>
-        </>
-      ) : (
-        <>
-          <CheckCircle size={16} className="text-green-500" />
-          <span className="text-sm font-medium text-green-600">All Changes Published</span>
-          <Badge variant="outline" className="text-xs border-green-200 text-green-600">
-            Up to date
-          </Badge>
-        </>
-      )}
-    </div>
-  )
-}
+
 export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v4-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [publishedSettings, setPublishedSettings] = useKV<Settings>(`published-frontier-settings-v4-${selectedVersion}`, getDefaultSettings(selectedVersion))
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
-  const currentPublishedSettings = { ...getDefaultSettings(selectedVersion), ...publishedSettings }
-  
-  // Use a more robust comparison that handles initial state properly
-  const hasUnpublishedChanges = () => {
-    // If both are effectively defaults, no changes
-    if (!settings && !publishedSettings) return false
-    
-    // If one exists and the other doesn't, there are changes
-    if (!!settings !== !!publishedSettings) return true
-    
-    // Compare the actual merged objects
-    return JSON.stringify(currentSettings) !== JSON.stringify(currentPublishedSettings)
-  }
 
   const updateSettings = (updates: Partial<Settings>) => {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
   const resetToDefaults = () => setSettings(getDefaultSettings(selectedVersion))
-  const publishChanges = () => setPublishedSettings(currentSettings)
 
   // Handle version switching - reset to version-specific defaults
   const handleVersionChange = (version: VersionType) => {
     setSelectedVersion(version)
     // Reset settings when switching versions to use version-specific defaults
     setSettings(getDefaultSettings(version))
-    setPublishedSettings(getDefaultSettings(version))
   }
 
   const versions = {
@@ -543,44 +504,33 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-4 p-6 bg-card rounded-lg border shadow-lg">
-          <span className="text-lg font-semibold text-foreground" data-editable="true">Select Version:</span>
-          <div className="flex gap-2">
-            <Button
-              variant={selectedVersion === 'unified' ? "default" : "outline"}
-              onClick={() => handleVersionChange('unified')}
-              className="border-black"
-              data-editable="true"
-            >A. No Toggle</Button>
-            <Button
-              variant={selectedVersion === 'separated' ? "default" : "outline"}
-              onClick={() => handleVersionChange('separated')}
-              className="border-black"
-              data-editable="true"
-            >B. Toggle - 3 Tabs</Button>
-            <Button
-              variant={selectedVersion === 'enhanced' ? "default" : "outline"}
-              onClick={() => handleVersionChange('enhanced')}
-              className="border-black"
-              data-editable="true"
-            >C. Toggle - 2 Tabs</Button>
-          </div>
+      <div className="flex items-center gap-4 p-6 bg-card rounded-lg border shadow-lg">
+        <span className="text-lg font-semibold text-foreground" data-editable="true">Select Version:</span>
+        <div className="flex gap-2">
+          <Button
+            variant={selectedVersion === 'unified' ? "default" : "outline"}
+            onClick={() => handleVersionChange('unified')}
+            className="border-black"
+            data-editable="true"
+          >A. No Toggle</Button>
+          <Button
+            variant={selectedVersion === 'separated' ? "default" : "outline"}
+            onClick={() => handleVersionChange('separated')}
+            className="border-black"
+            data-editable="true"
+          >B. Toggle - 3 Tabs</Button>
+          <Button
+            variant={selectedVersion === 'enhanced' ? "default" : "outline"}
+            onClick={() => handleVersionChange('enhanced')}
+            className="border-black"
+            data-editable="true"
+          >C. Toggle - 2 Tabs</Button>
         </div>
-        <PublishStatus hasChanges={hasUnpublishedChanges()} />
       </div>
       <div className="relative">
         <SelectedVersion />
         <div className="absolute bottom-4 right-4 flex gap-2">
           <Button variant="outline" onClick={resetToDefaults} className="border-black" data-editable="true">Cancel</Button>
-          <Button 
-            onClick={publishChanges} 
-            disabled={!hasUnpublishedChanges()} 
-            className="border-black" 
-            data-editable="true"
-          >
-            {hasUnpublishedChanges() ? 'Save' : 'Saved'}
-          </Button>
         </div>
       </div>
     </div>
