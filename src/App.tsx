@@ -16,12 +16,17 @@ type AccessLevel = 'no-access' | 'all-users' | 'specific-groups'
 type VersionType = 'unified' | 'separated' | 'enhanced'
 
 interface Settings {
+  // Version A (unified) - uses allApps for its single Apps setting
+  allApps: AccessLevel
+  allAppsGroups: string[]
+  
+  // Version B (separated) - uses separate webApps and officeWin32
   webApps: AccessLevel
   webGroups: string[]
   officeWin32: AccessLevel
   officeGroups: string[]
-  allApps: AccessLevel
-  allAppsGroups: string[]
+  
+  // Version C (enhanced) - uses allApps like Version A, plus per-device controls
   enablePerDeviceAccess: boolean
   perDeviceAccessType: 'all-users' | 'specific-groups'
   perDeviceGroups: string[]
@@ -32,36 +37,45 @@ const getDefaultSettings = (version: VersionType): Settings => {
   switch (version) {
     case 'unified': // A. No Toggle
       return {
+        // Version A uses allApps for its unified Apps setting
+        allApps: 'no-access',
+        allAppsGroups: [],
+        // Version B settings (not used in Version A)
         webApps: 'no-access',
         webGroups: [],
         officeWin32: 'no-access',
         officeGroups: [],
-        allApps: 'no-access',
-        allAppsGroups: [],
+        // Version C settings (not used in Version A)
         enablePerDeviceAccess: false,
         perDeviceAccessType: 'all-users',
         perDeviceGroups: []
       }
     case 'separated': // B. Toggle - 3 Tabs
       return {
+        // Version A settings (not used in Version B)
+        allApps: 'no-access',
+        allAppsGroups: [],
+        // Version B uses separate webApps and officeWin32
         webApps: 'no-access',
         webGroups: [],
         officeWin32: 'all-users',
         officeGroups: [],
-        allApps: 'all-users',
-        allAppsGroups: [],
+        // Version C settings (not used in Version B)
         enablePerDeviceAccess: true,
         perDeviceAccessType: 'all-users',
         perDeviceGroups: []
       }
     case 'enhanced': // C. Toggle - 2 Tabs
       return {
+        // Version C uses allApps like Version A
+        allApps: 'no-access',
+        allAppsGroups: [],
+        // Version B settings (not used in Version C)
         webApps: 'no-access',
         webGroups: [],
         officeWin32: 'all-users',
         officeGroups: [],
-        allApps: 'no-access',
-        allAppsGroups: [],
+        // Version C specific per-device controls
         enablePerDeviceAccess: true,
         perDeviceAccessType: 'all-users',
         perDeviceGroups: []
