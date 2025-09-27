@@ -286,7 +286,7 @@ function App() {
                       value={originalNewAllAppsGroup}
                       onChange={(e) => setOriginalNewAllAppsGroup(e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, addOriginalAllAppsGroup)}
-                      className="flex-1 border-black"
+                      className="flex-1"
                     />
                     <Button 
                       onClick={addOriginalAllAppsGroup}
@@ -359,7 +359,7 @@ function App() {
                           value={originalNewPerDeviceGroup}
                           onChange={(e) => setOriginalNewPerDeviceGroup(e.target.value)}
                           onKeyDown={(e) => handleKeyDown(e, addPerDeviceGroup)}
-                          className="flex-1 border-black"
+                          className="flex-1"
                         />
                         <Button 
                           onClick={addPerDeviceGroup}
@@ -478,7 +478,7 @@ function App() {
                       value={alternateNewAllAppsGroup}
                       onChange={(e) => setAlternateNewAllAppsGroup(e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, addAllAppsGroup)}
-                      className="flex-1 border-black"
+                      className="flex-1"
                     />
                     <Button 
                       onClick={addAllAppsGroup}
@@ -604,7 +604,7 @@ function App() {
                       value={newWebGroup}
                       onChange={(e) => setNewWebGroup(e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, addWebGroup)}
-                      className="flex-1 border-black"
+                      className="flex-1"
                     />
                     <Button 
                       onClick={addWebGroup}
@@ -679,7 +679,7 @@ function App() {
                       value={newOfficeGroup}
                       onChange={(e) => setNewOfficeGroup(e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, addOfficeGroup)}
-                      className="flex-1 border-black"
+                      className="flex-1"
                     />
                     <Button 
                       onClick={addOfficeGroup}
