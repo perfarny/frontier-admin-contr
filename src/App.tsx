@@ -179,7 +179,7 @@ function UnifiedVersion({ settings, updateSettings }: { settings: Settings; upda
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
-    <Card className="max-w-2xl w-full h-[780px]">
+    <Card className="w-[672px] h-[780px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -242,7 +242,7 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
   const [activeTab, setActiveTab] = useState('web-apps')
 
   return (
-    <Card className="max-w-2xl w-full h-[780px]">
+    <Card className="w-[672px] h-[780px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
