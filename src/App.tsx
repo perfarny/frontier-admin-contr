@@ -281,6 +281,7 @@ function App() {
                 <div className="ml-6 space-y-3">
                   <div className="flex gap-2">
                     <Input
+                      id="original-all-apps-group-input"
                       placeholder="Enter group name"
                       value={originalNewAllAppsGroup}
                       onChange={(e) => setOriginalNewAllAppsGroup(e.target.value)}
@@ -353,6 +354,7 @@ function App() {
                     <div className="ml-6 space-y-2 mt-2">
                       <div className="flex gap-2">
                         <Input
+                          id="original-per-device-group-input"
                           placeholder="Enter group name"
                           value={originalNewPerDeviceGroup}
                           onChange={(e) => setOriginalNewPerDeviceGroup(e.target.value)}
@@ -471,6 +473,7 @@ function App() {
                 <div className="ml-6 space-y-3">
                   <div className="flex gap-2">
                     <Input
+                      id="alternate-all-apps-group-input"
                       placeholder="Enter group name"
                       value={alternateNewAllAppsGroup}
                       onChange={(e) => setAlternateNewAllAppsGroup(e.target.value)}
@@ -596,6 +599,7 @@ function App() {
                 <div className="ml-6 space-y-3">
                   <div className="flex gap-2">
                     <Input
+                      id="web-group-input"
                       placeholder="Enter group name"
                       value={newWebGroup}
                       onChange={(e) => setNewWebGroup(e.target.value)}
@@ -670,6 +674,7 @@ function App() {
                 <div className="ml-6 space-y-3">
                   <div className="flex gap-2">
                     <Input
+                      id="office-group-input"
                       placeholder="Enter group name"
                       value={newOfficeGroup}
                       onChange={(e) => setNewOfficeGroup(e.target.value)}
