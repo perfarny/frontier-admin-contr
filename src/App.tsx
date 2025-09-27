@@ -38,10 +38,17 @@ const defaultSettings: FrontierSettings = {
 function App() {
   const [settings, setSettings] = useKV<FrontierSettings>('frontier-settings', defaultSettings)
   const [publishedSettings, setPublishedSettings] = useKV<FrontierSettings>('published-frontier-settings', defaultSettings)
+  // Version B input states
   const [newWebGroup, setNewWebGroup] = useState('')
   const [newOfficeGroup, setNewOfficeGroup] = useState('')
-  const [newAllAppsGroup, setNewAllAppsGroup] = useState('')
-  const [newPerDeviceGroup, setNewPerDeviceGroup] = useState('')
+  
+  // Alternate version input states
+  const [alternateNewAllAppsGroup, setAlternateNewAllAppsGroup] = useState('')
+  
+  // Original version input states
+  const [originalNewAllAppsGroup, setOriginalNewAllAppsGroup] = useState('')
+  const [originalNewPerDeviceGroup, setOriginalNewPerDeviceGroup] = useState('')
+  
   const [selectedVersion, setSelectedVersion] = useState('alternate')
   const [activeTab, setActiveTab] = useState('apps')
   const [alternateActiveTab, setAlternateActiveTab] = useState('all-apps')
@@ -131,13 +138,24 @@ function App() {
   }
 
   const addAllAppsGroup = () => {
-    if (newAllAppsGroup.trim()) {
+    if (alternateNewAllAppsGroup.trim()) {
       setSettings(current => ({
         ...defaultSettings,
         ...current,
-        allAppsGroups: [...(current?.allAppsGroups || []), newAllAppsGroup.trim()]
+        allAppsGroups: [...(current?.allAppsGroups || []), alternateNewAllAppsGroup.trim()]
       }))
-      setNewAllAppsGroup('')
+      setAlternateNewAllAppsGroup('')
+    }
+  }
+
+  const addOriginalAllAppsGroup = () => {
+    if (originalNewAllAppsGroup.trim()) {
+      setSettings(current => ({
+        ...defaultSettings,
+        ...current,
+        allAppsGroups: [...(current?.allAppsGroups || []), originalNewAllAppsGroup.trim()]
+      }))
+      setOriginalNewAllAppsGroup('')
     }
   }
 
@@ -174,13 +192,13 @@ function App() {
   }
 
   const addPerDeviceGroup = () => {
-    if (newPerDeviceGroup.trim()) {
+    if (originalNewPerDeviceGroup.trim()) {
       setSettings(current => ({
         ...defaultSettings,
         ...current,
-        perDeviceGroups: [...(current?.perDeviceGroups || []), newPerDeviceGroup.trim()]
+        perDeviceGroups: [...(current?.perDeviceGroups || []), originalNewPerDeviceGroup.trim()]
       }))
-      setNewPerDeviceGroup('')
+      setOriginalNewPerDeviceGroup('')
     }
   }
 
@@ -263,13 +281,13 @@ function App() {
                   <div className="flex gap-2">
                     <Input
                       placeholder="Enter group name"
-                      value={newAllAppsGroup}
-                      onChange={(e) => setNewAllAppsGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addAllAppsGroup)}
+                      value={originalNewAllAppsGroup}
+                      onChange={(e) => setOriginalNewAllAppsGroup(e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, addOriginalAllAppsGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
-                      onClick={addAllAppsGroup}
+                      onClick={addOriginalAllAppsGroup}
                       variant="outline"
                       size="sm"
                     >
@@ -335,8 +353,8 @@ function App() {
                       <div className="flex gap-2">
                         <Input
                           placeholder="Enter group name"
-                          value={newPerDeviceGroup}
-                          onChange={(e) => setNewPerDeviceGroup(e.target.value)}
+                          value={originalNewPerDeviceGroup}
+                          onChange={(e) => setOriginalNewPerDeviceGroup(e.target.value)}
                           onKeyPress={(e) => handleKeyPress(e, addPerDeviceGroup)}
                           className="flex-1 border-black"
                         />
@@ -453,8 +471,8 @@ function App() {
                   <div className="flex gap-2">
                     <Input
                       placeholder="Enter group name"
-                      value={newAllAppsGroup}
-                      onChange={(e) => setNewAllAppsGroup(e.target.value)}
+                      value={alternateNewAllAppsGroup}
+                      onChange={(e) => setAlternateNewAllAppsGroup(e.target.value)}
                       onKeyPress={(e) => handleKeyPress(e, addAllAppsGroup)}
                       className="flex-1 border-black"
                     />
