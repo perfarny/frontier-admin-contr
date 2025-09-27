@@ -258,7 +258,7 @@ function UnifiedVersion({ settings, updateSettings }: { settings: Settings; upda
                 }}
                 descriptions={{
                   noAccess: 'Users will not have access to Frontier features.',
-                  allUsers: 'All users in your organization will automatically receive Frontier features.',
+                  allUsers: 'All users will automatically receive Frontier features.',
                   specificGroups: 'Only specified user groups will automatically receive Frontier features.'
                 }}
               />
@@ -355,8 +355,8 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
 
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground">The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.</p>
+                <h3 className="font-bold mb-2" data-editable="true">Get early access to AI agents built by Microsoft</h3>
+                <p className="text-sm text-muted-foreground" data-editable="true">The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.</p>
               </div>
             </TabsContent>
           </Tabs>
@@ -463,8 +463,8 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
 
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-bold mb-2" data-editable="true">Get early access to AI agents built by Microsoft</h3>
+                <p className="text-sm text-muted-foreground" data-editable="true">
                   The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
                 </p>
               </div>
