@@ -545,12 +545,9 @@ export default function App() {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
-  // Check if current settings differ from defaults
   const defaultSettings = getDefaultSettings(selectedVersion)
-  // Only show changes if settings have actually been loaded and differ from defaults
   const hasChanges = settings !== undefined && JSON.stringify(currentSettings) !== JSON.stringify(defaultSettings)
 
-  // Save function - just reset changes flag by updating timestamp
   const handleSave = () => {
     // In a real app, this would send data to server
     // For now, we'll just show that the save worked by briefly showing no changes
