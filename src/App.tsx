@@ -38,7 +38,7 @@ const getDefaultSettings = (version: VersionType): Settings => {
         officeGroups: [],
         allApps: 'no-access',
         allAppsGroups: [],
-        enablePerDeviceAccess: true,
+        enablePerDeviceAccess: false,
         perDeviceAccessType: 'all-users',
         perDeviceGroups: []
       }
