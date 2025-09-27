@@ -524,6 +524,10 @@ export default function App() {
     toast.success('Settings saved successfully')
   }
 
+  const resetToDefaults = () => {
+    setSettings(getDefaultSettings(selectedVersion))
+  }
+
   const handleVersionChange = (version: VersionType) => {
     setSelectedVersion(version)
     // Reset settings when switching versions to use version-specific defaults
@@ -536,11 +540,6 @@ export default function App() {
     enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />
   }
 
-  const resetToDefaults = () => {
-    setSettings(getDefaultSettings(selectedVersion))
-  }
-
-  const SelectedVersion = versions[selectedVersion]
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
@@ -569,7 +568,7 @@ export default function App() {
 
       </div>
       
-      <SelectedVersion />
+      {versions[selectedVersion]()}
       <Toaster />
     </div>
   )
