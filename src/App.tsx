@@ -545,11 +545,10 @@ export default function App() {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
-
-  // Check if current settings differ from defaults
   // Check if current settings differ from defaults
   const defaultSettings = getDefaultSettings(selectedVersion)
-  const hasChanges = JSON.stringify(currentSettings) !== JSON.stringify(defaultSettings)
+  // Only show changes if settings have actually been loaded and differ from defaults
+  const hasChanges = settings !== undefined && JSON.stringify(currentSettings) !== JSON.stringify(defaultSettings)
 
   // Save function - just reset changes flag by updating timestamp
   const handleSave = () => {
