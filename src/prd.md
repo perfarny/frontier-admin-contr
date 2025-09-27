@@ -1,65 +1,51 @@
-# Frontier Features Configuration Tool - PRD
+# Frontier Features Configuration Interface - Rebuilt
 
 ## Core Purpose & Success
-- **Mission Statement**: Provide administrators with a clean, efficient interface to configure Microsoft Frontier program access across different organizational user groups and application types.
-- **Success Indicators**: Administrators can easily compare three different UI approaches, configure access settings without bugs, and save configurations reliably.
-- **Experience Qualities**: Clean, professional, intuitive
+- **Mission Statement**: Create a clean, efficient administrative interface for configuring Microsoft Frontier program access across different application contexts.
+- **Success Indicators**: Intuitive configuration experience, clear visual hierarchy, bug-free input handling, efficient state management.
+- **Experience Qualities**: Professional, Clear, Reliable
 
 ## Project Classification & Approach
 - **Complexity Level**: Light Application (multiple features with basic state)
-- **Primary User Activity**: Acting (configuring settings)
-
-## Thought Process for Feature Selection
-- **Core Problem Analysis**: Need to compare 3 different UI approaches for the same configuration functionality
-- **User Context**: Administrators evaluating UI designs while configuring access settings
-- **Critical Path**: Select version → Configure settings → Save changes
-- **Key Moments**: Version comparison, group input functionality, settings persistence
+- **Primary User Activity**: Acting (configuring settings with immediate feedback)
 
 ## Essential Features
-- Version selector to switch between 3 UI approaches
-- Consistent configuration options across all versions:
-  - App access levels (no access, all users, specific groups)
-  - Group management (add/remove user groups)
-  - Per-device access controls
-  - Agent access information
-- Settings persistence with change detection
-- Input validation and keyboard shortcuts
+- Version comparison interface with three distinct configuration approaches
+- Persistent settings storage with unpublished changes tracking
+- Group management with add/remove functionality 
+- Tab-based content organization
+- Radio button access level selection
+- Input validation and error handling
 
 ## Design Direction
 
 ### Visual Tone & Identity
-- **Emotional Response**: Professional confidence and clarity
-- **Design Personality**: Clean, systematic, Microsoft-aligned
-- **Visual Metaphors**: Administrative control panels
-- **Simplicity Spectrum**: Minimal interface focusing on functionality
+- **Emotional Response**: Confidence and control - users should feel empowered to make important organizational decisions
+- **Design Personality**: Professional, Microsoft-aligned, clean administrative interface
+- **Visual Metaphors**: Enterprise software conventions, familiar form patterns
+- **Simplicity Spectrum**: Clean and focused - every element serves a clear purpose
 
 ### Color Strategy
-- **Color Scheme Type**: Monochromatic with accent
-- **Primary Color**: Microsoft blue for actions and focus states
-- **Secondary Colors**: Neutral grays for structure
-- **Accent Color**: Purple for group indicators
-- **Color Psychology**: Blue conveys trust and professionalism
-- **Foreground/Background Pairings**: High contrast black text on white backgrounds
+- **Color Scheme Type**: Monochromatic with professional blue accents
+- **Primary Color**: Microsoft-inspired blue for actions and focus states
+- **Secondary Colors**: Neutral grays for structure and hierarchy
+- **Accent Color**: Purple indicators for group badges
+- **Color Psychology**: Blue conveys trust and professionalism, grays provide structure
+- **Foreground/Background Pairings**: High contrast black text on white/light backgrounds
 
 ### Typography System
-- **Font Pairing Strategy**: Single system font family for consistency
-- **Typographic Hierarchy**: Clear heading/body/caption distinctions
+- **Font Pairing Strategy**: Single system font stack for consistency and performance
+- **Typographic Hierarchy**: Clear distinction between headers, body text, and descriptions
 - **Font Personality**: Clean, readable, professional
-- **Which fonts**: System default (-apple-system, BlinkMacSystemFont, 'Segoe UI')
+- **Which fonts**: System font stack (-apple-system, BlinkMacSystemFont, 'Segoe UI', etc.)
 
 ### UI Elements & Component Selection
-- **Component Usage**: Cards for containers, Tabs for navigation, Radio groups for selections
-- **Component States**: Clear hover, focus, and selected states
-- **Icon Selection**: Minimal icons (X for remove, warning for alerts)
-- **Spacing System**: Consistent 4px grid system
+- **Component Usage**: Shadcn components for consistency - Cards, Tabs, Radio Groups, Inputs, Buttons
+- **Component States**: Clear hover, focus, and disabled states for all interactive elements
+- **Icon Selection**: Minimal icon usage - X for remove actions
+- **Spacing System**: Consistent padding and margins using Tailwind's spacing scale
 
 ## Implementation Considerations
-- **Scalability Needs**: Easy to add new versions or configuration options
-- **Testing Focus**: Input handling, state management, cross-version consistency
-- **Critical Questions**: How to eliminate the input bugs while maintaining clean architecture
-
-## Technical Architecture
-- Single shared state object for all versions
-- Reusable components for common functionality
-- Clean separation between UI variants and business logic
-- Efficient re-rendering with proper React patterns
+- **Scalability Needs**: Modular component structure for easy maintenance
+- **Testing Focus**: Input handling, state persistence, version switching
+- **Critical Questions**: How to eliminate input bugs and improve code efficiency?

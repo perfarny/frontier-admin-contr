@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Button } from './components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
@@ -10,7 +10,7 @@ import { Badge } from './components/ui/badge'
 import { Checkbox } from './components/ui/checkbox'
 import { X } from '@phosphor-icons/react'
 
-// Core types
+// Types
 type AccessLevel = 'no-access' | 'all-users' | 'specific-groups'
 type VersionType = 'unified' | 'separated' | 'enhanced'
 
@@ -38,74 +38,76 @@ const defaultSettings: Settings = {
   perDeviceGroups: []
 }
 
-// Reusable components
-interface GroupInputProps {
-  value: string
-  onChange: (value: string) => void
-  onAdd: () => void
+// Group management component
+interface GroupManagerProps {
+  groups: string[]
+  onAddGroup: (group: string) => void
+  onRemoveGroup: (index: number) => void
   placeholder?: string
-  id: string
+  inputId: string
 }
 
-const GroupInput = ({ value, onChange, onAdd, placeholder = "Enter group name", id }: GroupInputProps) => {
+function GroupManager({ groups, onAddGroup, onRemoveGroup, placeholder = "Enter group name", inputId }: GroupManagerProps) {
+  const [inputValue, setInputValue] = useState('')
+
+  const handleAdd = () => {
+    const trimmed = inputValue.trim()
+    if (trimmed && !groups.includes(trimmed)) {
+      onAddGroup(trimmed)
+      setInputValue('')
+    }
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      onAdd()
+      handleAdd()
     }
   }
 
   return (
-    <div className="flex gap-2">
-      <Input
-        id={id}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-        className="flex-1"
-      />
-      <Button onClick={onAdd} variant="outline" size="sm">
-        Add
-      </Button>
+    <div className="space-y-3">
+      <div className="flex gap-2">
+        <Input
+          id={inputId}
+          placeholder={placeholder}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="flex-1"
+        />
+        <Button onClick={handleAdd} variant="outline" size="sm">
+          Add
+        </Button>
+      </div>
+      
+      {groups.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {groups.map((group, index) => (
+            <Badge key={index} variant="secondary" className="flex items-center gap-1">
+              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+              {group}
+              <button
+                onClick={() => onRemoveGroup(index)}
+                className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
+              >
+                <X size={12} />
+              </button>
+            </Badge>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
 
-interface GroupListProps {
-  groups: string[]
-  onRemove: (index: number) => void
-}
-
-const GroupList = ({ groups, onRemove }: GroupListProps) => {
-  if (!groups.length) return null
-
-  return (
-    <div className="flex flex-wrap gap-2">
-      {groups.map((group, index) => (
-        <Badge key={index} variant="secondary" className="flex items-center gap-1">
-          <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-          {group}
-          <button
-            onClick={() => onRemove(index)}
-            className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
-          >
-            <X size={12} />
-          </button>
-        </Badge>
-      ))}
-    </div>
-  )
-}
-
+// Access control component
 interface AccessControlProps {
   value: AccessLevel
   onChange: (value: AccessLevel) => void
   groups: string[]
-  onAddGroup: () => void
+  onAddGroup: (group: string) => void
   onRemoveGroup: (index: number) => void
-  groupInput: string
-  onGroupInputChange: (value: string) => void
   prefix: string
   labels: {
     noAccess: string
@@ -119,116 +121,67 @@ interface AccessControlProps {
   }
 }
 
-const AccessControl = ({
+function AccessControl({
   value,
   onChange,
   groups,
   onAddGroup,
   onRemoveGroup,
-  groupInput,
-  onGroupInputChange,
   prefix,
   labels,
   descriptions
-}: AccessControlProps) => (
-  <RadioGroup value={value} onValueChange={(v) => onChange(v as AccessLevel)} className="space-y-3">
-    <div className="flex items-center space-x-2">
-      <RadioGroupItem value="no-access" id={`${prefix}-no-access`} className="border-black" />
-      <Label htmlFor={`${prefix}-no-access`} className="font-normal">
-        {labels.noAccess}
-      </Label>
-    </div>
-    <div className="text-xs text-muted-foreground ml-6 -mt-2">
-      {descriptions.noAccess}
-    </div>
-
-    <div className="flex items-center space-x-2">
-      <RadioGroupItem value="all-users" id={`${prefix}-all-users`} className="border-black" />
-      <Label htmlFor={`${prefix}-all-users`} className="font-normal">
-        {labels.allUsers}
-      </Label>
-    </div>
-    <div className="text-xs text-muted-foreground ml-6 -mt-2">
-      {descriptions.allUsers}
-    </div>
-
-    <div className="flex items-center space-x-2">
-      <RadioGroupItem value="specific-groups" id={`${prefix}-specific-groups`} className="border-black" />
-      <Label htmlFor={`${prefix}-specific-groups`} className="font-normal">
-        {labels.specificGroups}
-      </Label>
-    </div>
-    <div className="text-xs text-muted-foreground ml-6 -mt-2">
-      {descriptions.specificGroups}
-    </div>
-
-    {value === 'specific-groups' && (
-      <div className="ml-6 space-y-3">
-        <GroupInput
-          id={`${prefix}-group-input`}
-          value={groupInput}
-          onChange={onGroupInputChange}
-          onAdd={onAddGroup}
-        />
-        <GroupList groups={groups} onRemove={onRemoveGroup} />
+}: AccessControlProps) {
+  return (
+    <RadioGroup value={value} onValueChange={(v) => onChange(v as AccessLevel)} className="space-y-3">
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="no-access" id={`${prefix}-no-access`} />
+        <Label htmlFor={`${prefix}-no-access`} className="font-normal">
+          {labels.noAccess}
+        </Label>
       </div>
-    )}
-  </RadioGroup>
-)
+      <div className="text-xs text-muted-foreground ml-6 -mt-2">
+        {descriptions.noAccess}
+      </div>
 
-function App() {
-  const [settings, setSettings] = useKV<Settings>('frontier-settings-v2', defaultSettings)
-  const [publishedSettings, setPublishedSettings] = useKV<Settings>('published-frontier-settings-v2', defaultSettings)
-  const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
-  
-  // Input states for each context
-  const [inputs, setInputs] = useState({
-    webGroup: '',
-    officeGroup: '',
-    allAppsGroup: '',
-    perDeviceGroup: ''
-  })
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="all-users" id={`${prefix}-all-users`} />
+        <Label htmlFor={`${prefix}-all-users`} className="font-normal">
+          {labels.allUsers}
+        </Label>
+      </div>
+      <div className="text-xs text-muted-foreground ml-6 -mt-2">
+        {descriptions.allUsers}
+      </div>
 
-  // Tab states
-  const [tabs, setTabs] = useState({
-    unified: 'apps',
-    separated: 'web-apps',
-    enhanced: 'apps'
-  })
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="specific-groups" id={`${prefix}-specific-groups`} />
+        <Label htmlFor={`${prefix}-specific-groups`} className="font-normal">
+          {labels.specificGroups}
+        </Label>
+      </div>
+      <div className="text-xs text-muted-foreground ml-6 -mt-2">
+        {descriptions.specificGroups}
+      </div>
 
-  const currentSettings = { ...defaultSettings, ...settings }
-  const currentPublishedSettings = { ...defaultSettings, ...publishedSettings }
-  const hasUnpublishedChanges = JSON.stringify(currentSettings) !== JSON.stringify(currentPublishedSettings)
+      {value === 'specific-groups' && (
+        <div className="ml-6">
+          <GroupManager
+            groups={groups}
+            onAddGroup={onAddGroup}
+            onRemoveGroup={onRemoveGroup}
+            inputId={`${prefix}-group-input`}
+          />
+        </div>
+      )}
+    </RadioGroup>
+  )
+}
 
-  // Generic update function
-  const updateSettings = useCallback((updates: Partial<Settings>) => {
-    setSettings(current => ({ ...defaultSettings, ...current, ...updates }))
-  }, [setSettings])
+// Version A: Unified Apps Interface
+function UnifiedVersion({ settings, updateSettings }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void }) {
+  const [activeTab, setActiveTab] = useState('apps')
 
-  // Generic group management
-  const addGroup = useCallback((field: keyof Settings, inputField: keyof typeof inputs) => {
-    const inputValue = inputs[inputField].trim()
-    if (!inputValue) return
-
-    const currentGroups = (currentSettings[field] as string[]) || []
-    updateSettings({ [field]: [...currentGroups, inputValue] })
-    setInputs(prev => ({ ...prev, [inputField]: '' }))
-  }, [inputs, currentSettings, updateSettings])
-
-  const removeGroup = useCallback((field: keyof Settings, index: number) => {
-    const currentGroups = (currentSettings[field] as string[]) || []
-    updateSettings({ [field]: currentGroups.filter((_, i) => i !== index) })
-  }, [currentSettings, updateSettings])
-
-  const updateInput = useCallback((field: keyof typeof inputs, value: string) => {
-    setInputs(prev => ({ ...prev, [field]: value }))
-  }, [])
-
-  const resetToDefaults = () => setSettings(defaultSettings)
-  const publishChanges = () => setPublishedSettings(currentSettings)
-
-  // Version A: Unified Apps Interface
-  const UnifiedVersion = () => (
+  return (
     <Card className="max-w-2xl w-full h-[780px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
@@ -240,7 +193,7 @@ function App() {
 
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col">
-          <Tabs value={tabs.unified} onValueChange={(v) => setTabs(prev => ({ ...prev, unified: v }))} className="w-full flex-1 flex flex-col">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="apps">Apps</TabsTrigger>
               <TabsTrigger value="agents">Agents</TabsTrigger>
@@ -253,13 +206,11 @@ function App() {
               </div>
 
               <AccessControl
-                value={currentSettings.allApps}
-                onChange={(value) => updateSettings({ allApps: value })}
-                groups={currentSettings.allAppsGroups}
-                onAddGroup={() => addGroup('allAppsGroups', 'allAppsGroup')}
-                onRemoveGroup={(index) => removeGroup('allAppsGroups', index)}
-                groupInput={inputs.allAppsGroup}
-                onGroupInputChange={(value) => updateInput('allAppsGroup', value)}
+                value={settings.allApps}
+                onChange={(value) => updateSettings({ allApps: value, allAppsGroups: value !== 'specific-groups' ? [] : settings.allAppsGroups })}
+                groups={settings.allAppsGroups}
+                onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
+                onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
                 prefix="unified-apps"
                 labels={{
                   noAccess: 'No access',
@@ -284,17 +235,16 @@ function App() {
             </TabsContent>
           </Tabs>
         </div>
-
-        <div className="flex justify-end gap-2 pt-4 border-t mt-4">
-          <Button variant="outline" onClick={resetToDefaults}>Cancel</Button>
-          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>Save</Button>
-        </div>
       </CardContent>
     </Card>
   )
+}
 
-  // Version B: Separated Apps Interface
-  const SeparatedVersion = () => (
+// Version B: Separated Apps Interface
+function SeparatedVersion({ settings, updateSettings }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void }) {
+  const [activeTab, setActiveTab] = useState('web-apps')
+
+  return (
     <Card className="max-w-2xl w-full h-[780px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
@@ -306,7 +256,7 @@ function App() {
 
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col">
-          <Tabs value={tabs.separated} onValueChange={(v) => setTabs(prev => ({ ...prev, separated: v }))} className="w-full flex-1 flex flex-col">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="web-apps">Web apps</TabsTrigger>
               <TabsTrigger value="office">Office Desktop Apps</TabsTrigger>
@@ -320,13 +270,11 @@ function App() {
               </div>
 
               <AccessControl
-                value={currentSettings.webApps}
-                onChange={(value) => updateSettings({ webApps: value })}
-                groups={currentSettings.webGroups}
-                onAddGroup={() => addGroup('webGroups', 'webGroup')}
-                onRemoveGroup={(index) => removeGroup('webGroups', index)}
-                groupInput={inputs.webGroup}
-                onGroupInputChange={(value) => updateInput('webGroup', value)}
+                value={settings.webApps}
+                onChange={(value) => updateSettings({ webApps: value, webGroups: value !== 'specific-groups' ? [] : settings.webGroups })}
+                groups={settings.webGroups}
+                onAddGroup={(group) => updateSettings({ webGroups: [...settings.webGroups, group] })}
+                onRemoveGroup={(index) => updateSettings({ webGroups: settings.webGroups.filter((_, i) => i !== index) })}
                 prefix="separated-web"
                 labels={{
                   noAccess: 'No access',
@@ -348,13 +296,11 @@ function App() {
               </div>
 
               <AccessControl
-                value={currentSettings.officeWin32}
-                onChange={(value) => updateSettings({ officeWin32: value })}
-                groups={currentSettings.officeGroups}
-                onAddGroup={() => addGroup('officeGroups', 'officeGroup')}
-                onRemoveGroup={(index) => removeGroup('officeGroups', index)}
-                groupInput={inputs.officeGroup}
-                onGroupInputChange={(value) => updateInput('officeGroup', value)}
+                value={settings.officeWin32}
+                onChange={(value) => updateSettings({ officeWin32: value, officeGroups: value !== 'specific-groups' ? [] : settings.officeGroups })}
+                groups={settings.officeGroups}
+                onAddGroup={(group) => updateSettings({ officeGroups: [...settings.officeGroups, group] })}
+                onRemoveGroup={(index) => updateSettings({ officeGroups: settings.officeGroups.filter((_, i) => i !== index) })}
                 prefix="separated-office"
                 labels={{
                   noAccess: 'No access',
@@ -379,17 +325,16 @@ function App() {
             </TabsContent>
           </Tabs>
         </div>
-
-        <div className="flex justify-end gap-2 pt-4 border-t mt-4">
-          <Button variant="outline" onClick={resetToDefaults}>Cancel</Button>
-          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>Save</Button>
-        </div>
       </CardContent>
     </Card>
   )
+}
 
-  // Version C: Enhanced with Per-Device Controls
-  const EnhancedVersion = () => (
+// Version C: Enhanced with Per-Device Controls
+function EnhancedVersion({ settings, updateSettings }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void }) {
+  const [activeTab, setActiveTab] = useState('apps')
+
+  return (
     <Card className="max-w-2xl w-full h-[950px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
@@ -401,7 +346,7 @@ function App() {
 
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col">
-          <Tabs value={tabs.enhanced} onValueChange={(v) => setTabs(prev => ({ ...prev, enhanced: v }))} className="w-full flex-1 flex flex-col">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="apps">Apps</TabsTrigger>
               <TabsTrigger value="agents">Agents</TabsTrigger>
@@ -414,13 +359,11 @@ function App() {
               </div>
 
               <AccessControl
-                value={currentSettings.allApps}
-                onChange={(value) => updateSettings({ allApps: value })}
-                groups={currentSettings.allAppsGroups}
-                onAddGroup={() => addGroup('allAppsGroups', 'allAppsGroup')}
-                onRemoveGroup={(index) => removeGroup('allAppsGroups', index)}
-                groupInput={inputs.allAppsGroup}
-                onGroupInputChange={(value) => updateInput('allAppsGroup', value)}
+                value={settings.allApps}
+                onChange={(value) => updateSettings({ allApps: value, allAppsGroups: value !== 'specific-groups' ? [] : settings.allAppsGroups })}
+                groups={settings.allAppsGroups}
+                onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
+                onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
                 prefix="enhanced-apps"
                 labels={{
                   noAccess: 'No access',
@@ -438,9 +381,9 @@ function App() {
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="enhanced-per-device-access"
-                    checked={currentSettings.enablePerDeviceAccess}
+                    checked={settings.enablePerDeviceAccess}
                     onCheckedChange={(checked) => updateSettings({ enablePerDeviceAccess: !!checked })}
-                    className="border-black mt-0.5"
+                    className="mt-0.5"
                   />
                   <Label htmlFor="enhanced-per-device-access" className="font-medium cursor-pointer text-base leading-tight">
                     Allow per device enrollment in Office desktop applications
@@ -450,34 +393,30 @@ function App() {
                   By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. User choices are device specific.
                 </div>
 
-                <div className={`ml-6 mt-3 space-y-1 ${!currentSettings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
+                <div className={`ml-6 mt-3 space-y-1 ${!settings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
                   <RadioGroup
-                    value={currentSettings.enablePerDeviceAccess ? currentSettings.perDeviceAccessType : ''}
-                    onValueChange={(value) => updateSettings({ perDeviceAccessType: value as 'all-users' | 'specific-groups' })}
+                    value={settings.enablePerDeviceAccess ? settings.perDeviceAccessType : ''}
+                    onValueChange={(value) => updateSettings({ perDeviceAccessType: value as 'all-users' | 'specific-groups', perDeviceGroups: value !== 'specific-groups' ? [] : settings.perDeviceGroups })}
                     className="space-y-0.5"
-                    disabled={!currentSettings.enablePerDeviceAccess}
+                    disabled={!settings.enablePerDeviceAccess}
                   >
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="all-users" id="enhanced-per-device-all-users" className="border-black" />
+                      <RadioGroupItem value="all-users" id="enhanced-per-device-all-users" />
                       <Label htmlFor="enhanced-per-device-all-users" className="font-normal">All users</Label>
                     </div>
 
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="specific-groups" id="enhanced-per-device-specific-groups" className="border-black" />
+                      <RadioGroupItem value="specific-groups" id="enhanced-per-device-specific-groups" />
                       <Label htmlFor="enhanced-per-device-specific-groups" className="font-normal">Specific user groups</Label>
                     </div>
 
-                    {currentSettings.perDeviceAccessType === 'specific-groups' && currentSettings.enablePerDeviceAccess && (
-                      <div className="ml-6 space-y-2 mt-2">
-                        <GroupInput
-                          id="enhanced-per-device-group-input"
-                          value={inputs.perDeviceGroup}
-                          onChange={(value) => updateInput('perDeviceGroup', value)}
-                          onAdd={() => addGroup('perDeviceGroups', 'perDeviceGroup')}
-                        />
-                        <GroupList
-                          groups={currentSettings.perDeviceGroups}
-                          onRemove={(index) => removeGroup('perDeviceGroups', index)}
+                    {settings.perDeviceAccessType === 'specific-groups' && settings.enablePerDeviceAccess && (
+                      <div className="ml-6 mt-2">
+                        <GroupManager
+                          groups={settings.perDeviceGroups}
+                          onAddGroup={(group) => updateSettings({ perDeviceGroups: [...settings.perDeviceGroups, group] })}
+                          onRemoveGroup={(index) => updateSettings({ perDeviceGroups: settings.perDeviceGroups.filter((_, i) => i !== index) })}
+                          inputId="enhanced-per-device-group-input"
                         />
                       </div>
                     )}
@@ -496,19 +435,32 @@ function App() {
             </TabsContent>
           </Tabs>
         </div>
-
-        <div className="flex justify-end gap-2 pt-4 border-t mt-4">
-          <Button variant="outline" onClick={resetToDefaults}>Cancel</Button>
-          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>Save</Button>
-        </div>
       </CardContent>
     </Card>
   )
+}
+
+// Main App component
+export default function App() {
+  const [settings, setSettings] = useKV<Settings>('frontier-settings-v3', defaultSettings)
+  const [publishedSettings, setPublishedSettings] = useKV<Settings>('published-frontier-settings-v3', defaultSettings)
+  const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
+
+  const currentSettings = { ...defaultSettings, ...settings }
+  const currentPublishedSettings = { ...defaultSettings, ...publishedSettings }
+  const hasUnpublishedChanges = JSON.stringify(currentSettings) !== JSON.stringify(currentPublishedSettings)
+
+  const updateSettings = (updates: Partial<Settings>) => {
+    setSettings(current => ({ ...defaultSettings, ...current, ...updates }))
+  }
+
+  const resetToDefaults = () => setSettings(defaultSettings)
+  const publishChanges = () => setPublishedSettings(currentSettings)
 
   const versions = {
-    unified: UnifiedVersion,
-    separated: SeparatedVersion,
-    enhanced: EnhancedVersion
+    unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} />,
+    separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} />,
+    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} />
   }
 
   const SelectedVersion = versions[selectedVersion]
@@ -521,29 +473,31 @@ function App() {
           <Button
             variant={selectedVersion === 'unified' ? "default" : "outline"}
             onClick={() => setSelectedVersion('unified')}
-            className="border-black cursor-pointer"
           >
             A. Unified Apps
           </Button>
           <Button
             variant={selectedVersion === 'separated' ? "default" : "outline"}
             onClick={() => setSelectedVersion('separated')}
-            className="border-black cursor-pointer"
           >
             B. Separated Apps
           </Button>
           <Button
             variant={selectedVersion === 'enhanced' ? "default" : "outline"}
             onClick={() => setSelectedVersion('enhanced')}
-            className="border-black cursor-pointer"
           >
             C. Enhanced Controls
           </Button>
         </div>
       </div>
-      <SelectedVersion />
+      
+      <div className="relative">
+        <SelectedVersion />
+        <div className="absolute bottom-4 right-4 flex gap-2">
+          <Button variant="outline" onClick={resetToDefaults}>Cancel</Button>
+          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges}>Save</Button>
+        </div>
+      </div>
     </div>
   )
 }
-
-export default App
