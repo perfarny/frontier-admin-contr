@@ -210,8 +210,9 @@ function App() {
     }))
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent, callback: () => void) => {
+  const handleKeyDown = (e: React.KeyboardEvent, callback: () => void) => {
     if (e.key === 'Enter') {
+      e.preventDefault()
       callback()
     }
   }
@@ -283,7 +284,7 @@ function App() {
                       placeholder="Enter group name"
                       value={originalNewAllAppsGroup}
                       onChange={(e) => setOriginalNewAllAppsGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addOriginalAllAppsGroup)}
+                      onKeyDown={(e) => handleKeyDown(e, addOriginalAllAppsGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
@@ -355,7 +356,7 @@ function App() {
                           placeholder="Enter group name"
                           value={originalNewPerDeviceGroup}
                           onChange={(e) => setOriginalNewPerDeviceGroup(e.target.value)}
-                          onKeyPress={(e) => handleKeyPress(e, addPerDeviceGroup)}
+                          onKeyDown={(e) => handleKeyDown(e, addPerDeviceGroup)}
                           className="flex-1 border-black"
                         />
                         <Button 
@@ -473,7 +474,7 @@ function App() {
                       placeholder="Enter group name"
                       value={alternateNewAllAppsGroup}
                       onChange={(e) => setAlternateNewAllAppsGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addAllAppsGroup)}
+                      onKeyDown={(e) => handleKeyDown(e, addAllAppsGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
@@ -598,7 +599,7 @@ function App() {
                       placeholder="Enter group name"
                       value={newWebGroup}
                       onChange={(e) => setNewWebGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addWebGroup)}
+                      onKeyDown={(e) => handleKeyDown(e, addWebGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
@@ -672,7 +673,7 @@ function App() {
                       placeholder="Enter group name"
                       value={newOfficeGroup}
                       onChange={(e) => setNewOfficeGroup(e.target.value)}
-                      onKeyPress={(e) => handleKeyPress(e, addOfficeGroup)}
+                      onKeyDown={(e) => handleKeyDown(e, addOfficeGroup)}
                       className="flex-1 border-black"
                     />
                     <Button 
