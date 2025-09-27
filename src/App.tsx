@@ -207,7 +207,7 @@ function AccessControl({
 }
 
 // Version A: Unified Apps Interface
-function UnifiedVersion({ settings, updateSettings }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void }) {
+function UnifiedVersion({ settings, updateSettings, resetToDefaults }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void }) {
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
@@ -263,13 +263,17 @@ function UnifiedVersion({ settings, updateSettings }: { settings: Settings; upda
             </TabsContent>
           </Tabs>
         </div>
+        <div className="border-t pt-4 flex justify-end gap-2">
+          <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
+          <Button>Save</Button>
+        </div>
       </CardContent>
     </Card>
   );
 }
 
 // Version B: Separated Apps Interface
-function SeparatedVersion({ settings, updateSettings }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void }) {
+function SeparatedVersion({ settings, updateSettings, resetToDefaults }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void }) {
   const [activeTab, setActiveTab] = useState('web-apps')
 
   return (
@@ -350,13 +354,17 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
             </TabsContent>
           </Tabs>
         </div>
+        <div className="border-t pt-4 flex justify-end gap-2">
+          <Button variant="outline" className="border-black">Cancel</Button>
+          <Button>Save</Button>
+        </div>
       </CardContent>
     </Card>
   );
 }
 
 // Version C: Enhanced with Per-Device Controls
-function EnhancedVersion({ settings, updateSettings }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void }) {
+function EnhancedVersion({ settings, updateSettings, resetToDefaults }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void }) {
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
@@ -459,6 +467,10 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
             </TabsContent>
           </Tabs>
         </div>
+        <div className="border-t pt-4 flex justify-end gap-2">
+          <Button variant="outline" className="border-black">Cancel</Button>
+          <Button>Save</Button>
+        </div>
       </CardContent>
     </Card>
   );
@@ -487,9 +499,9 @@ export default function App() {
   }
 
   const versions = {
-    unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} />,
-    separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} />,
-    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} />
+    unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} />,
+    separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} />,
+    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} />
   }
 
   const SelectedVersion = versions[selectedVersion]
@@ -518,7 +530,7 @@ export default function App() {
             data-editable="true"
           >C. Toggle - 2 Tabs</Button>
         </div>
-        <Button variant="outline" onClick={resetToDefaults} className="border-black" data-editable="true">Cancel</Button>
+
       </div>
       
       <SelectedVersion />
