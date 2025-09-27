@@ -26,6 +26,48 @@ interface Settings {
   perDeviceGroups: string[]
 }
 
+// Default settings for different versions
+const getDefaultSettings = (version: VersionType): Settings => {
+  switch (version) {
+    case 'unified': // A. No Toggle
+      return {
+        webApps: 'no-access',
+        webGroups: [],
+        officeWin32: 'all-users',
+        officeGroups: [],
+        allApps: 'no-access',
+        allAppsGroups: [],
+        enablePerDeviceAccess: true,
+        perDeviceAccessType: 'all-users',
+        perDeviceGroups: []
+      }
+    case 'separated': // B. Toggle - 3 Tabs
+      return {
+        webApps: 'all-users',
+        webGroups: [],
+        officeWin32: 'all-users',
+        officeGroups: [],
+        allApps: 'all-users',
+        allAppsGroups: [],
+        enablePerDeviceAccess: true,
+        perDeviceAccessType: 'all-users',
+        perDeviceGroups: []
+      }
+    case 'enhanced': // C. Toggle - 2 Tabs
+      return {
+        webApps: 'no-access',
+        webGroups: [],
+        officeWin32: 'all-users',
+        officeGroups: [],
+        allApps: 'no-access',
+        allAppsGroups: [],
+        enablePerDeviceAccess: true,
+        perDeviceAccessType: 'all-users',
+        perDeviceGroups: []
+      }
+  }
+}
+
 const defaultSettings: Settings = {
   webApps: 'no-access',
   webGroups: [],
@@ -439,12 +481,12 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
 
 // Main App component
 export default function App() {
-  const [settings, setSettings] = useKV<Settings>('frontier-settings-v3', defaultSettings)
-  const [publishedSettings, setPublishedSettings] = useKV<Settings>('published-frontier-settings-v3', defaultSettings)
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
+  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v3-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [publishedSettings, setPublishedSettings] = useKV<Settings>(`published-frontier-settings-v3-${selectedVersion}`, getDefaultSettings(selectedVersion))
 
-  const currentSettings = { ...defaultSettings, ...settings }
-  const currentPublishedSettings = { ...defaultSettings, ...publishedSettings }
+  const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
+  const currentPublishedSettings = { ...getDefaultSettings(selectedVersion), ...publishedSettings }
   
   // Use a more robust comparison that handles initial state properly
   const hasUnpublishedChanges = () => {
@@ -459,11 +501,19 @@ export default function App() {
   }
 
   const updateSettings = (updates: Partial<Settings>) => {
-    setSettings(current => ({ ...defaultSettings, ...current, ...updates }))
+    setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
-  const resetToDefaults = () => setSettings(defaultSettings)
+  const resetToDefaults = () => setSettings(getDefaultSettings(selectedVersion))
   const publishChanges = () => setPublishedSettings(currentSettings)
+
+  // Handle version switching - reset to version-specific defaults
+  const handleVersionChange = (version: VersionType) => {
+    setSelectedVersion(version)
+    // Reset settings when switching versions to use version-specific defaults
+    setSettings(getDefaultSettings(version))
+    setPublishedSettings(getDefaultSettings(version))
+  }
 
   const versions = {
     unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} />,
@@ -480,17 +530,17 @@ export default function App() {
         <div className="flex gap-2">
           <Button
             variant={selectedVersion === 'unified' ? "default" : "outline"}
-            onClick={() => setSelectedVersion('unified')}
+            onClick={() => handleVersionChange('unified')}
             className="border-black"
           >A. No Toggle</Button>
           <Button
             variant={selectedVersion === 'separated' ? "default" : "outline"}
-            onClick={() => setSelectedVersion('separated')}
+            onClick={() => handleVersionChange('separated')}
             className="border-black"
           >B. Toggle 3 Tabs</Button>
           <Button
             variant={selectedVersion === 'enhanced' ? "default" : "outline"}
-            onClick={() => setSelectedVersion('enhanced')}
+            onClick={() => handleVersionChange('enhanced')}
             className="border-black"
           >C. Toggle 2 Tabs</Button>
         </div>
