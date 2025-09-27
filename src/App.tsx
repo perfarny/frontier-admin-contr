@@ -292,7 +292,6 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
           <p>To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
         </div>
       </CardHeader>
-
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
@@ -331,7 +330,7 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
             <TabsContent value="office" className="space-y-4 mt-6 flex-1">
               <div>
                 <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office Desktop applications</h3>
-                <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. Users choices are device specific.</p>
+                <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. User choices are device specific.</p>
               </div>
 
               <AccessControl
@@ -357,16 +356,14 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
                 <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground">
-                  The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
-                </p>
+                <p className="text-sm text-muted-foreground">The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.</p>
               </div>
             </TabsContent>
           </Tabs>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 // Version C: Enhanced with Per-Device Controls
