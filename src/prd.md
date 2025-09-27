@@ -1,64 +1,65 @@
-# Frontier Admin Control PRD
+# Frontier Features Configuration Tool - PRD
 
 ## Core Purpose & Success
-- **Mission Statement**: Create a Microsoft Admin Center style control for managing organizational access to Frontier features across web and Office win32 applications
-- **Success Indicators**: Admins can quickly understand and configure access settings for two distinct client types with different behaviors
-- **Experience Qualities**: Professional, Clear, Familiar (Microsoft-style)
+- **Mission Statement**: Provide administrators with a clean, efficient interface to configure Microsoft Frontier program access across different organizational user groups and application types.
+- **Success Indicators**: Administrators can easily compare three different UI approaches, configure access settings without bugs, and save configurations reliably.
+- **Experience Qualities**: Clean, professional, intuitive
 
 ## Project Classification & Approach
-- **Complexity Level**: Light Application (focused configuration interface with state management)
-- **Primary User Activity**: Acting (configuring organizational settings)
+- **Complexity Level**: Light Application (multiple features with basic state)
+- **Primary User Activity**: Acting (configuring settings)
 
 ## Thought Process for Feature Selection
-- **Core Problem Analysis**: Admins need to configure early access to experimental Microsoft features across different client types
-- **User Context**: Microsoft 365 administrators using the Admin Center to manage organizational features
-- **Critical Path**: Open control → Select appropriate access level for each client type → Configure groups if needed → Apply settings
-- **Key Moments**: Understanding the difference between web and win32 behaviors, configuring specific user groups
+- **Core Problem Analysis**: Need to compare 3 different UI approaches for the same configuration functionality
+- **User Context**: Administrators evaluating UI designs while configuring access settings
+- **Critical Path**: Select version → Configure settings → Save changes
+- **Key Moments**: Version comparison, group input functionality, settings persistence
 
 ## Essential Features
-1. **Tabbed Interface**: Web Apps and Office win32 sections
-2. **Radio Button Groups**: No access, All users, Specific user groups for each section
-3. **Dynamic Group Input**: Appears when "Specific user groups" is selected
-4. **Clear Behavioral Descriptions**: Explains what each option does for each client type
-5. **Microsoft Admin Center Styling**: Matches the familiar interface patterns
+- Version selector to switch between 3 UI approaches
+- Consistent configuration options across all versions:
+  - App access levels (no access, all users, specific groups)
+  - Group management (add/remove user groups)
+  - Per-device access controls
+  - Agent access information
+- Settings persistence with change detection
+- Input validation and keyboard shortcuts
 
 ## Design Direction
 
 ### Visual Tone & Identity
-- **Emotional Response**: Professional confidence, clarity, familiarity
-- **Design Personality**: Clean, enterprise-focused, Microsoft design language
-- **Visual Metaphors**: Admin center panels, configuration controls
-- **Simplicity Spectrum**: Clean and focused interface with clear information hierarchy
+- **Emotional Response**: Professional confidence and clarity
+- **Design Personality**: Clean, systematic, Microsoft-aligned
+- **Visual Metaphors**: Administrative control panels
+- **Simplicity Spectrum**: Minimal interface focusing on functionality
 
 ### Color Strategy
-- **Color Scheme Type**: Microsoft design system inspired
-- **Primary Color**: Microsoft blue for primary actions and selected states
-- **Secondary Colors**: Neutral grays for backgrounds and borders
-- **Accent Color**: Blue for interactive elements and focus states
-- **Color Psychology**: Professional blue conveys trust and reliability
-- **Foreground/Background Pairings**: Dark text on light backgrounds for maximum readability
+- **Color Scheme Type**: Monochromatic with accent
+- **Primary Color**: Microsoft blue for actions and focus states
+- **Secondary Colors**: Neutral grays for structure
+- **Accent Color**: Purple for group indicators
+- **Color Psychology**: Blue conveys trust and professionalism
+- **Foreground/Background Pairings**: High contrast black text on white backgrounds
 
 ### Typography System
-- **Font Pairing Strategy**: Single clean sans-serif font family
-- **Typographic Hierarchy**: Clear distinction between headings, body text, and descriptions
-- **Font Personality**: Professional, readable, Microsoft-style
-- **Which fonts**: Segoe UI (Microsoft's system font) via system font stack
-- **Legibility Check**: High contrast ratios for accessibility
+- **Font Pairing Strategy**: Single system font family for consistency
+- **Typographic Hierarchy**: Clear heading/body/caption distinctions
+- **Font Personality**: Clean, readable, professional
+- **Which fonts**: System default (-apple-system, BlinkMacSystemFont, 'Segoe UI')
 
 ### UI Elements & Component Selection
-- **Component Usage**: Dialog, Tabs, Radio buttons, Input fields with tags
-- **Component Customization**: Microsoft Admin Center visual styling
-- **Component States**: Clear focus, selected, and hover states
-- **Icon Selection**: Minimal use, focus on clear text labels
-- **Spacing System**: Generous whitespace following Microsoft design patterns
-
-### Accessibility & Readability
-- **Contrast Goal**: WCAG AA compliance for all text and interactive elements
-- **Keyboard Navigation**: Full keyboard accessibility with logical tab order
-- **Screen Reader Support**: Proper labeling and descriptions
+- **Component Usage**: Cards for containers, Tabs for navigation, Radio groups for selections
+- **Component States**: Clear hover, focus, and selected states
+- **Icon Selection**: Minimal icons (X for remove, warning for alerts)
+- **Spacing System**: Consistent 4px grid system
 
 ## Implementation Considerations
-- **State Management**: Track selected options for both web and win32 sections
-- **Validation**: Ensure at least one option is selected per section
-- **Group Management**: Add/remove functionality for specific user groups
-- **Persistence**: Save configuration across sessions
+- **Scalability Needs**: Easy to add new versions or configuration options
+- **Testing Focus**: Input handling, state management, cross-version consistency
+- **Critical Questions**: How to eliminate the input bugs while maintaining clean architecture
+
+## Technical Architecture
+- Single shared state object for all versions
+- Reusable components for common functionality
+- Clean separation between UI variants and business logic
+- Efficient re-rendering with proper React patterns
