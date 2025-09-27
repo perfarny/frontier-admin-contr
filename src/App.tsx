@@ -8,7 +8,7 @@ import { Label } from './components/ui/label'
 import { Input } from './components/ui/input'
 import { Badge } from './components/ui/badge'
 import { Checkbox } from './components/ui/checkbox'
-import { X } from '@phosphor-icons/react'
+import { X, CheckCircle, Clock } from '@phosphor-icons/react'
 
 // Types
 type AccessLevel = 'no-access' | 'all-users' | 'specific-groups'
@@ -226,10 +226,9 @@ function UnifiedVersion({ settings, updateSettings }: { settings: Settings; upda
         <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
           <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
+          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for both apps and agents.</p>
         </div>
       </CardHeader>
-
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
@@ -276,7 +275,7 @@ function UnifiedVersion({ settings, updateSettings }: { settings: Settings; upda
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 // Version B: Separated Apps Interface
@@ -289,7 +288,7 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
         <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
           <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
+          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
@@ -321,7 +320,7 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
                 }}
                 descriptions={{
                   noAccess: 'Users will not have access to Frontier features in web apps.',
-                  allUsers: 'All users in your organization will automatically receive Frontier features in web apps.',
+                  allUsers: 'All users will automatically receive Frontier features in web apps.',
                   specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
                 }}
               />
@@ -348,7 +347,7 @@ function SeparatedVersion({ settings, updateSettings }: { settings: Settings; up
                 descriptions={{
                   noAccess: 'Users cannot choose to enable Frontier features.',
                   allUsers: 'All users can choose to enable Frontier features.',
-                  specificGroups: 'Only specified user can choose to enable Frontier features.'
+                  specificGroups: 'Only specified user groups can choose to enable Frontier features.'
                 }}
               />
             </TabsContent>
@@ -376,10 +375,9 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
         <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
           <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for web apps, desktop apps, and agents.</p>
+          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
         </div>
       </CardHeader>
-
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
@@ -408,7 +406,7 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
                 }}
                 descriptions={{
                   noAccess: 'Users will not have access to Frontier features in web apps.',
-                  allUsers: 'All users in your organization will automatically receive Frontier features in web apps.',
+                  allUsers: 'All users will automatically receive Frontier features in web apps.',
                   specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
                 }}
               />
@@ -473,10 +471,33 @@ function EnhancedVersion({ settings, updateSettings }: { settings: Settings; upd
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
-// Main App component
+// Publication Status Component
+function PublishStatus({ hasChanges }: { hasChanges: boolean }) {
+  return (
+    <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-card">
+      {hasChanges ? (
+        <>
+          <Clock size={16} className="text-orange-500" />
+          <span className="text-sm font-medium text-orange-600">Unpublished Changes</span>
+          <Badge variant="outline" className="text-xs border-orange-200 text-orange-600">
+            Pending
+          </Badge>
+        </>
+      ) : (
+        <>
+          <CheckCircle size={16} className="text-green-500" />
+          <span className="text-sm font-medium text-green-600">All Changes Published</span>
+          <Badge variant="outline" className="text-xs border-green-200 text-green-600">
+            Up to date
+          </Badge>
+        </>
+      )}
+    </div>
+  )
+}
 export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v4-${selectedVersion}`, getDefaultSettings(selectedVersion))
@@ -522,34 +543,44 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 gap-6">
-      <div className="flex items-center gap-4 p-6 bg-card rounded-lg border shadow-lg">
-        <span className="text-lg font-semibold text-foreground" data-editable="true">Select Version:</span>
-        <div className="flex gap-2">
-          <Button
-            variant={selectedVersion === 'unified' ? "default" : "outline"}
-            onClick={() => handleVersionChange('unified')}
-            className="border-black"
-            data-editable="true"
-          >A. No Toggle</Button>
-          <Button
-            variant={selectedVersion === 'separated' ? "default" : "outline"}
-            onClick={() => handleVersionChange('separated')}
-            className="border-black"
-            data-editable="true"
-          >B. Toggle - 3 Tabs</Button>
-          <Button
-            variant={selectedVersion === 'enhanced' ? "default" : "outline"}
-            onClick={() => handleVersionChange('enhanced')}
-            className="border-black"
-            data-editable="true"
-          >C. Toggle - 2 Tabs</Button>
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 p-6 bg-card rounded-lg border shadow-lg">
+          <span className="text-lg font-semibold text-foreground" data-editable="true">Select Version:</span>
+          <div className="flex gap-2">
+            <Button
+              variant={selectedVersion === 'unified' ? "default" : "outline"}
+              onClick={() => handleVersionChange('unified')}
+              className="border-black"
+              data-editable="true"
+            >A. No Toggle</Button>
+            <Button
+              variant={selectedVersion === 'separated' ? "default" : "outline"}
+              onClick={() => handleVersionChange('separated')}
+              className="border-black"
+              data-editable="true"
+            >B. Toggle - 3 Tabs</Button>
+            <Button
+              variant={selectedVersion === 'enhanced' ? "default" : "outline"}
+              onClick={() => handleVersionChange('enhanced')}
+              className="border-black"
+              data-editable="true"
+            >C. Toggle - 2 Tabs</Button>
+          </div>
         </div>
+        <PublishStatus hasChanges={hasUnpublishedChanges()} />
       </div>
       <div className="relative">
         <SelectedVersion />
         <div className="absolute bottom-4 right-4 flex gap-2">
           <Button variant="outline" onClick={resetToDefaults} className="border-black" data-editable="true">Cancel</Button>
-          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges()} className="border-black" data-editable="true">Save</Button>
+          <Button 
+            onClick={publishChanges} 
+            disabled={!hasUnpublishedChanges()} 
+            className="border-black" 
+            data-editable="true"
+          >
+            {hasUnpublishedChanges() ? 'Save' : 'Saved'}
+          </Button>
         </div>
       </div>
     </div>
