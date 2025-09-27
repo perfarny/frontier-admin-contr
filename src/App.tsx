@@ -445,7 +445,18 @@ export default function App() {
 
   const currentSettings = { ...defaultSettings, ...settings }
   const currentPublishedSettings = { ...defaultSettings, ...publishedSettings }
-  const hasUnpublishedChanges = JSON.stringify(currentSettings) !== JSON.stringify(currentPublishedSettings)
+  
+  // Use a more robust comparison that handles initial state properly
+  const hasUnpublishedChanges = () => {
+    // If both are effectively defaults, no changes
+    if (!settings && !publishedSettings) return false
+    
+    // If one exists and the other doesn't, there are changes
+    if (!!settings !== !!publishedSettings) return true
+    
+    // Compare the actual merged objects
+    return JSON.stringify(currentSettings) !== JSON.stringify(currentPublishedSettings)
+  }
 
   const updateSettings = (updates: Partial<Settings>) => {
     setSettings(current => ({ ...defaultSettings, ...current, ...updates }))
@@ -471,33 +482,26 @@ export default function App() {
             variant={selectedVersion === 'unified' ? "default" : "outline"}
             onClick={() => setSelectedVersion('unified')}
             className="border-black"
-          >
-            A. Unified Apps
-          </Button>
+          >A. No Toggle</Button>
           <Button
             variant={selectedVersion === 'separated' ? "default" : "outline"}
             onClick={() => setSelectedVersion('separated')}
             className="border-black"
-          >
-            B. Separated Apps
-          </Button>
+          >B. Toggle 3 Tabs</Button>
           <Button
             variant={selectedVersion === 'enhanced' ? "default" : "outline"}
             onClick={() => setSelectedVersion('enhanced')}
             className="border-black"
-          >
-            C. Enhanced Controls
-          </Button>
+          >C. Toggle 2 Tabs</Button>
         </div>
       </div>
-      
       <div className="relative">
         <SelectedVersion />
         <div className="absolute bottom-4 right-4 flex gap-2">
           <Button variant="outline" onClick={resetToDefaults} className="border-black">Cancel</Button>
-          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges} className="border-black">Save</Button>
+          <Button onClick={publishChanges} disabled={!hasUnpublishedChanges()} className="border-black">Save</Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
