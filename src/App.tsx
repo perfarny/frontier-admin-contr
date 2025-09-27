@@ -539,30 +539,33 @@ export default function App() {
   
   // Use a fresh key to avoid stale data and ensure proper defaults
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v5-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v5-${selectedVersion}`, getDefaultSettings(selectedVersion))
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
+  const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
+  
   const updateSettings = (updates: Partial<Settings>) => {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
-  const defaultSettings = getDefaultSettings(selectedVersion)
-  const hasChanges = settings !== undefined && JSON.stringify(currentSettings) !== JSON.stringify(defaultSettings)
+  const hasChanges = settings !== undefined && JSON.stringify(currentSettings) !== JSON.stringify(currentSavedSettings)
 
   const handleSave = () => {
-    // In a real app, this would send data to server
-    // For now, we'll just show that the save worked by briefly showing no changes
+    setSavedSettings(currentSettings)
     console.log('Settings saved:', currentSettings)
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaults = () => {
-    setSettings(getDefaultSettings(selectedVersion))
+    setSettings(currentSavedSettings)
   }
 
   const handleVersionChange = (version: VersionType) => {
     setSelectedVersion(version)
-    // Reset settings when switching versions to use version-specific defaults
-    setSettings(getDefaultSettings(version))
+    // Reset both current and saved settings when switching versions to use version-specific defaults
+    const defaults = getDefaultSettings(version)
+    setSettings(defaults)
+    setSavedSettings(defaults)
   }
 
   const versions = {
