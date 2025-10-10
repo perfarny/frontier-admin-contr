@@ -96,7 +96,7 @@ const getDefaultSettings = (version: VersionType): Settings => {
     case 'enhanced-v1': // C. Toggle - 2 Tabs v1
       return {
         // Version C v1 uses allApps for Apps section
-        allApps: 'no-access',
+        allApps: 'all-users',
         allAppsGroups: [],
         // Version B settings (not used in Version C v1)
         webApps: 'no-access',
@@ -717,13 +717,13 @@ export default function App() {
           onClick={() => handleVersionChange('enhanced-v1')}
           className="border-black"
           data-editable="true"
-        >A. Toggle - 2 Tabs v1</Button>
+        >A. Office win32 & WAC Toggle (2 tabs)</Button>
         <Button
           variant={selectedVersion === 'separated' ? "default" : "outline"}
           onClick={() => handleVersionChange('separated')}
           className="border-black"
           data-editable="true"
-        >B. Toggle - 3 Tabs</Button>
+        >B. Office win32 & WAC Toggle (3 tabs)</Button>
         <Button
           variant={selectedVersion === 'unified' ? "default" : "outline"}
           onClick={() => handleVersionChange('unified')}
@@ -735,11 +735,10 @@ export default function App() {
           onClick={() => handleVersionChange('enhanced')}
           className="border-black"
           data-editable="true"
-        >D. Toggle - 2 Tabs</Button>
+        >D. Office win32 Toggle Only</Button>
       </div>
-      
       {versions[selectedVersion]()}
       <Toaster />
     </div>
-  )
+  );
 }
