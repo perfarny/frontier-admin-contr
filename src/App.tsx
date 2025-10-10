@@ -95,7 +95,7 @@ const getDefaultSettings = (version: VersionType): Settings => {
       }
     case 'enhanced-v1': // C. Toggle - 2 Tabs v1
       return {
-        // Version C v1 uses allApps for Apps section
+        // Version C v1 uses allApps for Apps section - set to 'all-users' by default
         allApps: 'all-users',
         allAppsGroups: [],
         // Version B settings (not used in Version C v1)
@@ -107,7 +107,7 @@ const getDefaultSettings = (version: VersionType): Settings => {
         enablePerDeviceAccess: false,
         perDeviceAccessType: 'all-users',
         perDeviceGroups: [],
-        // Version C v1 specific Office Apps controls
+        // Version C v1 specific Office Apps controls - keep at 'no-access'
         officeAppsAccess: 'no-access',
         officeAppsGroups: []
       }
@@ -672,8 +672,8 @@ export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('enhanced-v1')
   
   // Use a fresh key to avoid stale data and ensure proper defaults
-  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v5-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v5-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v6-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v6-${selectedVersion}`, getDefaultSettings(selectedVersion))
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
   const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
