@@ -584,8 +584,8 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Apps</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in applications.</p>
+                <h3 className="font-medium mb-2" data-editable="true">Office Apps like Word, Excel, PowerPoint</h3>
+                <p className="text-sm text-muted-foreground mb-4" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
               <AccessControl
@@ -609,7 +609,7 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
 
               <div className="mt-8 pt-6 border-t">
                 <div>
-                  <h3 className="font-medium mb-2" data-editable="true">Office Apps</h3>
+                  <h3 className="font-medium mb-2" data-editable="true">Other Apps</h3>
                   <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in Office applications.</p>
                 </div>
 
@@ -669,7 +669,7 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
 
 
 export default function App() {
-  const [selectedVersion, setSelectedVersion] = useState<VersionType>('unified')
+  const [selectedVersion, setSelectedVersion] = useState<VersionType>('enhanced-v1')
   
   // Use a fresh key to avoid stale data and ensure proper defaults
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v5-${selectedVersion}`, getDefaultSettings(selectedVersion))
@@ -713,11 +713,11 @@ export default function App() {
     <div className="min-h-screen bg-background flex flex-col items-center p-8 gap-8">
       <div className="flex gap-4">
         <Button
-          variant={selectedVersion === 'unified' ? "default" : "outline"}
-          onClick={() => handleVersionChange('unified')}
+          variant={selectedVersion === 'enhanced-v1' ? "default" : "outline"}
+          onClick={() => handleVersionChange('enhanced-v1')}
           className="border-black"
           data-editable="true"
-        >A. No Toggle</Button>
+        >A. Toggle - 2 Tabs v1</Button>
         <Button
           variant={selectedVersion === 'separated' ? "default" : "outline"}
           onClick={() => handleVersionChange('separated')}
@@ -725,17 +725,17 @@ export default function App() {
           data-editable="true"
         >B. Toggle - 3 Tabs</Button>
         <Button
+          variant={selectedVersion === 'unified' ? "default" : "outline"}
+          onClick={() => handleVersionChange('unified')}
+          className="border-black"
+          data-editable="true"
+        >C. No Toggle</Button>
+        <Button
           variant={selectedVersion === 'enhanced' ? "default" : "outline"}
           onClick={() => handleVersionChange('enhanced')}
           className="border-black"
           data-editable="true"
-        >C. Toggle - 2 Tabs</Button>
-        <Button
-          variant={selectedVersion === 'enhanced-v1' ? "default" : "outline"}
-          onClick={() => handleVersionChange('enhanced-v1')}
-          className="border-black"
-          data-editable="true"
-        >C. Toggle - 2 Tabs v1</Button>
+        >D. Toggle - 2 Tabs</Button>
       </div>
       
       {versions[selectedVersion]()}
