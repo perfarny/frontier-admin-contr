@@ -13,7 +13,7 @@ import { X } from '@phosphor-icons/react'
 
 // Types
 type AccessLevel = 'no-access' | 'all-users' | 'specific-groups'
-type VersionType = 'unified' | 'separated' | 'enhanced'
+type VersionType = 'unified' | 'separated' | 'enhanced' | 'enhanced-v1'
 
 interface Settings {
   // Version A (unified) - uses allApps for its single Apps setting
@@ -30,6 +30,10 @@ interface Settings {
   enablePerDeviceAccess: boolean
   perDeviceAccessType: 'all-users' | 'specific-groups'
   perDeviceGroups: string[]
+  
+  // Version C v1 (enhanced-v1) - uses allApps for both Apps and Office Apps sections
+  officeAppsAccess: AccessLevel
+  officeAppsGroups: string[]
 }
 
 // Default settings for different versions
@@ -48,7 +52,10 @@ const getDefaultSettings = (version: VersionType): Settings => {
         // Version C settings (not used in Version A)
         enablePerDeviceAccess: false,
         perDeviceAccessType: 'all-users',
-        perDeviceGroups: []
+        perDeviceGroups: [],
+        // Version C v1 settings (not used in Version A)
+        officeAppsAccess: 'no-access',
+        officeAppsGroups: []
       }
     case 'separated': // B. Toggle - 3 Tabs
       return {
@@ -63,7 +70,10 @@ const getDefaultSettings = (version: VersionType): Settings => {
         // Version C settings (not used in Version B)
         enablePerDeviceAccess: true,
         perDeviceAccessType: 'all-users',
-        perDeviceGroups: []
+        perDeviceGroups: [],
+        // Version C v1 settings (not used in Version B)
+        officeAppsAccess: 'no-access',
+        officeAppsGroups: []
       }
     case 'enhanced': // C. Toggle - 2 Tabs
       return {
@@ -78,7 +88,28 @@ const getDefaultSettings = (version: VersionType): Settings => {
         // Version C specific per-device controls
         enablePerDeviceAccess: true,
         perDeviceAccessType: 'all-users',
-        perDeviceGroups: []
+        perDeviceGroups: [],
+        // Version C v1 settings (not used in Version C)
+        officeAppsAccess: 'no-access',
+        officeAppsGroups: []
+      }
+    case 'enhanced-v1': // C. Toggle - 2 Tabs v1
+      return {
+        // Version C v1 uses allApps for Apps section
+        allApps: 'no-access',
+        allAppsGroups: [],
+        // Version B settings (not used in Version C v1)
+        webApps: 'no-access',
+        webGroups: [],
+        officeWin32: 'all-users',
+        officeGroups: [],
+        // Version C settings (not used in Version C v1)
+        enablePerDeviceAccess: false,
+        perDeviceAccessType: 'all-users',
+        perDeviceGroups: [],
+        // Version C v1 specific Office Apps controls
+        officeAppsAccess: 'no-access',
+        officeAppsGroups: []
       }
   }
 }
@@ -319,7 +350,7 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="web-apps" className="cursor-pointer" data-editable="true">Web apps</TabsTrigger>
-              <TabsTrigger value="office" className="cursor-pointer" data-editable="true">Office Desktop Apps</TabsTrigger>
+              <TabsTrigger value="office" className="cursor-pointer" data-editable="true">Office Apps</TabsTrigger>
               <TabsTrigger value="agents" className="cursor-pointer" data-editable="true">Agents</TabsTrigger>
             </TabsList>
 
@@ -351,8 +382,8 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
 
             <TabsContent value="office" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Allow users to enable Frontier features in Office Desktop applications</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. User choices are device specific.</p>
+                <h3 className="font-medium mb-2" data-editable="true">Allow users to enable Frontier features in Office applications</h3>
+                <p className="text-sm text-muted-foreground mb-4" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</p>
               </div>
 
               <AccessControl
@@ -446,9 +477,9 @@ function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges
                   specificGroups: 'Specific user groups'
                 }}
                 descriptions={{
-                  noAccess: 'Users will not have access to Frontier features in web apps.',
-                  allUsers: 'All users will automatically receive Frontier features in web apps.',
-                  specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
+                  noAccess: 'Users will not have access to Frontier features in their apps.',
+                  allUsers: 'All users will automatically receive Frontier features in their apps.',
+                  specificGroups: 'Only specified user groups will automatically receive Frontier features in their apps.'
                 }}
               />
 
@@ -460,13 +491,9 @@ function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges
                     onCheckedChange={(checked) => updateSettings({ enablePerDeviceAccess: !!checked })}
                     className="mt-0.5"
                   />
-                  <Label htmlFor="enhanced-per-device-access" className="font-medium cursor-pointer text-base leading-tight" data-editable="true">
-                    Allow per device enrollment in Office desktop applications
-                  </Label>
+                  <Label htmlFor="enhanced-per-device-access" className="font-medium cursor-pointer text-base leading-tight" data-editable="true">Allow per device enrollment in Office applications</Label>
                 </div>
-                <div className="text-muted-foreground ml-6 mt-1 text-sm" data-editable="true">
-                  By default, Frontier features are turned off in Office desktop applications, but all users can choose to turn them on. User choices are device specific.
-                </div>
+                <div className="text-muted-foreground ml-6 mt-1 text-sm" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</div>
 
                 <div className={`ml-6 mt-3 space-y-1 ${!settings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
                   <RadioGroup
@@ -497,6 +524,113 @@ function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges
                     )}
                   </RadioGroup>
                 </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
+              <div>
+                <h3 className="font-bold mb-2" data-editable="true">Get early access to AI agents built by Microsoft</h3>
+                <p className="text-sm text-muted-foreground" data-editable="true">
+                  The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+        <div className="border-t pt-4 flex justify-end gap-2">
+          <Button 
+            variant="outline" 
+            onClick={resetToDefaults} 
+            className="border-black"
+            disabled={!hasChanges}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={onSave}
+            variant={hasChanges ? "default" : "outline"}
+            className={hasChanges ? "" : "border-black"}
+            disabled={!hasChanges}
+          >
+            Save
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+
+// Version C v1: Enhanced with Duplicate Apps Interface
+function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
+  const [activeTab, setActiveTab] = useState('apps')
+
+  return (
+    <Card className="max-w-2xl w-full h-[950px]">
+      <CardHeader className="space-y-3">
+        <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
+        <div className="text-sm text-muted-foreground space-y-2">
+          <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
+        </div>
+      </CardHeader>
+      <CardContent className="flex flex-col flex-1">
+        <div className="flex-1 flex flex-col">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
+              <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
+              <div>
+                <h3 className="font-medium mb-2" data-editable="true">Apps</h3>
+                <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in applications.</p>
+              </div>
+
+              <AccessControl
+                value={settings.allApps}
+                onChange={(value) => updateSettings({ allApps: value, allAppsGroups: value !== 'specific-groups' ? [] : settings.allAppsGroups })}
+                groups={settings.allAppsGroups}
+                onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
+                onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
+                prefix="enhanced-v1-apps"
+                labels={{
+                  noAccess: 'No access',
+                  allUsers: 'All users',
+                  specificGroups: 'Specific user groups'
+                }}
+                descriptions={{
+                  noAccess: 'Users will not have access to Frontier features in their apps.',
+                  allUsers: 'All users will automatically receive Frontier features in their apps.',
+                  specificGroups: 'Only specified user groups will automatically receive Frontier features in their apps.'
+                }}
+              />
+
+              <div className="mt-8 pt-6 border-t">
+                <div>
+                  <h3 className="font-medium mb-2" data-editable="true">Office Apps</h3>
+                  <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in Office applications.</p>
+                </div>
+
+                <AccessControl
+                  value={settings.officeAppsAccess}
+                  onChange={(value) => updateSettings({ officeAppsAccess: value, officeAppsGroups: value !== 'specific-groups' ? [] : settings.officeAppsGroups })}
+                  groups={settings.officeAppsGroups}
+                  onAddGroup={(group) => updateSettings({ officeAppsGroups: [...settings.officeAppsGroups, group] })}
+                  onRemoveGroup={(index) => updateSettings({ officeAppsGroups: settings.officeAppsGroups.filter((_, i) => i !== index) })}
+                  prefix="enhanced-v1-office"
+                  labels={{
+                    noAccess: 'No access',
+                    allUsers: 'All users',
+                    specificGroups: 'Specific user groups'
+                  }}
+                  descriptions={{
+                    noAccess: 'Users will not have access to Frontier features in Office apps.',
+                    allUsers: 'All users will automatically receive Frontier features in Office apps.',
+                    specificGroups: 'Only specified user groups will automatically receive Frontier features in Office apps.'
+                  }}
+                />
               </div>
             </TabsContent>
 
@@ -571,7 +705,8 @@ export default function App() {
   const versions = {
     unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
     separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
-    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />
+    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
+    'enhanced-v1': () => <EnhancedV1Version settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />
   }
 
   return (
@@ -595,6 +730,12 @@ export default function App() {
           className="border-black"
           data-editable="true"
         >C. Toggle - 2 Tabs</Button>
+        <Button
+          variant={selectedVersion === 'enhanced-v1' ? "default" : "outline"}
+          onClick={() => handleVersionChange('enhanced-v1')}
+          className="border-black"
+          data-editable="true"
+        >C. Toggle - 2 Tabs v1</Button>
       </div>
       
       {versions[selectedVersion]()}
