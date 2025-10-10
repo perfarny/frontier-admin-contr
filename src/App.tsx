@@ -588,49 +588,97 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
                 <p className="text-sm text-muted-foreground mb-4" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
-              <AccessControl
-                value={settings.allApps}
-                onChange={(value) => updateSettings({ allApps: value, allAppsGroups: value !== 'specific-groups' ? [] : settings.allAppsGroups })}
-                groups={settings.allAppsGroups}
-                onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
-                onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
-                prefix="enhanced-v1-apps"
-                labels={{
-                  noAccess: 'No access',
-                  allUsers: 'All users',
-                  specificGroups: 'Specific user groups'
-                }}
-                descriptions={{
-                  noAccess: 'Users will not have access to Frontier features in their apps.',
-                  allUsers: 'All users will automatically receive Frontier features in their apps.',
-                  specificGroups: 'Only specified user groups will automatically receive Frontier features in their apps.'
-                }}
-              />
+              <RadioGroup value={settings.allApps} onValueChange={(v) => {
+                const value = v as AccessLevel;
+                updateSettings({ allApps: value, allAppsGroups: value !== 'specific-groups' ? [] : settings.allAppsGroups });
+              }} className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no-access" id="enhanced-v1-apps-no-access" className="border-black" />
+                  <Label htmlFor="enhanced-v1-apps-no-access" className="font-normal" data-editable="true">
+                    No access
+                  </Label>
+                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
+                  Users will not have access to Frontier features in their apps.
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="all-users" id="enhanced-v1-apps-all-users" className="border-black" />
+                  <Label htmlFor="enhanced-v1-apps-all-users" className="font-normal" data-editable="true">
+                    All users
+                  </Label>
+                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
+                  All users will automatically receive Frontier features in their apps.
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="specific-groups" id="enhanced-v1-apps-specific-groups" className="border-black" />
+                  <Label htmlFor="enhanced-v1-apps-specific-groups" className="font-normal" data-editable="true">
+                    Specific user groups
+                  </Label>
+                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
+                  Only specified user groups will automatically receive Frontier features in their apps.
+                </div>
+                {settings.allApps === 'specific-groups' && (
+                  <div className="ml-6">
+                    <GroupManager
+                      groups={settings.allAppsGroups}
+                      onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
+                      onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
+                      inputId="enhanced-v1-apps-group-input"
+                    />
+                  </div>
+                )}
+              </RadioGroup>
 
               <div className="mt-8 pt-6 border-t">
                 <div>
                   <h3 className="font-medium mb-2" data-editable="true">Other Apps</h3>
-                  <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in Office applications.</p>
+                  <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in other applications.</p>
                 </div>
 
-                <AccessControl
-                  value={settings.officeAppsAccess}
-                  onChange={(value) => updateSettings({ officeAppsAccess: value, officeAppsGroups: value !== 'specific-groups' ? [] : settings.officeAppsGroups })}
-                  groups={settings.officeAppsGroups}
-                  onAddGroup={(group) => updateSettings({ officeAppsGroups: [...settings.officeAppsGroups, group] })}
-                  onRemoveGroup={(index) => updateSettings({ officeAppsGroups: settings.officeAppsGroups.filter((_, i) => i !== index) })}
-                  prefix="enhanced-v1-office"
-                  labels={{
-                    noAccess: 'No access',
-                    allUsers: 'All users',
-                    specificGroups: 'Specific user groups'
-                  }}
-                  descriptions={{
-                    noAccess: 'Users will not have access to Frontier features in Office apps.',
-                    allUsers: 'All users will automatically receive Frontier features in Office apps.',
-                    specificGroups: 'Only specified user groups will automatically receive Frontier features in Office apps.'
-                  }}
-                />
+                <RadioGroup value={settings.officeAppsAccess} onValueChange={(v) => {
+                  const value = v as AccessLevel;
+                  updateSettings({ officeAppsAccess: value, officeAppsGroups: value !== 'specific-groups' ? [] : settings.officeAppsGroups });
+                }} className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no-access" id="enhanced-v1-office-no-access" className="border-black" />
+                    <Label htmlFor="enhanced-v1-office-no-access" className="font-normal" data-editable="true">
+                      No access
+                    </Label>
+                  </div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
+                    Users will not have access to Frontier features in Office apps.
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="all-users" id="enhanced-v1-office-all-users" className="border-black" />
+                    <Label htmlFor="enhanced-v1-office-all-users" className="font-normal" data-editable="true">
+                      All users
+                    </Label>
+                  </div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
+                    All users will automatically receive Frontier features in Office apps.
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="specific-groups" id="enhanced-v1-office-specific-groups" className="border-black" />
+                    <Label htmlFor="enhanced-v1-office-specific-groups" className="font-normal" data-editable="true">
+                      Specific user groups
+                    </Label>
+                  </div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
+                    Only specified user groups will automatically receive Frontier features in Office apps.
+                  </div>
+                  {settings.officeAppsAccess === 'specific-groups' && (
+                    <div className="ml-6">
+                      <GroupManager
+                        groups={settings.officeAppsGroups}
+                        onAddGroup={(group) => updateSettings({ officeAppsGroups: [...settings.officeAppsGroups, group] })}
+                        onRemoveGroup={(index) => updateSettings({ officeAppsGroups: settings.officeAppsGroups.filter((_, i) => i !== index) })}
+                        inputId="enhanced-v1-office-group-input"
+                      />
+                    </div>
+                  )}
+                </RadioGroup>
               </div>
             </TabsContent>
 
