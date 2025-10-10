@@ -566,7 +566,7 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
-    <Card className="max-w-2xl w-full h-[950px]">
+    <Card className="max-w-2xl w-full h-[1050px]">
       <CardHeader className="space-y-3">
         <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
@@ -598,27 +598,21 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
                     No access
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-                  Users will not have access to Frontier features in their apps.
-                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Users will not have access to Frontier features in their Office apps.</div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="all-users" id="enhanced-v1-apps-all-users" className="border-black" />
                   <Label htmlFor="enhanced-v1-apps-all-users" className="font-normal" data-editable="true">
                     All users
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-                  All users will automatically receive Frontier features in their apps.
-                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">All users will automatically receive Frontier features in their Office apps.</div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="specific-groups" id="enhanced-v1-apps-specific-groups" className="border-black" />
                   <Label htmlFor="enhanced-v1-apps-specific-groups" className="font-normal" data-editable="true">
                     Specific user groups
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-                  Only specified user groups will automatically receive Frontier features in their apps.
-                </div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Only specified user groups will automatically receive Frontier features in their Office apps.</div>
                 {settings.allApps === 'specific-groups' && (
                   <div className="ml-6">
                     <GroupManager
@@ -647,27 +641,21 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
                       No access
                     </Label>
                   </div>
-                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-                    Users will not have access to Frontier features in Office apps.
-                  </div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Users will not have access to Frontier features in other apps.</div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="all-users" id="enhanced-v1-office-all-users" className="border-black" />
                     <Label htmlFor="enhanced-v1-office-all-users" className="font-normal" data-editable="true">
                       All users
                     </Label>
                   </div>
-                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-                    All users will automatically receive Frontier features in Office apps.
-                  </div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">All users will automatically receive Frontier features in other apps.</div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="specific-groups" id="enhanced-v1-office-specific-groups" className="border-black" />
                     <Label htmlFor="enhanced-v1-office-specific-groups" className="font-normal" data-editable="true">
                       Specific user groups
                     </Label>
                   </div>
-                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-                    Only specified user groups will automatically receive Frontier features in Office apps.
-                  </div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Only specified user groups will automatically receive Frontier features in other apps.</div>
                   {settings.officeAppsAccess === 'specific-groups' && (
                     <div className="ml-6">
                       <GroupManager
