@@ -32,20 +32,29 @@ interface TabTextConfig {
   descriptions: RadioButtonDescriptions
 }
 
+interface AgentsTextConfig {
+  title: string
+  description: string
+}
+
 interface TextConfig {
   unified: {
     apps: TabTextConfig
+    agents: AgentsTextConfig
   }
   separated: {
     office: TabTextConfig
     webApps: TabTextConfig
+    agents: AgentsTextConfig
   }
   enhanced: {
     apps: TabTextConfig
+    agents: AgentsTextConfig
   }
   'enhanced-v1': {
     apps: TabTextConfig
     office: TabTextConfig
+    agents: AgentsTextConfig
   }
 }
 
@@ -84,6 +93,10 @@ const STATIC_TEXT_CONFIGS: TextConfig = {
         allUsers: 'All users will automatically receive Frontier features.',
         specificGroups: 'Only specified user groups will automatically receive Frontier features.'
       }
+    },
+    agents: {
+      title: 'Get early access to AI agents built by Microsoft',
+      description: 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.'
     }
   },
   separated: {
@@ -110,6 +123,10 @@ const STATIC_TEXT_CONFIGS: TextConfig = {
         allUsers: 'All users will automatically receive Frontier features in web apps.',
         specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
       }
+    },
+    agents: {
+      title: 'Get early access to AI agents built by Microsoft',
+      description: 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.'
     }
   },
   enhanced: {
@@ -124,6 +141,10 @@ const STATIC_TEXT_CONFIGS: TextConfig = {
         allUsers: 'All users will automatically receive Frontier features in their apps.',
         specificGroups: 'Only specified user groups will automatically receive Frontier features in their apps.'
       }
+    },
+    agents: {
+      title: 'Get early access to AI agents built by Microsoft',
+      description: 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.'
     }
   },
   'enhanced-v1': {
@@ -150,6 +171,10 @@ const STATIC_TEXT_CONFIGS: TextConfig = {
         allUsers: 'All users will automatically receive Frontier features in other apps.',
         specificGroups: 'Only specified user groups will automatically receive Frontier features in other apps.'
       }
+    },
+    agents: {
+      title: 'Get early access to AI agents built by Microsoft',
+      description: 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.'
     }
   }
 }
@@ -543,9 +568,30 @@ function UnifiedVersion({
 
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-bold mb-2" data-editable="true">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground" data-editable="true">
-                  The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+                <h3 className="font-bold mb-2">
+                  <EditableText
+                    value={textConfig.unified.agents.title}
+                    onChange={(newValue) => updateTextConfig({
+                      unified: {
+                        ...textConfig.unified,
+                        agents: { ...textConfig.unified.agents, title: newValue }
+                      }
+                    })}
+                    className="font-bold"
+                  />
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  <EditableText
+                    value={textConfig.unified.agents.description}
+                    onChange={(newValue) => updateTextConfig({
+                      unified: {
+                        ...textConfig.unified,
+                        agents: { ...textConfig.unified.agents, description: newValue }
+                      }
+                    })}
+                    className="text-sm text-muted-foreground"
+                    isDescription={true}
+                  />
                 </p>
               </div>
             </TabsContent>
@@ -674,8 +720,31 @@ function SeparatedVersion({
 
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground">The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.</p>
+                <h3 className="font-bold mb-2">
+                  <EditableText
+                    value={textConfig.separated.agents.title}
+                    onChange={(newValue) => updateTextConfig({
+                      separated: {
+                        ...textConfig.separated,
+                        agents: { ...textConfig.separated.agents, title: newValue }
+                      }
+                    })}
+                    className="font-bold"
+                  />
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  <EditableText
+                    value={textConfig.separated.agents.description}
+                    onChange={(newValue) => updateTextConfig({
+                      separated: {
+                        ...textConfig.separated,
+                        agents: { ...textConfig.separated.agents, description: newValue }
+                      }
+                    })}
+                    className="text-sm text-muted-foreground"
+                    isDescription={true}
+                  />
+                </p>
               </div>
             </TabsContent>
           </Tabs>
@@ -815,9 +884,30 @@ function EnhancedVersion({
 
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-bold mb-2" data-editable="true">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground" data-editable="true">
-                  The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+                <h3 className="font-bold mb-2">
+                  <EditableText
+                    value={textConfig.enhanced.agents.title}
+                    onChange={(newValue) => updateTextConfig({
+                      enhanced: {
+                        ...textConfig.enhanced,
+                        agents: { ...textConfig.enhanced.agents, title: newValue }
+                      }
+                    })}
+                    className="font-bold"
+                  />
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  <EditableText
+                    value={textConfig.enhanced.agents.description}
+                    onChange={(newValue) => updateTextConfig({
+                      enhanced: {
+                        ...textConfig.enhanced,
+                        agents: { ...textConfig.enhanced.agents, description: newValue }
+                      }
+                    })}
+                    className="text-sm text-muted-foreground"
+                    isDescription={true}
+                  />
                 </p>
               </div>
             </TabsContent>
@@ -1130,9 +1220,30 @@ function EnhancedV1Version({
 
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-bold mb-2" data-editable="true">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground" data-editable="true">
-                  The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.
+                <h3 className="font-bold mb-2">
+                  <EditableText
+                    value={textConfig['enhanced-v1'].agents.title}
+                    onChange={(newValue) => updateTextConfig({
+                      'enhanced-v1': {
+                        ...textConfig['enhanced-v1'],
+                        agents: { ...textConfig['enhanced-v1'].agents, title: newValue }
+                      }
+                    })}
+                    className="font-bold"
+                  />
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  <EditableText
+                    value={textConfig['enhanced-v1'].agents.description}
+                    onChange={(newValue) => updateTextConfig({
+                      'enhanced-v1': {
+                        ...textConfig['enhanced-v1'],
+                        agents: { ...textConfig['enhanced-v1'].agents, description: newValue }
+                      }
+                    })}
+                    className="text-sm text-muted-foreground"
+                    isDescription={true}
+                  />
                 </p>
               </div>
             </TabsContent>
