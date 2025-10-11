@@ -1205,11 +1205,10 @@ export default function App() {
   }
 
   const handleVersionChange = (version: VersionType) => {
-    setSelectedVersion(version)
     // Only reset settings to version-specific defaults, preserve text config per version
+    setSelectedVersion(version)
     const defaults = getDefaultSettings(version)
     setSettings(defaults)
-    setSavedSettings(defaults)
     // Text config will be loaded from KV store for this version, not reset to static defaults
   }
 
