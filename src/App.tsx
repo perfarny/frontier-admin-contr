@@ -134,7 +134,7 @@ const getDefaultTextConfig = (): TextConfig => ({
         specificGroups: 'Specific user groups'
       },
       descriptions: {
-        noAccess: 'Users will not have access to Frontier features in their Office apps.',
+        noAccess: 'Users cannot choose to enable Frontier features in their Office apps.',
         allUsers: 'All users will automatically receive Frontier features in their Office apps.',
         specificGroups: 'Only specified user groups will automatically receive Frontier features in their Office apps.'
       }
