@@ -162,7 +162,7 @@ interface EditableTextProps {
   isDescription?: boolean
 }
 
-const isDevelopment = process.env.NODE_ENV === 'development'
+const isDevelopment = import.meta.env.DEV
 
 function EditableText({ value, onChange, className = '', isDescription = false }: EditableTextProps) {
   const [isEditing, setIsEditing] = useState(false)
@@ -1168,11 +1168,13 @@ export default function App() {
   // Use a fresh key to avoid stale data and ensure proper defaults
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
   const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  // Each version maintains its own independent text config, initialized from static defaults only once
   const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
   const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
   const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
+  // Use the persisted text config for this version, fallback to static only for missing properties
   const currentTextConfig = { ...STATIC_TEXT_CONFIGS, ...textConfig }
   const currentSavedTextConfig = { ...STATIC_TEXT_CONFIGS, ...savedTextConfig }
   
@@ -1204,13 +1206,11 @@ export default function App() {
 
   const handleVersionChange = (version: VersionType) => {
     setSelectedVersion(version)
-    // Reset both current and saved settings when switching versions to use version-specific defaults
+    // Only reset settings to version-specific defaults, preserve text config per version
     const defaults = getDefaultSettings(version)
-    const textDefaults = STATIC_TEXT_CONFIGS
     setSettings(defaults)
     setSavedSettings(defaults)
-    setTextConfig(textDefaults)
-    setSavedTextConfig(textDefaults)
+    // Text config will be loaded from KV store for this version, not reset to static defaults
   }
 
   const versions = {
