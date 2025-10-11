@@ -70,8 +70,8 @@ interface Settings {
   officeAppsGroups: string[]
 }
 
-// Default text configuration for all versions and tabs
-const getDefaultTextConfig = (): TextConfig => ({
+// Static text configurations for each version - no dynamic generation
+const STATIC_TEXT_CONFIGS: TextConfig = {
   unified: {
     apps: {
       labels: {
@@ -152,7 +152,7 @@ const getDefaultTextConfig = (): TextConfig => ({
       }
     }
   }
-})
+}
 
 // Development-only editable text component
 interface EditableTextProps {
@@ -1168,20 +1168,20 @@ export default function App() {
   // Use a fresh key to avoid stale data and ensure proper defaults
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
   const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v7-${selectedVersion}`, getDefaultTextConfig())
-  const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v7-${selectedVersion}`, getDefaultTextConfig())
+  const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
+  const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
   const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
-  const currentTextConfig = { ...getDefaultTextConfig(), ...textConfig }
-  const currentSavedTextConfig = { ...getDefaultTextConfig(), ...savedTextConfig }
+  const currentTextConfig = { ...STATIC_TEXT_CONFIGS, ...textConfig }
+  const currentSavedTextConfig = { ...STATIC_TEXT_CONFIGS, ...savedTextConfig }
   
   const updateSettings = (updates: Partial<Settings>) => {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
   const updateTextConfig = (updates: Partial<TextConfig>) => {
-    setTextConfig(current => ({ ...getDefaultTextConfig(), ...current, ...updates }))
+    setTextConfig(current => ({ ...STATIC_TEXT_CONFIGS, ...current, ...updates }))
   }
 
   const hasChanges = settings !== undefined && (
@@ -1206,7 +1206,7 @@ export default function App() {
     setSelectedVersion(version)
     // Reset both current and saved settings when switching versions to use version-specific defaults
     const defaults = getDefaultSettings(version)
-    const textDefaults = getDefaultTextConfig()
+    const textDefaults = STATIC_TEXT_CONFIGS
     setSettings(defaults)
     setSavedSettings(defaults)
     setTextConfig(textDefaults)
