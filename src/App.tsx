@@ -334,7 +334,7 @@ function UnifiedVersion({ settings, updateSettings, resetToDefaults, hasChanges,
 
 // Version B: Separated Apps Interface
 function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
-  const [activeTab, setActiveTab] = useState('web-apps')
+  const [activeTab, setActiveTab] = useState('office')
 
   return (
     <Card className="w-[672px] h-[780px]">
@@ -349,36 +349,10 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="web-apps" className="cursor-pointer" data-editable="true">Web apps</TabsTrigger>
               <TabsTrigger value="office" className="cursor-pointer" data-editable="true">Office Apps</TabsTrigger>
+              <TabsTrigger value="web-apps" className="cursor-pointer" data-editable="true">Other apps</TabsTrigger>
               <TabsTrigger value="agents" className="cursor-pointer" data-editable="true">Agents</TabsTrigger>
             </TabsList>
-
-            <TabsContent value="web-apps" className="space-y-4 mt-6 flex-1">
-              <div>
-                <h3 className="font-medium mb-2" data-editable="true">Enable Frontier features in web apps</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in web apps.</p>
-              </div>
-
-              <AccessControl
-                value={settings.webApps}
-                onChange={(value) => updateSettings({ webApps: value, webGroups: value !== 'specific-groups' ? [] : settings.webGroups })}
-                groups={settings.webGroups}
-                onAddGroup={(group) => updateSettings({ webGroups: [...settings.webGroups, group] })}
-                onRemoveGroup={(index) => updateSettings({ webGroups: settings.webGroups.filter((_, i) => i !== index) })}
-                prefix="separated-web"
-                labels={{
-                  noAccess: 'No access',
-                  allUsers: 'All users',
-                  specificGroups: 'Specific user groups'
-                }}
-                descriptions={{
-                  noAccess: 'Users will not have access to Frontier features in web apps.',
-                  allUsers: 'All users will automatically receive Frontier features in web apps.',
-                  specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
-                }}
-              />
-            </TabsContent>
 
             <TabsContent value="office" className="space-y-4 mt-6 flex-1">
               <div>
@@ -402,6 +376,32 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
                   noAccess: 'Users cannot choose to enable Frontier features.',
                   allUsers: 'All users can choose to enable Frontier features.',
                   specificGroups: 'Only specified user groups can choose to enable Frontier features.'
+                }}
+              />
+            </TabsContent>
+
+            <TabsContent value="web-apps" className="space-y-4 mt-6 flex-1">
+              <div>
+                <h3 className="font-medium mb-2" data-editable="true">Enable Frontier features in other apps</h3>
+                <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in other apps.</p>
+              </div>
+
+              <AccessControl
+                value={settings.webApps}
+                onChange={(value) => updateSettings({ webApps: value, webGroups: value !== 'specific-groups' ? [] : settings.webGroups })}
+                groups={settings.webGroups}
+                onAddGroup={(group) => updateSettings({ webGroups: [...settings.webGroups, group] })}
+                onRemoveGroup={(index) => updateSettings({ webGroups: settings.webGroups.filter((_, i) => i !== index) })}
+                prefix="separated-web"
+                labels={{
+                  noAccess: 'No access',
+                  allUsers: 'All users',
+                  specificGroups: 'Specific user groups'
+                }}
+                descriptions={{
+                  noAccess: 'Users will not have access to Frontier features in web apps.',
+                  allUsers: 'All users will automatically receive Frontier features in web apps.',
+                  specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
                 }}
               />
             </TabsContent>
