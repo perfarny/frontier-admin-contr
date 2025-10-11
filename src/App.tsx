@@ -154,7 +154,7 @@ const getDefaultTextConfig = (): TextConfig => ({
   }
 })
 
-// Editable text component
+// Development-only editable text component
 interface EditableTextProps {
   value: string
   onChange: (value: string) => void
@@ -162,9 +162,16 @@ interface EditableTextProps {
   isDescription?: boolean
 }
 
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 function EditableText({ value, onChange, className = '', isDescription = false }: EditableTextProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(value)
+
+  // Don't allow editing in production
+  if (!isDevelopment) {
+    return <span className={className}>{value}</span>
+  }
 
   const handleSave = () => {
     onChange(editValue.trim())
@@ -490,10 +497,10 @@ function UnifiedVersion({
   return (
     <Card className="w-[672px] h-[780px]">
       <CardHeader className="space-y-3">
-        <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
+        <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for both apps and agents.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p>To get the most out of the Frontier program, we recommend turning it on for both apps and agents.</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
@@ -506,8 +513,8 @@ function UnifiedVersion({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Apps</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in their M365 applications.</p>
+                <h3 className="font-medium mb-2">Apps</h3>
+                <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in their M365 applications.</p>
               </div>
 
               <AccessControl
@@ -590,25 +597,25 @@ function SeparatedVersion({
   return (
     <Card className="w-[672px] h-[780px]">
       <CardHeader className="space-y-3">
-        <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
+        <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p>To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="office" className="cursor-pointer" data-editable="true">Office Apps</TabsTrigger>
-              <TabsTrigger value="web-apps" className="cursor-pointer" data-editable="true">Other apps</TabsTrigger>
-              <TabsTrigger value="agents" className="cursor-pointer" data-editable="true">Agents</TabsTrigger>
+              <TabsTrigger value="office" className="cursor-pointer">Office Apps</TabsTrigger>
+              <TabsTrigger value="web-apps" className="cursor-pointer">Other apps</TabsTrigger>
+              <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
             </TabsList>
 
             <TabsContent value="office" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Allow users to enable Frontier features in Office applications like Word, Excel, PowerPoint</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</p>
+                <h3 className="font-medium mb-2">Allow users to enable Frontier features in Office applications like Word, Excel, PowerPoint</h3>
+                <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</p>
               </div>
 
               <AccessControl
@@ -637,8 +644,8 @@ function SeparatedVersion({
 
             <TabsContent value="web-apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Enable Frontier features in other apps</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in other apps.</p>
+                <h3 className="font-medium mb-2">Enable Frontier features in other apps</h3>
+                <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in other apps.</p>
               </div>
 
               <AccessControl
@@ -667,8 +674,8 @@ function SeparatedVersion({
 
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-bold mb-2" data-editable="true">Get early access to AI agents built by Microsoft</h3>
-                <p className="text-sm text-muted-foreground" data-editable="true">The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.</p>
+                <h3 className="font-bold mb-2">Get early access to AI agents built by Microsoft</h3>
+                <p className="text-sm text-muted-foreground">The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.</p>
               </div>
             </TabsContent>
           </Tabs>
@@ -719,10 +726,10 @@ function EnhancedVersion({
   return (
     <Card className="max-w-2xl w-full h-[950px]">
       <CardHeader className="space-y-3">
-        <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
+        <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p>To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
@@ -735,8 +742,8 @@ function EnhancedVersion({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Apps</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in applications.</p>
+                <h3 className="font-medium mb-2">Apps</h3>
+                <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in applications.</p>
               </div>
 
               <AccessControl
@@ -770,9 +777,9 @@ function EnhancedVersion({
                     onCheckedChange={(checked) => updateSettings({ enablePerDeviceAccess: !!checked })}
                     className="mt-0.5"
                   />
-                  <Label htmlFor="enhanced-per-device-access" className="font-medium cursor-pointer text-base leading-tight" data-editable="true">Allow per device enrollment in Office applications</Label>
+                  <Label htmlFor="enhanced-per-device-access" className="font-medium cursor-pointer text-base leading-tight">Allow per device enrollment in Office applications</Label>
                 </div>
-                <div className="text-muted-foreground ml-6 mt-1 text-sm" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</div>
+                <div className="text-muted-foreground ml-6 mt-1 text-sm">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</div>
 
                 <div className={`ml-6 mt-3 space-y-1 ${!settings.enablePerDeviceAccess ? 'opacity-50 pointer-events-none' : ''}`}>
                   <RadioGroup
@@ -783,12 +790,12 @@ function EnhancedVersion({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="all-users" id="enhanced-per-device-all-users" className="border-black" />
-                      <Label htmlFor="enhanced-per-device-all-users" className="font-normal" data-editable="true">All users</Label>
+                      <Label htmlFor="enhanced-per-device-all-users" className="font-normal">All users</Label>
                     </div>
 
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="specific-groups" id="enhanced-per-device-specific-groups" className="border-black" />
-                      <Label htmlFor="enhanced-per-device-specific-groups" className="font-normal" data-editable="true">Specific user groups</Label>
+                      <Label htmlFor="enhanced-per-device-specific-groups" className="font-normal">Specific user groups</Label>
                     </div>
 
                     {settings.perDeviceAccessType === 'specific-groups' && settings.enablePerDeviceAccess && (
@@ -863,10 +870,10 @@ function EnhancedV1Version({
   return (
     <Card className="max-w-2xl w-full h-[1050px]">
       <CardHeader className="space-y-3">
-        <CardTitle className="text-xl font-semibold" data-editable="true">Turn on Frontier features</CardTitle>
+        <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p data-editable="true">The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p data-editable="true">To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
+          <p>To get the most out of the Frontier program, we recommend turning it on for all apps and agents.</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
@@ -879,8 +886,8 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Office Apps like Word, Excel, PowerPoint</h3>
-                <p className="text-sm text-muted-foreground mb-4" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
+                <h3 className="font-medium mb-2">Office Apps like Word, Excel, PowerPoint</h3>
+                <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
               <RadioGroup value={settings.allApps} onValueChange={(v) => {
@@ -1000,8 +1007,8 @@ function EnhancedV1Version({
 
               <div className="mt-8 pt-6 border-t">
                 <div>
-                  <h3 className="font-medium mb-2" data-editable="true">Other Apps</h3>
-                  <p className="text-sm text-muted-foreground mb-4" data-editable="true">Select which users automatically get Frontier features in other applications.</p>
+                  <h3 className="font-medium mb-2">Other Apps</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in other applications.</p>
                 </div>
 
                 <RadioGroup value={settings.officeAppsAccess} onValueChange={(v) => {
@@ -1159,10 +1166,10 @@ export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('enhanced-v1')
   
   // Use a fresh key to avoid stale data and ensure proper defaults
-  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v6-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v6-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v6-${selectedVersion}`, getDefaultTextConfig())
-  const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v6-${selectedVersion}`, getDefaultTextConfig())
+  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v7-${selectedVersion}`, getDefaultTextConfig())
+  const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v7-${selectedVersion}`, getDefaultTextConfig())
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
   const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
@@ -1252,25 +1259,21 @@ export default function App() {
           variant={selectedVersion === 'enhanced-v1' ? "default" : "outline"}
           onClick={() => handleVersionChange('enhanced-v1')}
           className="border-black"
-          data-editable="true"
         >A. Office win32 & WAC Toggle (2 tabs)</Button>
         <Button
           variant={selectedVersion === 'separated' ? "default" : "outline"}
           onClick={() => handleVersionChange('separated')}
           className="border-black"
-          data-editable="true"
         >B. Office win32 & WAC Toggle (3 tabs)</Button>
         <Button
           variant={selectedVersion === 'unified' ? "default" : "outline"}
           onClick={() => handleVersionChange('unified')}
           className="border-black"
-          data-editable="true"
         >C. No Toggle</Button>
         <Button
           variant={selectedVersion === 'enhanced' ? "default" : "outline"}
           onClick={() => handleVersionChange('enhanced')}
           className="border-black"
-          data-editable="true"
         >D. Office win32 Toggle Only</Button>
       </div>
       {versions[selectedVersion]()}
