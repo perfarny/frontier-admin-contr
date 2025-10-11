@@ -9,11 +9,45 @@ import { Label } from './components/ui/label'
 import { Input } from './components/ui/input'
 import { Badge } from './components/ui/badge'
 import { Checkbox } from './components/ui/checkbox'
-import { X } from '@phosphor-icons/react'
+import { X, PencilSimple, Check } from '@phosphor-icons/react'
 
 // Types
 type AccessLevel = 'no-access' | 'all-users' | 'specific-groups'
 type VersionType = 'unified' | 'separated' | 'enhanced' | 'enhanced-v1'
+
+interface RadioButtonLabels {
+  noAccess: string
+  allUsers: string
+  specificGroups: string
+}
+
+interface RadioButtonDescriptions {
+  noAccess: string
+  allUsers: string
+  specificGroups: string
+}
+
+interface TabTextConfig {
+  labels: RadioButtonLabels
+  descriptions: RadioButtonDescriptions
+}
+
+interface TextConfig {
+  unified: {
+    apps: TabTextConfig
+  }
+  separated: {
+    office: TabTextConfig
+    webApps: TabTextConfig
+  }
+  enhanced: {
+    apps: TabTextConfig
+  }
+  'enhanced-v1': {
+    apps: TabTextConfig
+    office: TabTextConfig
+  }
+}
 
 interface Settings {
   // Version A (unified) - uses allApps for its single Apps setting
@@ -34,6 +68,167 @@ interface Settings {
   // Version C v1 (enhanced-v1) - uses allApps for both Apps and Office Apps sections
   officeAppsAccess: AccessLevel
   officeAppsGroups: string[]
+}
+
+// Default text configuration for all versions and tabs
+const getDefaultTextConfig = (): TextConfig => ({
+  unified: {
+    apps: {
+      labels: {
+        noAccess: 'No access',
+        allUsers: 'All users',
+        specificGroups: 'Specific user groups'
+      },
+      descriptions: {
+        noAccess: 'Users will not have access to Frontier features.',
+        allUsers: 'All users will automatically receive Frontier features.',
+        specificGroups: 'Only specified user groups will automatically receive Frontier features.'
+      }
+    }
+  },
+  separated: {
+    office: {
+      labels: {
+        noAccess: 'No access',
+        allUsers: 'All users',
+        specificGroups: 'Specific user groups'
+      },
+      descriptions: {
+        noAccess: 'Users cannot choose to enable Frontier features.',
+        allUsers: 'All users can choose to enable Frontier features.',
+        specificGroups: 'Only specified user groups can choose to enable Frontier features.'
+      }
+    },
+    webApps: {
+      labels: {
+        noAccess: 'No access',
+        allUsers: 'All users',
+        specificGroups: 'Specific user groups'
+      },
+      descriptions: {
+        noAccess: 'Users will not have access to Frontier features in web apps.',
+        allUsers: 'All users will automatically receive Frontier features in web apps.',
+        specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
+      }
+    }
+  },
+  enhanced: {
+    apps: {
+      labels: {
+        noAccess: 'No access',
+        allUsers: 'All users',
+        specificGroups: 'Specific user groups'
+      },
+      descriptions: {
+        noAccess: 'Users will not have access to Frontier features in their apps.',
+        allUsers: 'All users will automatically receive Frontier features in their apps.',
+        specificGroups: 'Only specified user groups will automatically receive Frontier features in their apps.'
+      }
+    }
+  },
+  'enhanced-v1': {
+    apps: {
+      labels: {
+        noAccess: 'No access',
+        allUsers: 'All users',
+        specificGroups: 'Specific user groups'
+      },
+      descriptions: {
+        noAccess: 'Users will not have access to Frontier features in their Office apps.',
+        allUsers: 'All users will automatically receive Frontier features in their Office apps.',
+        specificGroups: 'Only specified user groups will automatically receive Frontier features in their Office apps.'
+      }
+    },
+    office: {
+      labels: {
+        noAccess: 'No access',
+        allUsers: 'All users',
+        specificGroups: 'Specific user groups'
+      },
+      descriptions: {
+        noAccess: 'Users will not have access to Frontier features in other apps.',
+        allUsers: 'All users will automatically receive Frontier features in other apps.',
+        specificGroups: 'Only specified user groups will automatically receive Frontier features in other apps.'
+      }
+    }
+  }
+})
+
+// Editable text component
+interface EditableTextProps {
+  value: string
+  onChange: (value: string) => void
+  className?: string
+  isDescription?: boolean
+}
+
+function EditableText({ value, onChange, className = '', isDescription = false }: EditableTextProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editValue, setEditValue] = useState(value)
+
+  const handleSave = () => {
+    onChange(editValue.trim())
+    setIsEditing(false)
+  }
+
+  const handleCancel = () => {
+    setEditValue(value)
+    setIsEditing(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSave()
+    } else if (e.key === 'Escape') {
+      handleCancel()
+    }
+  }
+
+  if (isEditing) {
+    return (
+      <div className="flex items-center gap-2">
+        {isDescription ? (
+          <textarea
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={`flex-1 resize-none border rounded px-2 py-1 text-xs ${className}`}
+            rows={2}
+            autoFocus
+          />
+        ) : (
+          <Input
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={`flex-1 ${className}`}
+            autoFocus
+          />
+        )}
+        <Button size="sm" variant="ghost" onClick={handleSave} className="h-6 w-6 p-0">
+          <Check size={12} />
+        </Button>
+        <Button size="sm" variant="ghost" onClick={handleCancel} className="h-6 w-6 p-0">
+          <X size={12} />
+        </Button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-center gap-2 group">
+      <span className={className}>{value}</span>
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={() => setIsEditing(true)}
+        className="h-4 w-4 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <PencilSimple size={10} />
+      </Button>
+    </div>
+  )
 }
 
 // Default settings for different versions
@@ -187,16 +382,10 @@ interface AccessControlProps {
   onAddGroup: (group: string) => void
   onRemoveGroup: (index: number) => void
   prefix: string
-  labels: {
-    noAccess: string
-    allUsers: string
-    specificGroups: string
-  }
-  descriptions: {
-    noAccess: string
-    allUsers: string
-    specificGroups: string
-  }
+  labels: RadioButtonLabels
+  descriptions: RadioButtonDescriptions
+  onUpdateLabels: (labels: RadioButtonLabels) => void
+  onUpdateDescriptions: (descriptions: RadioButtonDescriptions) => void
 }
 
 function AccessControl({
@@ -207,36 +396,62 @@ function AccessControl({
   onRemoveGroup,
   prefix,
   labels,
-  descriptions
+  descriptions,
+  onUpdateLabels,
+  onUpdateDescriptions
 }: AccessControlProps) {
   return (
     <RadioGroup value={value} onValueChange={(v) => onChange(v as AccessLevel)} className="space-y-3">
       <div className="flex items-center space-x-2">
         <RadioGroupItem value="no-access" id={`${prefix}-no-access`} className="border-black" />
-        <Label htmlFor={`${prefix}-no-access`} className="font-normal" data-editable="true">
-          {labels.noAccess}
+        <Label htmlFor={`${prefix}-no-access`} className="font-normal">
+          <EditableText
+            value={labels.noAccess}
+            onChange={(newValue) => onUpdateLabels({ ...labels, noAccess: newValue })}
+          />
         </Label>
       </div>
-      <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-        {descriptions.noAccess}
+      <div className="text-xs text-muted-foreground ml-6 -mt-2">
+        <EditableText
+          value={descriptions.noAccess}
+          onChange={(newValue) => onUpdateDescriptions({ ...descriptions, noAccess: newValue })}
+          className="text-xs text-muted-foreground"
+          isDescription={true}
+        />
       </div>
       <div className="flex items-center space-x-2">
         <RadioGroupItem value="all-users" id={`${prefix}-all-users`} className="border-black" />
-        <Label htmlFor={`${prefix}-all-users`} className="font-normal" data-editable="true">
-          {labels.allUsers}
+        <Label htmlFor={`${prefix}-all-users`} className="font-normal">
+          <EditableText
+            value={labels.allUsers}
+            onChange={(newValue) => onUpdateLabels({ ...labels, allUsers: newValue })}
+          />
         </Label>
       </div>
-      <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-        {descriptions.allUsers}
+      <div className="text-xs text-muted-foreground ml-6 -mt-2">
+        <EditableText
+          value={descriptions.allUsers}
+          onChange={(newValue) => onUpdateDescriptions({ ...descriptions, allUsers: newValue })}
+          className="text-xs text-muted-foreground"
+          isDescription={true}
+        />
       </div>
       <div className="flex items-center space-x-2">
         <RadioGroupItem value="specific-groups" id={`${prefix}-specific-groups`} className="border-black" />
-        <Label htmlFor={`${prefix}-specific-groups`} className="font-normal" data-editable="true">
-          {labels.specificGroups}
+        <Label htmlFor={`${prefix}-specific-groups`} className="font-normal">
+          <EditableText
+            value={labels.specificGroups}
+            onChange={(newValue) => onUpdateLabels({ ...labels, specificGroups: newValue })}
+          />
         </Label>
       </div>
-      <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">
-        {descriptions.specificGroups}
+      <div className="text-xs text-muted-foreground ml-6 -mt-2">
+        <EditableText
+          value={descriptions.specificGroups}
+          onChange={(newValue) => onUpdateDescriptions({ ...descriptions, specificGroups: newValue })}
+          className="text-xs text-muted-foreground"
+          isDescription={true}
+        />
       </div>
       {value === 'specific-groups' && (
         <div className="ml-6">
@@ -253,7 +468,23 @@ function AccessControl({
 }
 
 // Version A: Unified Apps Interface
-function UnifiedVersion({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
+function UnifiedVersion({ 
+  settings, 
+  updateSettings, 
+  resetToDefaults, 
+  hasChanges, 
+  onSave, 
+  textConfig, 
+  updateTextConfig 
+}: { 
+  settings: Settings
+  updateSettings: (updates: Partial<Settings>) => void
+  resetToDefaults: () => void
+  hasChanges: boolean
+  onSave: () => void
+  textConfig: TextConfig
+  updateTextConfig: (updates: Partial<TextConfig>) => void
+}) {
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
@@ -286,16 +517,20 @@ function UnifiedVersion({ settings, updateSettings, resetToDefaults, hasChanges,
                 onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
                 onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
                 prefix="unified-apps"
-                labels={{
-                  noAccess: 'No access',
-                  allUsers: 'All users',
-                  specificGroups: 'Specific user groups'
-                }}
-                descriptions={{
-                  noAccess: 'Users will not have access to Frontier features.',
-                  allUsers: 'All users will automatically receive Frontier features.',
-                  specificGroups: 'Only specified user groups will automatically receive Frontier features.'
-                }}
+                labels={textConfig.unified.apps.labels}
+                descriptions={textConfig.unified.apps.descriptions}
+                onUpdateLabels={(labels) => updateTextConfig({
+                  unified: {
+                    ...textConfig.unified,
+                    apps: { ...textConfig.unified.apps, labels }
+                  }
+                })}
+                onUpdateDescriptions={(descriptions) => updateTextConfig({
+                  unified: {
+                    ...textConfig.unified,
+                    apps: { ...textConfig.unified.apps, descriptions }
+                  }
+                })}
               />
             </TabsContent>
 
@@ -333,7 +568,23 @@ function UnifiedVersion({ settings, updateSettings, resetToDefaults, hasChanges,
 }
 
 // Version B: Separated Apps Interface
-function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
+function SeparatedVersion({ 
+  settings, 
+  updateSettings, 
+  resetToDefaults, 
+  hasChanges, 
+  onSave, 
+  textConfig, 
+  updateTextConfig 
+}: { 
+  settings: Settings
+  updateSettings: (updates: Partial<Settings>) => void
+  resetToDefaults: () => void
+  hasChanges: boolean
+  onSave: () => void
+  textConfig: TextConfig
+  updateTextConfig: (updates: Partial<TextConfig>) => void
+}) {
   const [activeTab, setActiveTab] = useState('office')
 
   return (
@@ -356,7 +607,7 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
 
             <TabsContent value="office" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2" data-editable="true">Allow users to enable Frontier features in Office applications</h3>
+                <h3 className="font-medium mb-2" data-editable="true">Allow users to enable Frontier features in Office applications like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4" data-editable="true">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</p>
               </div>
 
@@ -367,16 +618,20 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
                 onAddGroup={(group) => updateSettings({ officeGroups: [...settings.officeGroups, group] })}
                 onRemoveGroup={(index) => updateSettings({ officeGroups: settings.officeGroups.filter((_, i) => i !== index) })}
                 prefix="separated-office"
-                labels={{
-                  noAccess: 'No access',
-                  allUsers: 'All users',
-                  specificGroups: 'Specific user groups'
-                }}
-                descriptions={{
-                  noAccess: 'Users cannot choose to enable Frontier features.',
-                  allUsers: 'All users can choose to enable Frontier features.',
-                  specificGroups: 'Only specified user groups can choose to enable Frontier features.'
-                }}
+                labels={textConfig.separated.office.labels}
+                descriptions={textConfig.separated.office.descriptions}
+                onUpdateLabels={(labels) => updateTextConfig({
+                  separated: {
+                    ...textConfig.separated,
+                    office: { ...textConfig.separated.office, labels }
+                  }
+                })}
+                onUpdateDescriptions={(descriptions) => updateTextConfig({
+                  separated: {
+                    ...textConfig.separated,
+                    office: { ...textConfig.separated.office, descriptions }
+                  }
+                })}
               />
             </TabsContent>
 
@@ -393,16 +648,20 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
                 onAddGroup={(group) => updateSettings({ webGroups: [...settings.webGroups, group] })}
                 onRemoveGroup={(index) => updateSettings({ webGroups: settings.webGroups.filter((_, i) => i !== index) })}
                 prefix="separated-web"
-                labels={{
-                  noAccess: 'No access',
-                  allUsers: 'All users',
-                  specificGroups: 'Specific user groups'
-                }}
-                descriptions={{
-                  noAccess: 'Users will not have access to Frontier features in web apps.',
-                  allUsers: 'All users will automatically receive Frontier features in web apps.',
-                  specificGroups: 'Only specified user groups will automatically receive Frontier features in web apps.'
-                }}
+                labels={textConfig.separated.webApps.labels}
+                descriptions={textConfig.separated.webApps.descriptions}
+                onUpdateLabels={(labels) => updateTextConfig({
+                  separated: {
+                    ...textConfig.separated,
+                    webApps: { ...textConfig.separated.webApps, labels }
+                  }
+                })}
+                onUpdateDescriptions={(descriptions) => updateTextConfig({
+                  separated: {
+                    ...textConfig.separated,
+                    webApps: { ...textConfig.separated.webApps, descriptions }
+                  }
+                })}
               />
             </TabsContent>
 
@@ -438,7 +697,23 @@ function SeparatedVersion({ settings, updateSettings, resetToDefaults, hasChange
 }
 
 // Version C: Enhanced with Per-Device Controls
-function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
+function EnhancedVersion({ 
+  settings, 
+  updateSettings, 
+  resetToDefaults, 
+  hasChanges, 
+  onSave, 
+  textConfig, 
+  updateTextConfig 
+}: { 
+  settings: Settings
+  updateSettings: (updates: Partial<Settings>) => void
+  resetToDefaults: () => void
+  hasChanges: boolean
+  onSave: () => void
+  textConfig: TextConfig
+  updateTextConfig: (updates: Partial<TextConfig>) => void
+}) {
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
@@ -471,16 +746,20 @@ function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges
                 onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
                 onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
                 prefix="enhanced-apps"
-                labels={{
-                  noAccess: 'No access',
-                  allUsers: 'All users',
-                  specificGroups: 'Specific user groups'
-                }}
-                descriptions={{
-                  noAccess: 'Users will not have access to Frontier features in their apps.',
-                  allUsers: 'All users will automatically receive Frontier features in their apps.',
-                  specificGroups: 'Only specified user groups will automatically receive Frontier features in their apps.'
-                }}
+                labels={textConfig.enhanced.apps.labels}
+                descriptions={textConfig.enhanced.apps.descriptions}
+                onUpdateLabels={(labels) => updateTextConfig({
+                  enhanced: {
+                    ...textConfig.enhanced,
+                    apps: { ...textConfig.enhanced.apps, labels }
+                  }
+                })}
+                onUpdateDescriptions={(descriptions) => updateTextConfig({
+                  enhanced: {
+                    ...textConfig.enhanced,
+                    apps: { ...textConfig.enhanced.apps, descriptions }
+                  }
+                })}
               />
 
               <div className="mt-8 pt-6 border-t">
@@ -562,7 +841,23 @@ function EnhancedVersion({ settings, updateSettings, resetToDefaults, hasChanges
 
 
 // Version C v1: Enhanced with Duplicate Apps Interface
-function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChanges, onSave }: { settings: Settings; updateSettings: (updates: Partial<Settings>) => void; resetToDefaults: () => void; hasChanges: boolean; onSave: () => void }) {
+function EnhancedV1Version({ 
+  settings, 
+  updateSettings, 
+  resetToDefaults, 
+  hasChanges, 
+  onSave, 
+  textConfig, 
+  updateTextConfig 
+}: { 
+  settings: Settings
+  updateSettings: (updates: Partial<Settings>) => void
+  resetToDefaults: () => void
+  hasChanges: boolean
+  onSave: () => void
+  textConfig: TextConfig
+  updateTextConfig: (updates: Partial<TextConfig>) => void
+}) {
   const [activeTab, setActiveTab] = useState('apps')
 
   return (
@@ -594,25 +889,103 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
               }} className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="no-access" id="enhanced-v1-apps-no-access" className="border-black" />
-                  <Label htmlFor="enhanced-v1-apps-no-access" className="font-normal" data-editable="true">
-                    No access
+                  <Label htmlFor="enhanced-v1-apps-no-access" className="font-normal">
+                    <EditableText
+                      value={textConfig['enhanced-v1'].apps.labels.noAccess}
+                      onChange={(newValue) => updateTextConfig({
+                        'enhanced-v1': {
+                          ...textConfig['enhanced-v1'],
+                          apps: { 
+                            ...textConfig['enhanced-v1'].apps, 
+                            labels: { ...textConfig['enhanced-v1'].apps.labels, noAccess: newValue }
+                          }
+                        }
+                      })}
+                    />
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Users will not have access to Frontier features in their Office apps.</div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                  <EditableText
+                    value={textConfig['enhanced-v1'].apps.descriptions.noAccess}
+                    onChange={(newValue) => updateTextConfig({
+                      'enhanced-v1': {
+                        ...textConfig['enhanced-v1'],
+                        apps: { 
+                          ...textConfig['enhanced-v1'].apps, 
+                          descriptions: { ...textConfig['enhanced-v1'].apps.descriptions, noAccess: newValue }
+                        }
+                      }
+                    })}
+                    className="text-xs text-muted-foreground"
+                    isDescription={true}
+                  />
+                </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="all-users" id="enhanced-v1-apps-all-users" className="border-black" />
-                  <Label htmlFor="enhanced-v1-apps-all-users" className="font-normal" data-editable="true">
-                    All users
+                  <Label htmlFor="enhanced-v1-apps-all-users" className="font-normal">
+                    <EditableText
+                      value={textConfig['enhanced-v1'].apps.labels.allUsers}
+                      onChange={(newValue) => updateTextConfig({
+                        'enhanced-v1': {
+                          ...textConfig['enhanced-v1'],
+                          apps: { 
+                            ...textConfig['enhanced-v1'].apps, 
+                            labels: { ...textConfig['enhanced-v1'].apps.labels, allUsers: newValue }
+                          }
+                        }
+                      })}
+                    />
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">All users will automatically receive Frontier features in their Office apps.</div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                  <EditableText
+                    value={textConfig['enhanced-v1'].apps.descriptions.allUsers}
+                    onChange={(newValue) => updateTextConfig({
+                      'enhanced-v1': {
+                        ...textConfig['enhanced-v1'],
+                        apps: { 
+                          ...textConfig['enhanced-v1'].apps, 
+                          descriptions: { ...textConfig['enhanced-v1'].apps.descriptions, allUsers: newValue }
+                        }
+                      }
+                    })}
+                    className="text-xs text-muted-foreground"
+                    isDescription={true}
+                  />
+                </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="specific-groups" id="enhanced-v1-apps-specific-groups" className="border-black" />
-                  <Label htmlFor="enhanced-v1-apps-specific-groups" className="font-normal" data-editable="true">
-                    Specific user groups
+                  <Label htmlFor="enhanced-v1-apps-specific-groups" className="font-normal">
+                    <EditableText
+                      value={textConfig['enhanced-v1'].apps.labels.specificGroups}
+                      onChange={(newValue) => updateTextConfig({
+                        'enhanced-v1': {
+                          ...textConfig['enhanced-v1'],
+                          apps: { 
+                            ...textConfig['enhanced-v1'].apps, 
+                            labels: { ...textConfig['enhanced-v1'].apps.labels, specificGroups: newValue }
+                          }
+                        }
+                      })}
+                    />
                   </Label>
                 </div>
-                <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Only specified user groups will automatically receive Frontier features in their Office apps.</div>
+                <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                  <EditableText
+                    value={textConfig['enhanced-v1'].apps.descriptions.specificGroups}
+                    onChange={(newValue) => updateTextConfig({
+                      'enhanced-v1': {
+                        ...textConfig['enhanced-v1'],
+                        apps: { 
+                          ...textConfig['enhanced-v1'].apps, 
+                          descriptions: { ...textConfig['enhanced-v1'].apps.descriptions, specificGroups: newValue }
+                        }
+                      }
+                    })}
+                    className="text-xs text-muted-foreground"
+                    isDescription={true}
+                  />
+                </div>
                 {settings.allApps === 'specific-groups' && (
                   <div className="ml-6">
                     <GroupManager
@@ -637,25 +1010,103 @@ function EnhancedV1Version({ settings, updateSettings, resetToDefaults, hasChang
                 }} className="space-y-3">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="no-access" id="enhanced-v1-office-no-access" className="border-black" />
-                    <Label htmlFor="enhanced-v1-office-no-access" className="font-normal" data-editable="true">
-                      No access
+                    <Label htmlFor="enhanced-v1-office-no-access" className="font-normal">
+                      <EditableText
+                        value={textConfig['enhanced-v1'].office.labels.noAccess}
+                        onChange={(newValue) => updateTextConfig({
+                          'enhanced-v1': {
+                            ...textConfig['enhanced-v1'],
+                            office: { 
+                              ...textConfig['enhanced-v1'].office, 
+                              labels: { ...textConfig['enhanced-v1'].office.labels, noAccess: newValue }
+                            }
+                          }
+                        })}
+                      />
                     </Label>
                   </div>
-                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Users will not have access to Frontier features in other apps.</div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                    <EditableText
+                      value={textConfig['enhanced-v1'].office.descriptions.noAccess}
+                      onChange={(newValue) => updateTextConfig({
+                        'enhanced-v1': {
+                          ...textConfig['enhanced-v1'],
+                          office: { 
+                            ...textConfig['enhanced-v1'].office, 
+                            descriptions: { ...textConfig['enhanced-v1'].office.descriptions, noAccess: newValue }
+                          }
+                        }
+                      })}
+                      className="text-xs text-muted-foreground"
+                      isDescription={true}
+                    />
+                  </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="all-users" id="enhanced-v1-office-all-users" className="border-black" />
-                    <Label htmlFor="enhanced-v1-office-all-users" className="font-normal" data-editable="true">
-                      All users
+                    <Label htmlFor="enhanced-v1-office-all-users" className="font-normal">
+                      <EditableText
+                        value={textConfig['enhanced-v1'].office.labels.allUsers}
+                        onChange={(newValue) => updateTextConfig({
+                          'enhanced-v1': {
+                            ...textConfig['enhanced-v1'],
+                            office: { 
+                              ...textConfig['enhanced-v1'].office, 
+                              labels: { ...textConfig['enhanced-v1'].office.labels, allUsers: newValue }
+                            }
+                          }
+                        })}
+                      />
                     </Label>
                   </div>
-                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">All users will automatically receive Frontier features in other apps.</div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                    <EditableText
+                      value={textConfig['enhanced-v1'].office.descriptions.allUsers}
+                      onChange={(newValue) => updateTextConfig({
+                        'enhanced-v1': {
+                          ...textConfig['enhanced-v1'],
+                          office: { 
+                            ...textConfig['enhanced-v1'].office, 
+                            descriptions: { ...textConfig['enhanced-v1'].office.descriptions, allUsers: newValue }
+                          }
+                        }
+                      })}
+                      className="text-xs text-muted-foreground"
+                      isDescription={true}
+                    />
+                  </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="specific-groups" id="enhanced-v1-office-specific-groups" className="border-black" />
-                    <Label htmlFor="enhanced-v1-office-specific-groups" className="font-normal" data-editable="true">
-                      Specific user groups
+                    <Label htmlFor="enhanced-v1-office-specific-groups" className="font-normal">
+                      <EditableText
+                        value={textConfig['enhanced-v1'].office.labels.specificGroups}
+                        onChange={(newValue) => updateTextConfig({
+                          'enhanced-v1': {
+                            ...textConfig['enhanced-v1'],
+                            office: { 
+                              ...textConfig['enhanced-v1'].office, 
+                              labels: { ...textConfig['enhanced-v1'].office.labels, specificGroups: newValue }
+                            }
+                          }
+                        })}
+                      />
                     </Label>
                   </div>
-                  <div className="text-xs text-muted-foreground ml-6 -mt-2" data-editable="true">Only specified user groups will automatically receive Frontier features in other apps.</div>
+                  <div className="text-xs text-muted-foreground ml-6 -mt-2">
+                    <EditableText
+                      value={textConfig['enhanced-v1'].office.descriptions.specificGroups}
+                      onChange={(newValue) => updateTextConfig({
+                        'enhanced-v1': {
+                          ...textConfig['enhanced-v1'],
+                          office: { 
+                            ...textConfig['enhanced-v1'].office, 
+                            descriptions: { ...textConfig['enhanced-v1'].office.descriptions, specificGroups: newValue }
+                          }
+                        }
+                      })}
+                      className="text-xs text-muted-foreground"
+                      isDescription={true}
+                    />
+                  </div>
                   {settings.officeAppsAccess === 'specific-groups' && (
                     <div className="ml-6">
                       <GroupManager
@@ -710,39 +1161,88 @@ export default function App() {
   // Use a fresh key to avoid stale data and ensure proper defaults
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v6-${selectedVersion}`, getDefaultSettings(selectedVersion))
   const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v6-${selectedVersion}`, getDefaultSettings(selectedVersion))
+  const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v6-${selectedVersion}`, getDefaultTextConfig())
+  const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v6-${selectedVersion}`, getDefaultTextConfig())
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
   const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
+  const currentTextConfig = { ...getDefaultTextConfig(), ...textConfig }
+  const currentSavedTextConfig = { ...getDefaultTextConfig(), ...savedTextConfig }
   
   const updateSettings = (updates: Partial<Settings>) => {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
-  const hasChanges = settings !== undefined && JSON.stringify(currentSettings) !== JSON.stringify(currentSavedSettings)
+  const updateTextConfig = (updates: Partial<TextConfig>) => {
+    setTextConfig(current => ({ ...getDefaultTextConfig(), ...current, ...updates }))
+  }
+
+  const hasChanges = settings !== undefined && (
+    JSON.stringify(currentSettings) !== JSON.stringify(currentSavedSettings) ||
+    JSON.stringify(currentTextConfig) !== JSON.stringify(currentSavedTextConfig)
+  )
 
   const handleSave = () => {
     setSavedSettings(currentSettings)
+    setSavedTextConfig(currentTextConfig)
     console.log('Settings saved:', currentSettings)
+    console.log('Text config saved:', currentTextConfig)
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaults = () => {
     setSettings(currentSavedSettings)
+    setTextConfig(currentSavedTextConfig)
   }
 
   const handleVersionChange = (version: VersionType) => {
     setSelectedVersion(version)
     // Reset both current and saved settings when switching versions to use version-specific defaults
     const defaults = getDefaultSettings(version)
+    const textDefaults = getDefaultTextConfig()
     setSettings(defaults)
     setSavedSettings(defaults)
+    setTextConfig(textDefaults)
+    setSavedTextConfig(textDefaults)
   }
 
   const versions = {
-    unified: () => <UnifiedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
-    separated: () => <SeparatedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
-    enhanced: () => <EnhancedVersion settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />,
-    'enhanced-v1': () => <EnhancedV1Version settings={currentSettings} updateSettings={updateSettings} resetToDefaults={resetToDefaults} hasChanges={hasChanges} onSave={handleSave} />
+    unified: () => <UnifiedVersion 
+      settings={currentSettings} 
+      updateSettings={updateSettings} 
+      resetToDefaults={resetToDefaults} 
+      hasChanges={hasChanges} 
+      onSave={handleSave}
+      textConfig={currentTextConfig}
+      updateTextConfig={updateTextConfig}
+    />,
+    separated: () => <SeparatedVersion 
+      settings={currentSettings} 
+      updateSettings={updateSettings} 
+      resetToDefaults={resetToDefaults} 
+      hasChanges={hasChanges} 
+      onSave={handleSave}
+      textConfig={currentTextConfig}
+      updateTextConfig={updateTextConfig}
+    />,
+    enhanced: () => <EnhancedVersion 
+      settings={currentSettings} 
+      updateSettings={updateSettings} 
+      resetToDefaults={resetToDefaults} 
+      hasChanges={hasChanges} 
+      onSave={handleSave}
+      textConfig={currentTextConfig}
+      updateTextConfig={updateTextConfig}
+    />,
+    'enhanced-v1': () => <EnhancedV1Version 
+      settings={currentSettings} 
+      updateSettings={updateSettings} 
+      resetToDefaults={resetToDefaults} 
+      hasChanges={hasChanges} 
+      onSave={handleSave}
+      textConfig={currentTextConfig}
+      updateTextConfig={updateTextConfig}
+    />
   }
 
   return (
