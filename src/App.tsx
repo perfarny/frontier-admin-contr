@@ -1421,7 +1421,32 @@ export default function App() {
           className="border-black"
         >D. Office win32 Toggle Only</Button>
       </div>
-      {versions[selectedVersion]()}
+      <div className="flex gap-8 items-start">
+        <div>
+          <h2 className="text-lg font-semibold mb-4 text-center">Option A</h2>
+          <EnhancedV1Version 
+            settings={currentSettings} 
+            updateSettings={updateSettings} 
+            resetToDefaults={resetToDefaults} 
+            hasChanges={hasChanges} 
+            onSave={handleSave}
+            textConfig={currentTextConfig}
+            updateTextConfig={updateTextConfig}
+          />
+        </div>
+        <div>
+          <h2 className="text-lg font-semibold mb-4 text-center">Option B</h2>
+          <EnhancedV1Version 
+            settings={currentSettings} 
+            updateSettings={updateSettings} 
+            resetToDefaults={resetToDefaults} 
+            hasChanges={hasChanges} 
+            onSave={handleSave}
+            textConfig={currentTextConfig}
+            updateTextConfig={updateTextConfig}
+          />
+        </div>
+      </div>
       <Toaster />
     </div>
   );
