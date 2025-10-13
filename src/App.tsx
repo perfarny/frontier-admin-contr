@@ -1284,16 +1284,52 @@ export default function App() {
 
   const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
   const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
-  // Use the persisted text config for this version, fallback to static only for missing properties
-  const currentTextConfig = { ...STATIC_TEXT_CONFIGS, ...textConfig }
-  const currentSavedTextConfig = { ...STATIC_TEXT_CONFIGS, ...savedTextConfig }
+  
+  // Deep merge text config to ensure all nested properties exist
+  const mergeTextConfig = (base: TextConfig, override: any): TextConfig => {
+    if (!override) return base
+    
+    const result = { ...base }
+    
+    if (override.unified) {
+      result.unified = {
+        apps: { ...base.unified.apps, ...override.unified.apps },
+        agents: { ...base.unified.agents, ...override.unified.agents }
+      }
+    }
+    if (override.separated) {
+      result.separated = {
+        office: { ...base.separated.office, ...override.separated.office },
+        webApps: { ...base.separated.webApps, ...override.separated.webApps },
+        agents: { ...base.separated.agents, ...override.separated.agents }
+      }
+    }
+    if (override.enhanced) {
+      result.enhanced = {
+        apps: { ...base.enhanced.apps, ...override.enhanced.apps },
+        agents: { ...base.enhanced.agents, ...override.enhanced.agents }
+      }
+    }
+    if (override['enhanced-v1']) {
+      result['enhanced-v1'] = {
+        apps: { ...base['enhanced-v1'].apps, ...override['enhanced-v1'].apps },
+        office: { ...base['enhanced-v1'].office, ...override['enhanced-v1'].office },
+        agents: { ...base['enhanced-v1'].agents, ...override['enhanced-v1'].agents }
+      }
+    }
+    
+    return result
+  }
+  
+  const currentTextConfig = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfig)
+  const currentSavedTextConfig = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfig)
   
   const updateSettings = (updates: Partial<Settings>) => {
     setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
   }
 
   const updateTextConfig = (updates: Partial<TextConfig>) => {
-    setTextConfig(current => ({ ...STATIC_TEXT_CONFIGS, ...current, ...updates }))
+    setTextConfig(current => mergeTextConfig(STATIC_TEXT_CONFIGS, { ...current, ...updates }))
   }
 
   const hasChanges = settings !== undefined && (
