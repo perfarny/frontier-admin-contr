@@ -976,7 +976,7 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">Office apps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">Allow users to turn on Frontier in apps like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1295,14 +1295,14 @@ export default function App() {
   // Settings for Unified (C)
   const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-v7-unified', getDefaultSettings('unified'))
   const [savedSettingsUnified, setSavedSettingsUnified] = useKV<Settings>('frontier-saved-settings-v7-unified', getDefaultSettings('unified'))
-  const [textConfigUnified, setTextConfigUnified] = useKV<TextConfig>('frontier-text-config-v7-unified', STATIC_TEXT_CONFIGS)
-  const [savedTextConfigUnified, setSavedTextConfigUnified] = useKV<TextConfig>('frontier-saved-text-config-v7-unified', STATIC_TEXT_CONFIGS)
+  const [textConfigUnified, setTextConfigUnified] = useKV<TextConfig>('frontier-text-config-v7-unified', getInitialTextConfig())
+  const [savedTextConfigUnified, setSavedTextConfigUnified] = useKV<TextConfig>('frontier-saved-text-config-v7-unified', getInitialTextConfig())
   
   // Settings for Enhanced (D)
   const [settingsEnhanced, setSettingsEnhanced] = useKV<Settings>('frontier-settings-v7-enhanced', getDefaultSettings('enhanced'))
   const [savedSettingsEnhanced, setSavedSettingsEnhanced] = useKV<Settings>('frontier-saved-settings-v7-enhanced', getDefaultSettings('enhanced'))
-  const [textConfigEnhanced, setTextConfigEnhanced] = useKV<TextConfig>('frontier-text-config-v7-enhanced', STATIC_TEXT_CONFIGS)
-  const [savedTextConfigEnhanced, setSavedTextConfigEnhanced] = useKV<TextConfig>('frontier-saved-text-config-v7-enhanced', STATIC_TEXT_CONFIGS)
+  const [textConfigEnhanced, setTextConfigEnhanced] = useKV<TextConfig>('frontier-text-config-v7-enhanced', getInitialTextConfig())
+  const [savedTextConfigEnhanced, setSavedTextConfigEnhanced] = useKV<TextConfig>('frontier-saved-text-config-v7-enhanced', getInitialTextConfig())
 
   // Deep merge utility for nested objects
   const deepMerge = (target: any, source: any): any => {
@@ -1440,8 +1440,8 @@ export default function App() {
   // Unified version (C) state
   const currentSettingsUnified = { ...getDefaultSettings('unified'), ...settingsUnified }
   const currentSavedSettingsUnified = { ...getDefaultSettings('unified'), ...savedSettingsUnified }
-  const currentTextConfigUnified = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigUnified)
-  const currentSavedTextConfigUnified = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigUnified)
+  const currentTextConfigUnified = mergeTextConfig(getInitialTextConfig(), textConfigUnified)
+  const currentSavedTextConfigUnified = mergeTextConfig(getInitialTextConfig(), savedTextConfigUnified)
   
   const updateSettingsUnified = (updates: Partial<Settings>) => {
     setSettingsUnified(current => ({ ...getDefaultSettings('unified'), ...current, ...updates }))
@@ -1449,7 +1449,7 @@ export default function App() {
 
   const updateTextConfigUnified = (updates: Partial<TextConfig>) => {
     setTextConfigUnified(current => {
-      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      const base = current || getInitialTextConfig()
       return deepMerge(base, updates)
     })
   }
@@ -1473,8 +1473,8 @@ export default function App() {
   // Enhanced version (D) state
   const currentSettingsEnhanced = { ...getDefaultSettings('enhanced'), ...settingsEnhanced }
   const currentSavedSettingsEnhanced = { ...getDefaultSettings('enhanced'), ...savedSettingsEnhanced }
-  const currentTextConfigEnhanced = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigEnhanced)
-  const currentSavedTextConfigEnhanced = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigEnhanced)
+  const currentTextConfigEnhanced = mergeTextConfig(getInitialTextConfig(), textConfigEnhanced)
+  const currentSavedTextConfigEnhanced = mergeTextConfig(getInitialTextConfig(), savedTextConfigEnhanced)
   
   const updateSettingsEnhanced = (updates: Partial<Settings>) => {
     setSettingsEnhanced(current => ({ ...getDefaultSettings('enhanced'), ...current, ...updates }))
@@ -1482,7 +1482,7 @@ export default function App() {
 
   const updateTextConfigEnhanced = (updates: Partial<TextConfig>) => {
     setTextConfigEnhanced(current => {
-      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      const base = current || getInitialTextConfig()
       return deepMerge(base, updates)
     })
   }
@@ -1510,12 +1510,12 @@ export default function App() {
           variant={selectedVersion === 'enhanced-v1' ? "default" : "outline"}
           onClick={() => setSelectedVersion('enhanced-v1')}
           className="border-black"
-        >A. Office win32 & WAC Toggle (2 tabs)</Button>
+        >A. Office (win32&WAC)</Button>
         <Button
           variant={selectedVersion === 'enhanced-v1-copy' ? "default" : "outline"}
           onClick={() => setSelectedVersion('enhanced-v1-copy')}
           className="border-black"
-        >A Copy. Office win32 & WAC Toggle (2 tabs)</Button>
+        >B. Office (win32&WAC)</Button>
         <Button
           variant={selectedVersion === 'unified' ? "default" : "outline"}
           onClick={() => setSelectedVersion('unified')}
@@ -1527,7 +1527,6 @@ export default function App() {
           className="border-black"
         >D. Office win32 Toggle Only</Button>
       </div>
-      
       {selectedVersion === 'enhanced-v1' && (
         <div className="flex gap-8 items-start">
           <EnhancedV1Version 
@@ -1541,7 +1540,6 @@ export default function App() {
           />
         </div>
       )}
-      
       {selectedVersion === 'enhanced-v1-copy' && (
         <div className="flex gap-8 items-start">
           <EnhancedV1Version 
@@ -1555,7 +1553,6 @@ export default function App() {
           />
         </div>
       )}
-      
       {selectedVersion === 'unified' && (
         <UnifiedVersion 
           settings={currentSettingsUnified} 
@@ -1567,7 +1564,6 @@ export default function App() {
           updateTextConfig={updateTextConfigUnified}
         />
       )}
-      
       {selectedVersion === 'enhanced' && (
         <EnhancedVersion 
           settings={currentSettingsEnhanced} 
@@ -1579,7 +1575,6 @@ export default function App() {
           updateTextConfig={updateTextConfigEnhanced}
         />
       )}
-      
       <Toaster />
     </div>
   );
