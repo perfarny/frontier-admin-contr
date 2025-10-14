@@ -976,7 +976,7 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">xxxOffice apps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">Office apps like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1286,11 +1286,7 @@ export default function App() {
   const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', getInitialTextConfig())
   const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', getInitialTextConfig())
   
-  // Settings for Option B
-  const [settingsB, setSettingsB] = useKV<Settings>('frontier-settings-option-b', getDefaultSettings('enhanced-v1'))
-  const [savedSettingsB, setSavedSettingsB] = useKV<Settings>('frontier-saved-settings-option-b', getDefaultSettings('enhanced-v1'))
-  const [textConfigB, setTextConfigB] = useKV<TextConfig>('frontier-text-config-option-b', getInitialTextConfig())
-  const [savedTextConfigB, setSavedTextConfigB] = useKV<TextConfig>('frontier-saved-text-config-option-b', getInitialTextConfig())
+
   
   // Settings for Separated (B)
   const [settingsSeparated, setSettingsSeparated] = useKV<Settings>('frontier-settings-v7-separated', getDefaultSettings('separated'))
@@ -1410,39 +1406,7 @@ export default function App() {
     setTextConfigA(currentSavedTextConfigA)
   }
   
-  // Option B state
-  const currentSettingsB = { ...getDefaultSettings('enhanced-v1'), ...settingsB }
-  const currentSavedSettingsB = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsB }
-  const currentTextConfigB = mergeTextConfig(getInitialTextConfig(), textConfigB)
-  const currentSavedTextConfigB = mergeTextConfig(getInitialTextConfig(), savedTextConfigB)
-  
-  const updateSettingsB = (updates: Partial<Settings>) => {
-    setSettingsB(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
-  }
 
-  const updateTextConfigB = (updates: Partial<TextConfig>) => {
-    setTextConfigB(current => {
-      const base = current || getInitialTextConfig()
-      return deepMerge(base, updates)
-    })
-  }
-
-  const hasChangesB = (
-    JSON.stringify(currentSettingsB) !== JSON.stringify(currentSavedSettingsB) ||
-    JSON.stringify(currentTextConfigB) !== JSON.stringify(currentSavedTextConfigB)
-  )
-
-  const handleSaveB = () => {
-    setSavedSettingsB(currentSettingsB)
-    setSavedTextConfigB(currentTextConfigB)
-    toast.success('Settings saved successfully')
-  }
-
-  const resetToDefaultsB = () => {
-    setSettingsB(currentSavedSettingsB)
-    setTextConfigB(currentSavedTextConfigB)
-  }
-  
   // Separated version (B) state
   const currentSettingsSeparated = { ...getDefaultSettings('separated'), ...settingsSeparated }
   const currentSavedSettingsSeparated = { ...getDefaultSettings('separated'), ...savedSettingsSeparated }
@@ -1569,30 +1533,15 @@ export default function App() {
       
       {selectedVersion === 'enhanced-v1' ? (
         <div className="flex gap-8 items-start">
-          <div>
-            <h2 className="text-lg font-semibold mb-4 text-center">Option A</h2>
-            <EnhancedV1Version 
-              settings={currentSettingsA} 
-              updateSettings={updateSettingsA} 
-              resetToDefaults={resetToDefaultsA} 
-              hasChanges={hasChangesA} 
-              onSave={handleSaveA}
-              textConfig={currentTextConfigA}
-              updateTextConfig={updateTextConfigA}
-            />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold mb-4 text-center">Option B</h2>
-            <EnhancedV1Version 
-              settings={currentSettingsB} 
-              updateSettings={updateSettingsB} 
-              resetToDefaults={resetToDefaultsB} 
-              hasChanges={hasChangesB} 
-              onSave={handleSaveB}
-              textConfig={currentTextConfigB}
-              updateTextConfig={updateTextConfigB}
-            />
-          </div>
+          <EnhancedV1Version 
+            settings={currentSettingsA} 
+            updateSettings={updateSettingsA} 
+            resetToDefaults={resetToDefaultsA} 
+            hasChanges={hasChangesA} 
+            onSave={handleSaveA}
+            textConfig={currentTextConfigA}
+            updateTextConfig={updateTextConfigA}
+          />
         </div>
       ) : selectedVersion === 'separated' ? (
         <SeparatedVersion 
