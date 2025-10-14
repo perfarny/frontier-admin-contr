@@ -976,7 +976,7 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">Apps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">xxxApps like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1280,29 +1280,29 @@ type DisplayVersion = 'enhanced-v1' | 'enhanced-v1-copy' | 'unified' | 'enhanced
 export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<DisplayVersion>('enhanced-v1')
   
-  // Settings for Option A
-  const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-option-a-v2', getDefaultSettings('enhanced-v1'))
-  const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-option-a-v2', getDefaultSettings('enhanced-v1'))
-  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a-v2', getInitialTextConfig())
-  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a-v2', getInitialTextConfig())
+  // Settings for Option A (enhanced-v1)
+  const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-enhanced-v1-v3', getDefaultSettings('enhanced-v1'))
+  const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-enhanced-v1-v3', getDefaultSettings('enhanced-v1'))
+  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-enhanced-v1-v3', getInitialTextConfig())
+  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-enhanced-v1-v3', getInitialTextConfig())
   
-  // Settings for Option A Copy
-  const [settingsACopy, setSettingsACopy] = useKV<Settings>('frontier-settings-option-a-copy-v2', getDefaultSettings('enhanced-v1'))
-  const [savedSettingsACopy, setSavedSettingsACopy] = useKV<Settings>('frontier-saved-settings-option-a-copy-v2', getDefaultSettings('enhanced-v1'))
-  const [textConfigACopy, setTextConfigACopy] = useKV<TextConfig>('frontier-text-config-option-a-copy-v2', getInitialTextConfig())
-  const [savedTextConfigACopy, setSavedTextConfigACopy] = useKV<TextConfig>('frontier-saved-text-config-option-a-copy-v2', getInitialTextConfig())
+  // Settings for Option B (enhanced-v1-copy)
+  const [settingsACopy, setSettingsACopy] = useKV<Settings>('frontier-settings-enhanced-v1-copy-v3', getDefaultSettings('enhanced-v1'))
+  const [savedSettingsACopy, setSavedSettingsACopy] = useKV<Settings>('frontier-saved-settings-enhanced-v1-copy-v3', getDefaultSettings('enhanced-v1'))
+  const [textConfigACopy, setTextConfigACopy] = useKV<TextConfig>('frontier-text-config-enhanced-v1-copy-v3', getInitialTextConfig())
+  const [savedTextConfigACopy, setSavedTextConfigACopy] = useKV<TextConfig>('frontier-saved-text-config-enhanced-v1-copy-v3', getInitialTextConfig())
   
   // Settings for Unified (C)
-  const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-v8-unified', getDefaultSettings('unified'))
-  const [savedSettingsUnified, setSavedSettingsUnified] = useKV<Settings>('frontier-saved-settings-v8-unified', getDefaultSettings('unified'))
-  const [textConfigUnified, setTextConfigUnified] = useKV<TextConfig>('frontier-text-config-v8-unified', getInitialTextConfig())
-  const [savedTextConfigUnified, setSavedTextConfigUnified] = useKV<TextConfig>('frontier-saved-text-config-v8-unified', getInitialTextConfig())
+  const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-unified-v3', getDefaultSettings('unified'))
+  const [savedSettingsUnified, setSavedSettingsUnified] = useKV<Settings>('frontier-saved-settings-unified-v3', getDefaultSettings('unified'))
+  const [textConfigUnified, setTextConfigUnified] = useKV<TextConfig>('frontier-text-config-unified-v3', getInitialTextConfig())
+  const [savedTextConfigUnified, setSavedTextConfigUnified] = useKV<TextConfig>('frontier-saved-text-config-unified-v3', getInitialTextConfig())
   
   // Settings for Enhanced (D)
-  const [settingsEnhanced, setSettingsEnhanced] = useKV<Settings>('frontier-settings-v8-enhanced', getDefaultSettings('enhanced'))
-  const [savedSettingsEnhanced, setSavedSettingsEnhanced] = useKV<Settings>('frontier-saved-settings-v8-enhanced', getDefaultSettings('enhanced'))
-  const [textConfigEnhanced, setTextConfigEnhanced] = useKV<TextConfig>('frontier-text-config-v8-enhanced', getInitialTextConfig())
-  const [savedTextConfigEnhanced, setSavedTextConfigEnhanced] = useKV<TextConfig>('frontier-saved-text-config-v8-enhanced', getInitialTextConfig())
+  const [settingsEnhanced, setSettingsEnhanced] = useKV<Settings>('frontier-settings-enhanced-v3', getDefaultSettings('enhanced'))
+  const [savedSettingsEnhanced, setSavedSettingsEnhanced] = useKV<Settings>('frontier-saved-settings-enhanced-v3', getDefaultSettings('enhanced'))
+  const [textConfigEnhanced, setTextConfigEnhanced] = useKV<TextConfig>('frontier-text-config-enhanced-v3', getInitialTextConfig())
+  const [savedTextConfigEnhanced, setSavedTextConfigEnhanced] = useKV<TextConfig>('frontier-saved-text-config-enhanced-v3', getInitialTextConfig())
 
   // Deep merge utility for nested objects
   const deepMerge = (target: any, source: any): any => {
