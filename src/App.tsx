@@ -1293,7 +1293,20 @@ export default function App() {
   const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
   const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
 
-  // Deep merge text config to ensure all nested properties exist
+  // Deep merge utility for nested objects
+const deepMerge = (target: any, source: any): any => {
+  const result = JSON.parse(JSON.stringify(target))
+  for (const key in source) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      result[key] = deepMerge(result[key] || {}, source[key])
+    } else {
+      result[key] = source[key]
+    }
+  }
+  return result
+}
+
+// Deep merge text config to ensure all nested properties exist
   const mergeTextConfig = (base: TextConfig, override: any): TextConfig => {
     if (!override) return JSON.parse(JSON.stringify(base))
     
@@ -1359,8 +1372,8 @@ export default function App() {
 
   const updateTextConfigA = (updates: Partial<TextConfig>) => {
     setTextConfigA(current => {
-      const merged = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), current)
-      return mergeTextConfig(merged, updates)
+      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      return deepMerge(base, updates)
     })
   }
 
@@ -1393,8 +1406,8 @@ export default function App() {
 
   const updateTextConfigB = (updates: Partial<TextConfig>) => {
     setTextConfigB(current => {
-      const merged = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), current)
-      return mergeTextConfig(merged, updates)
+      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      return deepMerge(base, updates)
     })
   }
 
@@ -1427,8 +1440,8 @@ export default function App() {
 
   const updateTextConfig = (updates: Partial<TextConfig>) => {
     setTextConfig(current => {
-      const merged = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), current)
-      return mergeTextConfig(merged, updates)
+      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      return deepMerge(base, updates)
     })
   }
 
