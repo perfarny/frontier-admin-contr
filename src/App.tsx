@@ -976,7 +976,7 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">Allow user opt-in for Office apps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">Office apps like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1272,20 +1272,23 @@ function EnhancedV1Version({
   );
 }
 
+// Create separate initial text configs for each option to avoid reference sharing
+const getInitialTextConfig = () => JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+
 export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<VersionType>('enhanced-v1')
   
   // Settings for Option A (left module)
   const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-option-a', getDefaultSettings('enhanced-v1'))
   const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-option-a', getDefaultSettings('enhanced-v1'))
-  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
-  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
+  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', getInitialTextConfig())
+  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', getInitialTextConfig())
   
   // Settings for Option B (right module)
   const [settingsB, setSettingsB] = useKV<Settings>('frontier-settings-option-b', getDefaultSettings('enhanced-v1'))
   const [savedSettingsB, setSavedSettingsB] = useKV<Settings>('frontier-saved-settings-option-b', getDefaultSettings('enhanced-v1'))
-  const [textConfigB, setTextConfigB] = useKV<TextConfig>('frontier-text-config-option-b', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
-  const [savedTextConfigB, setSavedTextConfigB] = useKV<TextConfig>('frontier-saved-text-config-option-b', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
+  const [textConfigB, setTextConfigB] = useKV<TextConfig>('frontier-text-config-option-b', getInitialTextConfig())
+  const [savedTextConfigB, setSavedTextConfigB] = useKV<TextConfig>('frontier-saved-text-config-option-b', getInitialTextConfig())
   
   // Settings for other versions (C, D, E)
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
@@ -1363,8 +1366,8 @@ const deepMerge = (target: any, source: any): any => {
   // Option A state
   const currentSettingsA = { ...getDefaultSettings('enhanced-v1'), ...settingsA }
   const currentSavedSettingsA = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsA }
-  const currentTextConfigA = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), textConfigA)
-  const currentSavedTextConfigA = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), savedTextConfigA)
+  const currentTextConfigA = mergeTextConfig(getInitialTextConfig(), textConfigA)
+  const currentSavedTextConfigA = mergeTextConfig(getInitialTextConfig(), savedTextConfigA)
   
   const updateSettingsA = (updates: Partial<Settings>) => {
     setSettingsA(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
@@ -1372,7 +1375,7 @@ const deepMerge = (target: any, source: any): any => {
 
   const updateTextConfigA = (updates: Partial<TextConfig>) => {
     setTextConfigA(current => {
-      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      const base = current || getInitialTextConfig()
       return deepMerge(base, updates)
     })
   }
@@ -1396,8 +1399,8 @@ const deepMerge = (target: any, source: any): any => {
   // Option B state
   const currentSettingsB = { ...getDefaultSettings('enhanced-v1'), ...settingsB }
   const currentSavedSettingsB = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsB }
-  const currentTextConfigB = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), textConfigB)
-  const currentSavedTextConfigB = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), savedTextConfigB)
+  const currentTextConfigB = mergeTextConfig(getInitialTextConfig(), textConfigB)
+  const currentSavedTextConfigB = mergeTextConfig(getInitialTextConfig(), savedTextConfigB)
   
   const updateSettingsB = (updates: Partial<Settings>) => {
     setSettingsB(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
@@ -1405,7 +1408,7 @@ const deepMerge = (target: any, source: any): any => {
 
   const updateTextConfigB = (updates: Partial<TextConfig>) => {
     setTextConfigB(current => {
-      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      const base = current || getInitialTextConfig()
       return deepMerge(base, updates)
     })
   }
