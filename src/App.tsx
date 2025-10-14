@@ -1275,7 +1275,7 @@ function EnhancedV1Version({
 // Create separate initial text configs for each option to avoid reference sharing
 const getInitialTextConfig = () => JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
 
-type DisplayVersion = 'enhanced-v1' | 'separated' | 'unified' | 'enhanced'
+type DisplayVersion = 'enhanced-v1' | 'enhanced-v1-copy' | 'unified' | 'enhanced'
 
 export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<DisplayVersion>('enhanced-v1')
@@ -1286,13 +1286,11 @@ export default function App() {
   const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', getInitialTextConfig())
   const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', getInitialTextConfig())
   
-
-  
-  // Settings for Separated (B)
-  const [settingsSeparated, setSettingsSeparated] = useKV<Settings>('frontier-settings-v7-separated', getDefaultSettings('separated'))
-  const [savedSettingsSeparated, setSavedSettingsSeparated] = useKV<Settings>('frontier-saved-settings-v7-separated', getDefaultSettings('separated'))
-  const [textConfigSeparated, setTextConfigSeparated] = useKV<TextConfig>('frontier-text-config-v7-separated', STATIC_TEXT_CONFIGS)
-  const [savedTextConfigSeparated, setSavedTextConfigSeparated] = useKV<TextConfig>('frontier-saved-text-config-v7-separated', STATIC_TEXT_CONFIGS)
+  // Settings for Option A Copy
+  const [settingsACopy, setSettingsACopy] = useKV<Settings>('frontier-settings-option-a-copy', getDefaultSettings('enhanced-v1'))
+  const [savedSettingsACopy, setSavedSettingsACopy] = useKV<Settings>('frontier-saved-settings-option-a-copy', getDefaultSettings('enhanced-v1'))
+  const [textConfigACopy, setTextConfigACopy] = useKV<TextConfig>('frontier-text-config-option-a-copy', getInitialTextConfig())
+  const [savedTextConfigACopy, setSavedTextConfigACopy] = useKV<TextConfig>('frontier-saved-text-config-option-a-copy', getInitialTextConfig())
   
   // Settings for Unified (C)
   const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-v7-unified', getDefaultSettings('unified'))
@@ -1406,38 +1404,37 @@ export default function App() {
     setTextConfigA(currentSavedTextConfigA)
   }
   
-
-  // Separated version (B) state
-  const currentSettingsSeparated = { ...getDefaultSettings('separated'), ...settingsSeparated }
-  const currentSavedSettingsSeparated = { ...getDefaultSettings('separated'), ...savedSettingsSeparated }
-  const currentTextConfigSeparated = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigSeparated)
-  const currentSavedTextConfigSeparated = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigSeparated)
+  // Option A Copy state
+  const currentSettingsACopy = { ...getDefaultSettings('enhanced-v1'), ...settingsACopy }
+  const currentSavedSettingsACopy = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsACopy }
+  const currentTextConfigACopy = mergeTextConfig(getInitialTextConfig(), textConfigACopy)
+  const currentSavedTextConfigACopy = mergeTextConfig(getInitialTextConfig(), savedTextConfigACopy)
   
-  const updateSettingsSeparated = (updates: Partial<Settings>) => {
-    setSettingsSeparated(current => ({ ...getDefaultSettings('separated'), ...current, ...updates }))
+  const updateSettingsACopy = (updates: Partial<Settings>) => {
+    setSettingsACopy(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
   }
 
-  const updateTextConfigSeparated = (updates: Partial<TextConfig>) => {
-    setTextConfigSeparated(current => {
-      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+  const updateTextConfigACopy = (updates: Partial<TextConfig>) => {
+    setTextConfigACopy(current => {
+      const base = current || getInitialTextConfig()
       return deepMerge(base, updates)
     })
   }
 
-  const hasChangesSeparated = (
-    JSON.stringify(currentSettingsSeparated) !== JSON.stringify(currentSavedSettingsSeparated) ||
-    JSON.stringify(currentTextConfigSeparated) !== JSON.stringify(currentSavedTextConfigSeparated)
+  const hasChangesACopy = (
+    JSON.stringify(currentSettingsACopy) !== JSON.stringify(currentSavedSettingsACopy) ||
+    JSON.stringify(currentTextConfigACopy) !== JSON.stringify(currentSavedTextConfigACopy)
   )
 
-  const handleSaveSeparated = () => {
-    setSavedSettingsSeparated(currentSettingsSeparated)
-    setSavedTextConfigSeparated(currentTextConfigSeparated)
+  const handleSaveACopy = () => {
+    setSavedSettingsACopy(currentSettingsACopy)
+    setSavedTextConfigACopy(currentTextConfigACopy)
     toast.success('Settings saved successfully')
   }
 
-  const resetToDefaultsSeparated = () => {
-    setSettingsSeparated(currentSavedSettingsSeparated)
-    setTextConfigSeparated(currentSavedTextConfigSeparated)
+  const resetToDefaultsACopy = () => {
+    setSettingsACopy(currentSavedSettingsACopy)
+    setTextConfigACopy(currentSavedTextConfigACopy)
   }
   
   // Unified version (C) state
@@ -1515,10 +1512,10 @@ export default function App() {
           className="border-black"
         >A. Office win32 & WAC Toggle (2 tabs)</Button>
         <Button
-          variant={selectedVersion === 'separated' ? "default" : "outline"}
-          onClick={() => setSelectedVersion('separated')}
+          variant={selectedVersion === 'enhanced-v1-copy' ? "default" : "outline"}
+          onClick={() => setSelectedVersion('enhanced-v1-copy')}
           className="border-black"
-        >B. Office win32 & WAC Toggle (3 tabs)</Button>
+        >A Copy. Office win32 & WAC Toggle (2 tabs)</Button>
         <Button
           variant={selectedVersion === 'unified' ? "default" : "outline"}
           onClick={() => setSelectedVersion('unified')}
@@ -1531,7 +1528,7 @@ export default function App() {
         >D. Office win32 Toggle Only</Button>
       </div>
       
-      {selectedVersion === 'enhanced-v1' ? (
+      {selectedVersion === 'enhanced-v1' && (
         <div className="flex gap-8 items-start">
           <EnhancedV1Version 
             settings={currentSettingsA} 
@@ -1543,17 +1540,21 @@ export default function App() {
             updateTextConfig={updateTextConfigA}
           />
         </div>
-      ) : selectedVersion === 'separated' ? (
-        <SeparatedVersion 
-          settings={currentSettingsSeparated} 
-          updateSettings={updateSettingsSeparated} 
-          resetToDefaults={resetToDefaultsSeparated} 
-          hasChanges={hasChangesSeparated} 
-          onSave={handleSaveSeparated}
-          textConfig={currentTextConfigSeparated}
-          updateTextConfig={updateTextConfigSeparated}
-        />
-      ) : null}
+      )}
+      
+      {selectedVersion === 'enhanced-v1-copy' && (
+        <div className="flex gap-8 items-start">
+          <EnhancedV1Version 
+            settings={currentSettingsACopy} 
+            updateSettings={updateSettingsACopy} 
+            resetToDefaults={resetToDefaultsACopy} 
+            hasChanges={hasChangesACopy} 
+            onSave={handleSaveACopy}
+            textConfig={currentTextConfigACopy}
+            updateTextConfig={updateTextConfigACopy}
+          />
+        </div>
+      )}
       
       {selectedVersion === 'unified' && (
         <UnifiedVersion 
