@@ -976,7 +976,7 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">Office apps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">xxxOffice apps like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1275,41 +1275,55 @@ function EnhancedV1Version({
 // Create separate initial text configs for each option to avoid reference sharing
 const getInitialTextConfig = () => JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
 
+type DisplayVersion = 'option-a' | 'option-b' | 'separated' | 'unified' | 'enhanced'
+
 export default function App() {
-  const [selectedVersion, setSelectedVersion] = useState<VersionType>('enhanced-v1')
+  const [selectedVersion, setSelectedVersion] = useState<DisplayVersion>('option-a')
   
-  // Settings for Option A (left module)
+  // Settings for Option A
   const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-option-a', getDefaultSettings('enhanced-v1'))
   const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-option-a', getDefaultSettings('enhanced-v1'))
   const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', getInitialTextConfig())
   const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', getInitialTextConfig())
   
-  // Settings for Option B (right module)
+  // Settings for Option B
   const [settingsB, setSettingsB] = useKV<Settings>('frontier-settings-option-b', getDefaultSettings('enhanced-v1'))
   const [savedSettingsB, setSavedSettingsB] = useKV<Settings>('frontier-saved-settings-option-b', getDefaultSettings('enhanced-v1'))
   const [textConfigB, setTextConfigB] = useKV<TextConfig>('frontier-text-config-option-b', getInitialTextConfig())
   const [savedTextConfigB, setSavedTextConfigB] = useKV<TextConfig>('frontier-saved-text-config-option-b', getInitialTextConfig())
   
-  // Settings for other versions (C, D, E)
-  const [settings, setSettings] = useKV<Settings>(`frontier-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [savedSettings, setSavedSettings] = useKV<Settings>(`frontier-saved-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
-  const [textConfig, setTextConfig] = useKV<TextConfig>(`frontier-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
-  const [savedTextConfig, setSavedTextConfig] = useKV<TextConfig>(`frontier-saved-text-config-v7-${selectedVersion}`, STATIC_TEXT_CONFIGS)
+  // Settings for Separated (B)
+  const [settingsSeparated, setSettingsSeparated] = useKV<Settings>('frontier-settings-v7-separated', getDefaultSettings('separated'))
+  const [savedSettingsSeparated, setSavedSettingsSeparated] = useKV<Settings>('frontier-saved-settings-v7-separated', getDefaultSettings('separated'))
+  const [textConfigSeparated, setTextConfigSeparated] = useKV<TextConfig>('frontier-text-config-v7-separated', STATIC_TEXT_CONFIGS)
+  const [savedTextConfigSeparated, setSavedTextConfigSeparated] = useKV<TextConfig>('frontier-saved-text-config-v7-separated', STATIC_TEXT_CONFIGS)
+  
+  // Settings for Unified (C)
+  const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-v7-unified', getDefaultSettings('unified'))
+  const [savedSettingsUnified, setSavedSettingsUnified] = useKV<Settings>('frontier-saved-settings-v7-unified', getDefaultSettings('unified'))
+  const [textConfigUnified, setTextConfigUnified] = useKV<TextConfig>('frontier-text-config-v7-unified', STATIC_TEXT_CONFIGS)
+  const [savedTextConfigUnified, setSavedTextConfigUnified] = useKV<TextConfig>('frontier-saved-text-config-v7-unified', STATIC_TEXT_CONFIGS)
+  
+  // Settings for Enhanced (D)
+  const [settingsEnhanced, setSettingsEnhanced] = useKV<Settings>('frontier-settings-v7-enhanced', getDefaultSettings('enhanced'))
+  const [savedSettingsEnhanced, setSavedSettingsEnhanced] = useKV<Settings>('frontier-saved-settings-v7-enhanced', getDefaultSettings('enhanced'))
+  const [textConfigEnhanced, setTextConfigEnhanced] = useKV<TextConfig>('frontier-text-config-v7-enhanced', STATIC_TEXT_CONFIGS)
+  const [savedTextConfigEnhanced, setSavedTextConfigEnhanced] = useKV<TextConfig>('frontier-saved-text-config-v7-enhanced', STATIC_TEXT_CONFIGS)
 
   // Deep merge utility for nested objects
-const deepMerge = (target: any, source: any): any => {
-  const result = JSON.parse(JSON.stringify(target))
-  for (const key in source) {
-    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-      result[key] = deepMerge(result[key] || {}, source[key])
-    } else {
-      result[key] = source[key]
+  const deepMerge = (target: any, source: any): any => {
+    const result = JSON.parse(JSON.stringify(target))
+    for (const key in source) {
+      if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        result[key] = deepMerge(result[key] || {}, source[key])
+      } else {
+        result[key] = source[key]
+      }
     }
+    return result
   }
-  return result
-}
 
-// Deep merge text config to ensure all nested properties exist
+  // Deep merge text config to ensure all nested properties exist
   const mergeTextConfig = (base: TextConfig, override: any): TextConfig => {
     if (!override) return JSON.parse(JSON.stringify(base))
     
@@ -1429,128 +1443,195 @@ const deepMerge = (target: any, source: any): any => {
     setTextConfigB(currentSavedTextConfigB)
   }
   
-  // Other versions state (C, D, E)
-  const currentSettings = { ...getDefaultSettings(selectedVersion), ...settings }
-  const currentSavedSettings = { ...getDefaultSettings(selectedVersion), ...savedSettings }
-  const currentTextConfig = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfig)
-  const currentSavedTextConfig = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfig)
+  // Separated version (B) state
+  const currentSettingsSeparated = { ...getDefaultSettings('separated'), ...settingsSeparated }
+  const currentSavedSettingsSeparated = { ...getDefaultSettings('separated'), ...savedSettingsSeparated }
+  const currentTextConfigSeparated = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigSeparated)
+  const currentSavedTextConfigSeparated = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigSeparated)
   
-  const updateSettings = (updates: Partial<Settings>) => {
-    setSettings(current => ({ ...getDefaultSettings(selectedVersion), ...current, ...updates }))
+  const updateSettingsSeparated = (updates: Partial<Settings>) => {
+    setSettingsSeparated(current => ({ ...getDefaultSettings('separated'), ...current, ...updates }))
   }
 
-  const updateTextConfig = (updates: Partial<TextConfig>) => {
-    setTextConfig(current => {
+  const updateTextConfigSeparated = (updates: Partial<TextConfig>) => {
+    setTextConfigSeparated(current => {
       const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
       return deepMerge(base, updates)
     })
   }
 
-  const hasChanges = settings !== undefined && (
-    JSON.stringify(currentSettings) !== JSON.stringify(currentSavedSettings) ||
-    JSON.stringify(currentTextConfig) !== JSON.stringify(currentSavedTextConfig)
+  const hasChangesSeparated = settingsSeparated !== undefined && (
+    JSON.stringify(currentSettingsSeparated) !== JSON.stringify(currentSavedSettingsSeparated) ||
+    JSON.stringify(currentTextConfigSeparated) !== JSON.stringify(currentSavedTextConfigSeparated)
   )
 
-  const handleSave = () => {
-    setSavedSettings(currentSettings)
-    setSavedTextConfig(currentTextConfig)
+  const handleSaveSeparated = () => {
+    setSavedSettingsSeparated(currentSettingsSeparated)
+    setSavedTextConfigSeparated(currentTextConfigSeparated)
     toast.success('Settings saved successfully')
   }
 
-  const resetToDefaults = () => {
-    setSettings(currentSavedSettings)
-    setTextConfig(currentSavedTextConfig)
+  const resetToDefaultsSeparated = () => {
+    setSettingsSeparated(currentSavedSettingsSeparated)
+    setTextConfigSeparated(currentSavedTextConfigSeparated)
+  }
+  
+  // Unified version (C) state
+  const currentSettingsUnified = { ...getDefaultSettings('unified'), ...settingsUnified }
+  const currentSavedSettingsUnified = { ...getDefaultSettings('unified'), ...savedSettingsUnified }
+  const currentTextConfigUnified = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigUnified)
+  const currentSavedTextConfigUnified = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigUnified)
+  
+  const updateSettingsUnified = (updates: Partial<Settings>) => {
+    setSettingsUnified(current => ({ ...getDefaultSettings('unified'), ...current, ...updates }))
   }
 
-  const handleVersionChange = (version: VersionType) => {
-    setSelectedVersion(version)
-    const defaults = getDefaultSettings(version)
-    setSettings(defaults)
+  const updateTextConfigUnified = (updates: Partial<TextConfig>) => {
+    setTextConfigUnified(current => {
+      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      return deepMerge(base, updates)
+    })
+  }
+
+  const hasChangesUnified = settingsUnified !== undefined && (
+    JSON.stringify(currentSettingsUnified) !== JSON.stringify(currentSavedSettingsUnified) ||
+    JSON.stringify(currentTextConfigUnified) !== JSON.stringify(currentSavedTextConfigUnified)
+  )
+
+  const handleSaveUnified = () => {
+    setSavedSettingsUnified(currentSettingsUnified)
+    setSavedTextConfigUnified(currentTextConfigUnified)
+    toast.success('Settings saved successfully')
+  }
+
+  const resetToDefaultsUnified = () => {
+    setSettingsUnified(currentSavedSettingsUnified)
+    setTextConfigUnified(currentSavedTextConfigUnified)
+  }
+  
+  // Enhanced version (D) state
+  const currentSettingsEnhanced = { ...getDefaultSettings('enhanced'), ...settingsEnhanced }
+  const currentSavedSettingsEnhanced = { ...getDefaultSettings('enhanced'), ...savedSettingsEnhanced }
+  const currentTextConfigEnhanced = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigEnhanced)
+  const currentSavedTextConfigEnhanced = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigEnhanced)
+  
+  const updateSettingsEnhanced = (updates: Partial<Settings>) => {
+    setSettingsEnhanced(current => ({ ...getDefaultSettings('enhanced'), ...current, ...updates }))
+  }
+
+  const updateTextConfigEnhanced = (updates: Partial<TextConfig>) => {
+    setTextConfigEnhanced(current => {
+      const base = current || JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
+      return deepMerge(base, updates)
+    })
+  }
+
+  const hasChangesEnhanced = settingsEnhanced !== undefined && (
+    JSON.stringify(currentSettingsEnhanced) !== JSON.stringify(currentSavedSettingsEnhanced) ||
+    JSON.stringify(currentTextConfigEnhanced) !== JSON.stringify(currentSavedTextConfigEnhanced)
+  )
+
+  const handleSaveEnhanced = () => {
+    setSavedSettingsEnhanced(currentSettingsEnhanced)
+    setSavedTextConfigEnhanced(currentTextConfigEnhanced)
+    toast.success('Settings saved successfully')
+  }
+
+  const resetToDefaultsEnhanced = () => {
+    setSettingsEnhanced(currentSavedSettingsEnhanced)
+    setTextConfigEnhanced(currentSavedTextConfigEnhanced)
   }
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center p-8 gap-8">
       <div className="flex gap-4">
         <Button
-          variant={selectedVersion === 'enhanced-v1' ? "default" : "outline"}
-          onClick={() => handleVersionChange('enhanced-v1')}
+          variant={selectedVersion === 'option-a' ? "default" : "outline"}
+          onClick={() => setSelectedVersion('option-a')}
           className="border-black"
-        >A. Office win32 & WAC Toggle (2 tabs)</Button>
+        >A. Option A</Button>
+        <Button
+          variant={selectedVersion === 'option-b' ? "default" : "outline"}
+          onClick={() => setSelectedVersion('option-b')}
+          className="border-black"
+        >B. Option B</Button>
         <Button
           variant={selectedVersion === 'separated' ? "default" : "outline"}
-          onClick={() => handleVersionChange('separated')}
+          onClick={() => setSelectedVersion('separated')}
           className="border-black"
-        >B. Office win32 & WAC Toggle (3 tabs)</Button>
+        >C. Office win32 & WAC Toggle (3 tabs)</Button>
         <Button
           variant={selectedVersion === 'unified' ? "default" : "outline"}
-          onClick={() => handleVersionChange('unified')}
+          onClick={() => setSelectedVersion('unified')}
           className="border-black"
-        >C. No Toggle</Button>
+        >D. No Toggle</Button>
         <Button
           variant={selectedVersion === 'enhanced' ? "default" : "outline"}
-          onClick={() => handleVersionChange('enhanced')}
+          onClick={() => setSelectedVersion('enhanced')}
           className="border-black"
-        >D. Office win32 Toggle Only</Button>
+        >E. Office win32 Toggle Only</Button>
       </div>
       
-      {selectedVersion === 'enhanced-v1' ? (
-        <div className="flex gap-8 items-start">
-          <div>
-            <h2 className="text-lg font-semibold mb-4 text-center">Option A</h2>
-            <EnhancedV1Version 
-              settings={currentSettingsA} 
-              updateSettings={updateSettingsA} 
-              resetToDefaults={resetToDefaultsA} 
-              hasChanges={hasChangesA} 
-              onSave={handleSaveA}
-              textConfig={currentTextConfigA}
-              updateTextConfig={updateTextConfigA}
-            />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold mb-4 text-center">Option B</h2>
-            <EnhancedV1Version 
-              settings={currentSettingsB} 
-              updateSettings={updateSettingsB} 
-              resetToDefaults={resetToDefaultsB} 
-              hasChanges={hasChangesB} 
-              onSave={handleSaveB}
-              textConfig={currentTextConfigB}
-              updateTextConfig={updateTextConfigB}
-            />
-          </div>
-        </div>
-      ) : selectedVersion === 'separated' ? (
-        <SeparatedVersion 
-          settings={currentSettings} 
-          updateSettings={updateSettings} 
-          resetToDefaults={resetToDefaults} 
-          hasChanges={hasChanges} 
-          onSave={handleSave}
-          textConfig={currentTextConfig}
-          updateTextConfig={updateTextConfig}
-        />
-      ) : selectedVersion === 'unified' ? (
-        <UnifiedVersion 
-          settings={currentSettings} 
-          updateSettings={updateSettings} 
-          resetToDefaults={resetToDefaults} 
-          hasChanges={hasChanges} 
-          onSave={handleSave}
-          textConfig={currentTextConfig}
-          updateTextConfig={updateTextConfig}
-        />
-      ) : (
-        <EnhancedVersion 
-          settings={currentSettings} 
-          updateSettings={updateSettings} 
-          resetToDefaults={resetToDefaults} 
-          hasChanges={hasChanges} 
-          onSave={handleSave}
-          textConfig={currentTextConfig}
-          updateTextConfig={updateTextConfig}
+      {selectedVersion === 'option-a' && (
+        <EnhancedV1Version 
+          settings={currentSettingsA} 
+          updateSettings={updateSettingsA} 
+          resetToDefaults={resetToDefaultsA} 
+          hasChanges={hasChangesA} 
+          onSave={handleSaveA}
+          textConfig={currentTextConfigA}
+          updateTextConfig={updateTextConfigA}
         />
       )}
+      
+      {selectedVersion === 'option-b' && (
+        <EnhancedV1Version 
+          settings={currentSettingsB} 
+          updateSettings={updateSettingsB} 
+          resetToDefaults={resetToDefaultsB} 
+          hasChanges={hasChangesB} 
+          onSave={handleSaveB}
+          textConfig={currentTextConfigB}
+          updateTextConfig={updateTextConfigB}
+        />
+      )}
+      
+      {selectedVersion === 'separated' && (
+        <SeparatedVersion 
+          settings={currentSettingsSeparated} 
+          updateSettings={updateSettingsSeparated} 
+          resetToDefaults={resetToDefaultsSeparated} 
+          hasChanges={hasChangesSeparated} 
+          onSave={handleSaveSeparated}
+          textConfig={currentTextConfigSeparated}
+          updateTextConfig={updateTextConfigSeparated}
+        />
+      )}
+      
+      {selectedVersion === 'unified' && (
+        <UnifiedVersion 
+          settings={currentSettingsUnified} 
+          updateSettings={updateSettingsUnified} 
+          resetToDefaults={resetToDefaultsUnified} 
+          hasChanges={hasChangesUnified} 
+          onSave={handleSaveUnified}
+          textConfig={currentTextConfigUnified}
+          updateTextConfig={updateTextConfigUnified}
+        />
+      )}
+      
+      {selectedVersion === 'enhanced' && (
+        <EnhancedVersion 
+          settings={currentSettingsEnhanced} 
+          updateSettings={updateSettingsEnhanced} 
+          resetToDefaults={resetToDefaultsEnhanced} 
+          hasChanges={hasChangesEnhanced} 
+          onSave={handleSaveEnhanced}
+          textConfig={currentTextConfigEnhanced}
+          updateTextConfig={updateTextConfigEnhanced}
+        />
+      )}
+      
       <Toaster />
     </div>
   );
