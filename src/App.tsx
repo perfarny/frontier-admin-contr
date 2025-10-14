@@ -1385,8 +1385,7 @@ const deepMerge = (target: any, source: any): any => {
   const handleSaveA = () => {
     setSavedSettingsA(currentSettingsA)
     setSavedTextConfigA(currentTextConfigA)
-    console.log('Option A settings saved:', currentSettingsA)
-    toast.success('Option A settings saved successfully')
+    toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsA = () => {
@@ -1419,8 +1418,7 @@ const deepMerge = (target: any, source: any): any => {
   const handleSaveB = () => {
     setSavedSettingsB(currentSettingsB)
     setSavedTextConfigB(currentTextConfigB)
-    console.log('Option B settings saved:', currentSettingsB)
-    toast.success('Option B settings saved successfully')
+    toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsB = () => {
@@ -1453,8 +1451,6 @@ const deepMerge = (target: any, source: any): any => {
   const handleSave = () => {
     setSavedSettings(currentSettings)
     setSavedTextConfig(currentTextConfig)
-    console.log('Settings saved:', currentSettings)
-    console.log('Text config saved:', currentTextConfig)
     toast.success('Settings saved successfully')
   }
 
