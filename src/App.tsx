@@ -949,7 +949,15 @@ function EnhancedV1Version({
   sectionTitleApps = "Apps like Word, Excel, PowerPoint",
   sectionTitleOffice = "Other Apps",
   onUpdateSectionTitleApps,
-  onUpdateSectionTitleOffice
+  onUpdateSectionTitleOffice,
+  sectionDescApps = "By default, Frontier features are turned off in Office applications, but all users can choose to turn them on",
+  onUpdateSectionDescApps,
+  sectionDescOffice = "Select which users automatically get Frontier features in other applications.",
+  onUpdateSectionDescOffice,
+  agentsTitle = "Get early access to AI agents built by Microsoft",
+  onUpdateAgentsTitle,
+  agentsDesc = "The Frontier program gives you early access to Microsoft's pre-built AI agents. Go to the Agent store and look for agents \"Built by Microsoft\". Frontier program agents will be tagged with \"(Frontier)\" at the end of the agents name.",
+  onUpdateAgentsDesc
 }: { 
   settings: Settings
   updateSettings: (updates: Partial<Settings>) => void
@@ -962,6 +970,14 @@ function EnhancedV1Version({
   sectionTitleOffice?: string
   onUpdateSectionTitleApps?: (value: string) => void
   onUpdateSectionTitleOffice?: (value: string) => void
+  sectionDescApps?: string
+  onUpdateSectionDescApps?: (value: string) => void
+  sectionDescOffice?: string
+  onUpdateSectionDescOffice?: (value: string) => void
+  agentsTitle?: string
+  onUpdateAgentsTitle?: (value: string) => void
+  agentsDesc?: string
+  onUpdateAgentsDesc?: (value: string) => void
 }) {
   const [activeTab, setActiveTab] = useState('apps')
 
@@ -995,7 +1011,18 @@ function EnhancedV1Version({
                     sectionTitleApps
                   )}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {onUpdateSectionDescApps ? (
+                    <EditableText
+                      value={sectionDescApps}
+                      onChange={onUpdateSectionDescApps}
+                      className="text-sm text-muted-foreground"
+                      isDescription={true}
+                    />
+                  ) : (
+                    sectionDescApps
+                  )}
+                </p>
               </div>
 
               <RadioGroup value={settings.allApps} onValueChange={(v) => {
@@ -1126,7 +1153,18 @@ function EnhancedV1Version({
                       sectionTitleOffice
                     )}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in other applications.</p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {onUpdateSectionDescOffice ? (
+                      <EditableText
+                        value={sectionDescOffice}
+                        onChange={onUpdateSectionDescOffice}
+                        className="text-sm text-muted-foreground"
+                        isDescription={true}
+                      />
+                    ) : (
+                      sectionDescOffice
+                    )}
+                  </p>
                 </div>
 
                 <RadioGroup value={settings.officeAppsAccess} onValueChange={(v) => {
@@ -1249,29 +1287,27 @@ function EnhancedV1Version({
             <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
               <div>
                 <h3 className="font-bold mb-2">
-                  <EditableText
-                    value={textConfig['enhanced-v1'].agents.title}
-                    onChange={(newValue) => updateTextConfig({
-                      'enhanced-v1': {
-                        ...textConfig['enhanced-v1'],
-                        agents: { ...textConfig['enhanced-v1'].agents, title: newValue }
-                      }
-                    })}
-                    className="font-bold"
-                  />
+                  {onUpdateAgentsTitle ? (
+                    <EditableText
+                      value={agentsTitle}
+                      onChange={onUpdateAgentsTitle}
+                      className="font-bold"
+                    />
+                  ) : (
+                    agentsTitle
+                  )}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  <EditableText
-                    value={textConfig['enhanced-v1'].agents.description}
-                    onChange={(newValue) => updateTextConfig({
-                      'enhanced-v1': {
-                        ...textConfig['enhanced-v1'],
-                        agents: { ...textConfig['enhanced-v1'].agents, description: newValue }
-                      }
-                    })}
-                    className="text-sm text-muted-foreground"
-                    isDescription={true}
-                  />
+                  {onUpdateAgentsDesc ? (
+                    <EditableText
+                      value={agentsDesc}
+                      onChange={onUpdateAgentsDesc}
+                      className="text-sm text-muted-foreground"
+                      isDescription={true}
+                    />
+                  ) : (
+                    agentsDesc
+                  )}
                 </p>
               </div>
             </TabsContent>
@@ -1317,6 +1353,14 @@ export default function App() {
   const [savedSectionTitleAppsA, setSavedSectionTitleAppsA] = useKV<string>('frontier-saved-section-title-apps-a-v1', 'Apps like Word, Excel, PowerPoint')
   const [sectionTitleOfficeA, setSectionTitleOfficeA] = useKV<string>('frontier-section-title-office-a-v1', 'Other Apps')
   const [savedSectionTitleOfficeA, setSavedSectionTitleOfficeA] = useKV<string>('frontier-saved-section-title-office-a-v1', 'Other Apps')
+  const [sectionDescAppsA, setSectionDescAppsA] = useKV<string>('frontier-section-desc-apps-a-v1', 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+  const [savedSectionDescAppsA, setSavedSectionDescAppsA] = useKV<string>('frontier-saved-section-desc-apps-a-v1', 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+  const [sectionDescOfficeA, setSectionDescOfficeA] = useKV<string>('frontier-section-desc-office-a-v1', 'Select which users automatically get Frontier features in other applications.')
+  const [savedSectionDescOfficeA, setSavedSectionDescOfficeA] = useKV<string>('frontier-saved-section-desc-office-a-v1', 'Select which users automatically get Frontier features in other applications.')
+  const [agentsTitleA, setAgentsTitleA] = useKV<string>('frontier-agents-title-a-v1', 'Get early access to AI agents built by Microsoft')
+  const [savedAgentsTitleA, setSavedAgentsTitleA] = useKV<string>('frontier-saved-agents-title-a-v1', 'Get early access to AI agents built by Microsoft')
+  const [agentsDescA, setAgentsDescA] = useKV<string>('frontier-agents-desc-a-v1', 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
+  const [savedAgentsDescA, setSavedAgentsDescA] = useKV<string>('frontier-saved-agents-desc-a-v1', 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
   
   // Settings for Option B (enhanced-v1-copy)
   const [settingsACopy, setSettingsACopy] = useKV<Settings>('frontier-settings-enhanced-v1-copy-v3', getDefaultSettings('enhanced-v1'))
@@ -1327,6 +1371,14 @@ export default function App() {
   const [savedSectionTitleAppsACopy, setSavedSectionTitleAppsACopy] = useKV<string>('frontier-saved-section-title-apps-a-copy-v1', 'Apps like Word, Excel, PowerPoint')
   const [sectionTitleOfficeACopy, setSectionTitleOfficeACopy] = useKV<string>('frontier-section-title-office-a-copy-v1', 'Other Apps')
   const [savedSectionTitleOfficeACopy, setSavedSectionTitleOfficeACopy] = useKV<string>('frontier-saved-section-title-office-a-copy-v1', 'Other Apps')
+  const [sectionDescAppsACopy, setSectionDescAppsACopy] = useKV<string>('frontier-section-desc-apps-a-copy-v1', 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+  const [savedSectionDescAppsACopy, setSavedSectionDescAppsACopy] = useKV<string>('frontier-saved-section-desc-apps-a-copy-v1', 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+  const [sectionDescOfficeACopy, setSectionDescOfficeACopy] = useKV<string>('frontier-section-desc-office-a-copy-v1', 'Select which users automatically get Frontier features in other applications.')
+  const [savedSectionDescOfficeACopy, setSavedSectionDescOfficeACopy] = useKV<string>('frontier-saved-section-desc-office-a-copy-v1', 'Select which users automatically get Frontier features in other applications.')
+  const [agentsTitleACopy, setAgentsTitleACopy] = useKV<string>('frontier-agents-title-a-copy-v1', 'Get early access to AI agents built by Microsoft')
+  const [savedAgentsTitleACopy, setSavedAgentsTitleACopy] = useKV<string>('frontier-saved-agents-title-a-copy-v1', 'Get early access to AI agents built by Microsoft')
+  const [agentsDescACopy, setAgentsDescACopy] = useKV<string>('frontier-agents-desc-a-copy-v1', 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
+  const [savedAgentsDescACopy, setSavedAgentsDescACopy] = useKV<string>('frontier-saved-agents-desc-a-copy-v1', 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
   
   // Settings for Unified (C)
   const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-unified-v3', getDefaultSettings('unified'))
@@ -1428,7 +1480,11 @@ export default function App() {
     JSON.stringify(currentSettingsA) !== JSON.stringify(currentSavedSettingsA) ||
     JSON.stringify(currentTextConfigA) !== JSON.stringify(currentSavedTextConfigA) ||
     sectionTitleAppsA !== savedSectionTitleAppsA ||
-    sectionTitleOfficeA !== savedSectionTitleOfficeA
+    sectionTitleOfficeA !== savedSectionTitleOfficeA ||
+    sectionDescAppsA !== savedSectionDescAppsA ||
+    sectionDescOfficeA !== savedSectionDescOfficeA ||
+    agentsTitleA !== savedAgentsTitleA ||
+    agentsDescA !== savedAgentsDescA
   )
 
   const handleSaveA = () => {
@@ -1436,6 +1492,10 @@ export default function App() {
     setSavedTextConfigA(JSON.parse(JSON.stringify(currentTextConfigA)))
     setSavedSectionTitleAppsA(sectionTitleAppsA || 'Apps like Word, Excel, PowerPoint')
     setSavedSectionTitleOfficeA(sectionTitleOfficeA || 'Other Apps')
+    setSavedSectionDescAppsA(sectionDescAppsA || 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+    setSavedSectionDescOfficeA(sectionDescOfficeA || 'Select which users automatically get Frontier features in other applications.')
+    setSavedAgentsTitleA(agentsTitleA || 'Get early access to AI agents built by Microsoft')
+    setSavedAgentsDescA(agentsDescA || 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
     toast.success('Settings saved successfully')
   }
 
@@ -1444,6 +1504,10 @@ export default function App() {
     setTextConfigA(JSON.parse(JSON.stringify(currentSavedTextConfigA)))
     setSectionTitleAppsA(savedSectionTitleAppsA || 'Apps like Word, Excel, PowerPoint')
     setSectionTitleOfficeA(savedSectionTitleOfficeA || 'Other Apps')
+    setSectionDescAppsA(savedSectionDescAppsA || 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+    setSectionDescOfficeA(savedSectionDescOfficeA || 'Select which users automatically get Frontier features in other applications.')
+    setAgentsTitleA(savedAgentsTitleA || 'Get early access to AI agents built by Microsoft')
+    setAgentsDescA(savedAgentsDescA || 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
   }
   
   // Option A Copy state
@@ -1467,7 +1531,11 @@ export default function App() {
     JSON.stringify(currentSettingsACopy) !== JSON.stringify(currentSavedSettingsACopy) ||
     JSON.stringify(currentTextConfigACopy) !== JSON.stringify(currentSavedTextConfigACopy) ||
     sectionTitleAppsACopy !== savedSectionTitleAppsACopy ||
-    sectionTitleOfficeACopy !== savedSectionTitleOfficeACopy
+    sectionTitleOfficeACopy !== savedSectionTitleOfficeACopy ||
+    sectionDescAppsACopy !== savedSectionDescAppsACopy ||
+    sectionDescOfficeACopy !== savedSectionDescOfficeACopy ||
+    agentsTitleACopy !== savedAgentsTitleACopy ||
+    agentsDescACopy !== savedAgentsDescACopy
   )
 
   const handleSaveACopy = () => {
@@ -1475,6 +1543,10 @@ export default function App() {
     setSavedTextConfigACopy(JSON.parse(JSON.stringify(currentTextConfigACopy)))
     setSavedSectionTitleAppsACopy(sectionTitleAppsACopy || 'Apps like Word, Excel, PowerPoint')
     setSavedSectionTitleOfficeACopy(sectionTitleOfficeACopy || 'Other Apps')
+    setSavedSectionDescAppsACopy(sectionDescAppsACopy || 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+    setSavedSectionDescOfficeACopy(sectionDescOfficeACopy || 'Select which users automatically get Frontier features in other applications.')
+    setSavedAgentsTitleACopy(agentsTitleACopy || 'Get early access to AI agents built by Microsoft')
+    setSavedAgentsDescACopy(agentsDescACopy || 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
     toast.success('Settings saved successfully')
   }
 
@@ -1483,6 +1555,10 @@ export default function App() {
     setTextConfigACopy(JSON.parse(JSON.stringify(currentSavedTextConfigACopy)))
     setSectionTitleAppsACopy(savedSectionTitleAppsACopy || 'Apps like Word, Excel, PowerPoint')
     setSectionTitleOfficeACopy(savedSectionTitleOfficeACopy || 'Other Apps')
+    setSectionDescAppsACopy(savedSectionDescAppsACopy || 'By default, Frontier features are turned off in Office applications, but all users can choose to turn them on')
+    setSectionDescOfficeACopy(savedSectionDescOfficeACopy || 'Select which users automatically get Frontier features in other applications.')
+    setAgentsTitleACopy(savedAgentsTitleACopy || 'Get early access to AI agents built by Microsoft')
+    setAgentsDescACopy(savedAgentsDescACopy || 'The Frontier program gives you early access to Microsoft\'s pre-built AI agents. Go to the Agent store and look for agents "Built by Microsoft". Frontier program agents will be tagged with "(Frontier)" at the end of the agents name.')
   }
   
   // Unified version (C) state
@@ -1589,6 +1665,14 @@ export default function App() {
             sectionTitleOffice={sectionTitleOfficeA}
             onUpdateSectionTitleApps={setSectionTitleAppsA}
             onUpdateSectionTitleOffice={setSectionTitleOfficeA}
+            sectionDescApps={sectionDescAppsA}
+            onUpdateSectionDescApps={setSectionDescAppsA}
+            sectionDescOffice={sectionDescOfficeA}
+            onUpdateSectionDescOffice={setSectionDescOfficeA}
+            agentsTitle={agentsTitleA}
+            onUpdateAgentsTitle={setAgentsTitleA}
+            agentsDesc={agentsDescA}
+            onUpdateAgentsDesc={setAgentsDescA}
           />
         </div>
       )}
@@ -1606,6 +1690,14 @@ export default function App() {
             sectionTitleOffice={sectionTitleOfficeACopy}
             onUpdateSectionTitleApps={setSectionTitleAppsACopy}
             onUpdateSectionTitleOffice={setSectionTitleOfficeACopy}
+            sectionDescApps={sectionDescAppsACopy}
+            onUpdateSectionDescApps={setSectionDescAppsACopy}
+            sectionDescOffice={sectionDescOfficeACopy}
+            onUpdateSectionDescOffice={setSectionDescOfficeACopy}
+            agentsTitle={agentsTitleACopy}
+            onUpdateAgentsTitle={setAgentsTitleACopy}
+            agentsDesc={agentsDescACopy}
+            onUpdateAgentsDesc={setAgentsDescACopy}
           />
         </div>
       )}
