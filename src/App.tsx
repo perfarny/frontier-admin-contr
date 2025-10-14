@@ -1275,10 +1275,10 @@ function EnhancedV1Version({
 // Create separate initial text configs for each option to avoid reference sharing
 const getInitialTextConfig = () => JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS))
 
-type DisplayVersion = 'option-a' | 'option-b' | 'separated' | 'unified' | 'enhanced'
+type DisplayVersion = 'enhanced-v1' | 'separated' | 'unified' | 'enhanced'
 
 export default function App() {
-  const [selectedVersion, setSelectedVersion] = useState<DisplayVersion>('option-a')
+  const [selectedVersion, setSelectedVersion] = useState<DisplayVersion>('enhanced-v1')
   
   // Settings for Option A
   const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-option-a', getDefaultSettings('enhanced-v1'))
@@ -1546,57 +1546,55 @@ export default function App() {
     <div className="min-h-screen bg-background flex flex-col items-center p-8 gap-8">
       <div className="flex gap-4">
         <Button
-          variant={selectedVersion === 'option-a' ? "default" : "outline"}
-          onClick={() => setSelectedVersion('option-a')}
+          variant={selectedVersion === 'enhanced-v1' ? "default" : "outline"}
+          onClick={() => setSelectedVersion('enhanced-v1')}
           className="border-black"
-        >A. Option A</Button>
-        <Button
-          variant={selectedVersion === 'option-b' ? "default" : "outline"}
-          onClick={() => setSelectedVersion('option-b')}
-          className="border-black"
-        >B. Option B</Button>
+        >A. Office win32 & WAC Toggle (2 tabs)</Button>
         <Button
           variant={selectedVersion === 'separated' ? "default" : "outline"}
           onClick={() => setSelectedVersion('separated')}
           className="border-black"
-        >C. Office win32 & WAC Toggle (3 tabs)</Button>
+        >B. Office win32 & WAC Toggle (3 tabs)</Button>
         <Button
           variant={selectedVersion === 'unified' ? "default" : "outline"}
           onClick={() => setSelectedVersion('unified')}
           className="border-black"
-        >D. No Toggle</Button>
+        >C. No Toggle</Button>
         <Button
           variant={selectedVersion === 'enhanced' ? "default" : "outline"}
           onClick={() => setSelectedVersion('enhanced')}
           className="border-black"
-        >E. Office win32 Toggle Only</Button>
+        >D. Office win32 Toggle Only</Button>
       </div>
       
-      {selectedVersion === 'option-a' && (
-        <EnhancedV1Version 
-          settings={currentSettingsA} 
-          updateSettings={updateSettingsA} 
-          resetToDefaults={resetToDefaultsA} 
-          hasChanges={hasChangesA} 
-          onSave={handleSaveA}
-          textConfig={currentTextConfigA}
-          updateTextConfig={updateTextConfigA}
-        />
-      )}
-      
-      {selectedVersion === 'option-b' && (
-        <EnhancedV1Version 
-          settings={currentSettingsB} 
-          updateSettings={updateSettingsB} 
-          resetToDefaults={resetToDefaultsB} 
-          hasChanges={hasChangesB} 
-          onSave={handleSaveB}
-          textConfig={currentTextConfigB}
-          updateTextConfig={updateTextConfigB}
-        />
-      )}
-      
-      {selectedVersion === 'separated' && (
+      {selectedVersion === 'enhanced-v1' ? (
+        <div className="flex gap-8 items-start">
+          <div>
+            <h2 className="text-lg font-semibold mb-4 text-center">Option A</h2>
+            <EnhancedV1Version 
+              settings={currentSettingsA} 
+              updateSettings={updateSettingsA} 
+              resetToDefaults={resetToDefaultsA} 
+              hasChanges={hasChangesA} 
+              onSave={handleSaveA}
+              textConfig={currentTextConfigA}
+              updateTextConfig={updateTextConfigA}
+            />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold mb-4 text-center">Option B</h2>
+            <EnhancedV1Version 
+              settings={currentSettingsB} 
+              updateSettings={updateSettingsB} 
+              resetToDefaults={resetToDefaultsB} 
+              hasChanges={hasChangesB} 
+              onSave={handleSaveB}
+              textConfig={currentTextConfigB}
+              updateTextConfig={updateTextConfigB}
+            />
+          </div>
+        </div>
+      ) : selectedVersion === 'separated' ? (
         <SeparatedVersion 
           settings={currentSettingsSeparated} 
           updateSettings={updateSettingsSeparated} 
@@ -1606,7 +1604,7 @@ export default function App() {
           textConfig={currentTextConfigSeparated}
           updateTextConfig={updateTextConfigSeparated}
         />
-      )}
+      ) : null}
       
       {selectedVersion === 'unified' && (
         <UnifiedVersion 
