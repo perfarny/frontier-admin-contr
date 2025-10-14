@@ -945,7 +945,11 @@ function EnhancedV1Version({
   hasChanges, 
   onSave, 
   textConfig, 
-  updateTextConfig 
+  updateTextConfig,
+  sectionTitleApps = "Apps like Word, Excel, PowerPoint",
+  sectionTitleOffice = "Other Apps",
+  onUpdateSectionTitleApps,
+  onUpdateSectionTitleOffice
 }: { 
   settings: Settings
   updateSettings: (updates: Partial<Settings>) => void
@@ -954,6 +958,10 @@ function EnhancedV1Version({
   onSave: () => void
   textConfig: TextConfig
   updateTextConfig: (updates: Partial<TextConfig>) => void
+  sectionTitleApps?: string
+  sectionTitleOffice?: string
+  onUpdateSectionTitleApps?: (value: string) => void
+  onUpdateSectionTitleOffice?: (value: string) => void
 }) {
   const [activeTab, setActiveTab] = useState('apps')
 
@@ -976,7 +984,17 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">xxxApps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">
+                  {onUpdateSectionTitleApps ? (
+                    <EditableText
+                      value={sectionTitleApps}
+                      onChange={onUpdateSectionTitleApps}
+                      className="font-medium"
+                    />
+                  ) : (
+                    sectionTitleApps
+                  )}
+                </h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1097,7 +1115,17 @@ function EnhancedV1Version({
 
               <div className="mt-8 pt-6 border-t">
                 <div>
-                  <h3 className="font-medium mb-2">Other Apps</h3>
+                  <h3 className="font-medium mb-2">
+                    {onUpdateSectionTitleOffice ? (
+                      <EditableText
+                        value={sectionTitleOffice}
+                        onChange={onUpdateSectionTitleOffice}
+                        className="font-medium"
+                      />
+                    ) : (
+                      sectionTitleOffice
+                    )}
+                  </h3>
                   <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in other applications.</p>
                 </div>
 
@@ -1285,12 +1313,20 @@ export default function App() {
   const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-enhanced-v1-v3', getDefaultSettings('enhanced-v1'))
   const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-enhanced-v1-v3', getInitialTextConfig())
   const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-enhanced-v1-v3', getInitialTextConfig())
+  const [sectionTitleAppsA, setSectionTitleAppsA] = useKV<string>('frontier-section-title-apps-a-v1', 'Apps like Word, Excel, PowerPoint')
+  const [savedSectionTitleAppsA, setSavedSectionTitleAppsA] = useKV<string>('frontier-saved-section-title-apps-a-v1', 'Apps like Word, Excel, PowerPoint')
+  const [sectionTitleOfficeA, setSectionTitleOfficeA] = useKV<string>('frontier-section-title-office-a-v1', 'Other Apps')
+  const [savedSectionTitleOfficeA, setSavedSectionTitleOfficeA] = useKV<string>('frontier-saved-section-title-office-a-v1', 'Other Apps')
   
   // Settings for Option B (enhanced-v1-copy)
   const [settingsACopy, setSettingsACopy] = useKV<Settings>('frontier-settings-enhanced-v1-copy-v3', getDefaultSettings('enhanced-v1'))
   const [savedSettingsACopy, setSavedSettingsACopy] = useKV<Settings>('frontier-saved-settings-enhanced-v1-copy-v3', getDefaultSettings('enhanced-v1'))
   const [textConfigACopy, setTextConfigACopy] = useKV<TextConfig>('frontier-text-config-enhanced-v1-copy-v3', getInitialTextConfig())
   const [savedTextConfigACopy, setSavedTextConfigACopy] = useKV<TextConfig>('frontier-saved-text-config-enhanced-v1-copy-v3', getInitialTextConfig())
+  const [sectionTitleAppsACopy, setSectionTitleAppsACopy] = useKV<string>('frontier-section-title-apps-a-copy-v1', 'Apps like Word, Excel, PowerPoint')
+  const [savedSectionTitleAppsACopy, setSavedSectionTitleAppsACopy] = useKV<string>('frontier-saved-section-title-apps-a-copy-v1', 'Apps like Word, Excel, PowerPoint')
+  const [sectionTitleOfficeACopy, setSectionTitleOfficeACopy] = useKV<string>('frontier-section-title-office-a-copy-v1', 'Other Apps')
+  const [savedSectionTitleOfficeACopy, setSavedSectionTitleOfficeACopy] = useKV<string>('frontier-saved-section-title-office-a-copy-v1', 'Other Apps')
   
   // Settings for Unified (C)
   const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-unified-v3', getDefaultSettings('unified'))
@@ -1390,18 +1426,24 @@ export default function App() {
 
   const hasChangesA = (
     JSON.stringify(currentSettingsA) !== JSON.stringify(currentSavedSettingsA) ||
-    JSON.stringify(currentTextConfigA) !== JSON.stringify(currentSavedTextConfigA)
+    JSON.stringify(currentTextConfigA) !== JSON.stringify(currentSavedTextConfigA) ||
+    sectionTitleAppsA !== savedSectionTitleAppsA ||
+    sectionTitleOfficeA !== savedSectionTitleOfficeA
   )
 
   const handleSaveA = () => {
     setSavedSettingsA(JSON.parse(JSON.stringify(currentSettingsA)))
     setSavedTextConfigA(JSON.parse(JSON.stringify(currentTextConfigA)))
+    setSavedSectionTitleAppsA(sectionTitleAppsA || 'Apps like Word, Excel, PowerPoint')
+    setSavedSectionTitleOfficeA(sectionTitleOfficeA || 'Other Apps')
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsA = () => {
     setSettingsA(JSON.parse(JSON.stringify(currentSavedSettingsA)))
     setTextConfigA(JSON.parse(JSON.stringify(currentSavedTextConfigA)))
+    setSectionTitleAppsA(savedSectionTitleAppsA || 'Apps like Word, Excel, PowerPoint')
+    setSectionTitleOfficeA(savedSectionTitleOfficeA || 'Other Apps')
   }
   
   // Option A Copy state
@@ -1423,18 +1465,24 @@ export default function App() {
 
   const hasChangesACopy = (
     JSON.stringify(currentSettingsACopy) !== JSON.stringify(currentSavedSettingsACopy) ||
-    JSON.stringify(currentTextConfigACopy) !== JSON.stringify(currentSavedTextConfigACopy)
+    JSON.stringify(currentTextConfigACopy) !== JSON.stringify(currentSavedTextConfigACopy) ||
+    sectionTitleAppsACopy !== savedSectionTitleAppsACopy ||
+    sectionTitleOfficeACopy !== savedSectionTitleOfficeACopy
   )
 
   const handleSaveACopy = () => {
     setSavedSettingsACopy(JSON.parse(JSON.stringify(currentSettingsACopy)))
     setSavedTextConfigACopy(JSON.parse(JSON.stringify(currentTextConfigACopy)))
+    setSavedSectionTitleAppsACopy(sectionTitleAppsACopy || 'Apps like Word, Excel, PowerPoint')
+    setSavedSectionTitleOfficeACopy(sectionTitleOfficeACopy || 'Other Apps')
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsACopy = () => {
     setSettingsACopy(JSON.parse(JSON.stringify(currentSavedSettingsACopy)))
     setTextConfigACopy(JSON.parse(JSON.stringify(currentSavedTextConfigACopy)))
+    setSectionTitleAppsACopy(savedSectionTitleAppsACopy || 'Apps like Word, Excel, PowerPoint')
+    setSectionTitleOfficeACopy(savedSectionTitleOfficeACopy || 'Other Apps')
   }
   
   // Unified version (C) state
@@ -1537,6 +1585,10 @@ export default function App() {
             onSave={handleSaveA}
             textConfig={currentTextConfigA}
             updateTextConfig={updateTextConfigA}
+            sectionTitleApps={sectionTitleAppsA}
+            sectionTitleOffice={sectionTitleOfficeA}
+            onUpdateSectionTitleApps={setSectionTitleAppsA}
+            onUpdateSectionTitleOffice={setSectionTitleOfficeA}
           />
         </div>
       )}
@@ -1550,6 +1602,10 @@ export default function App() {
             onSave={handleSaveACopy}
             textConfig={currentTextConfigACopy}
             updateTextConfig={updateTextConfigACopy}
+            sectionTitleApps={sectionTitleAppsACopy}
+            sectionTitleOffice={sectionTitleOfficeACopy}
+            onUpdateSectionTitleApps={setSectionTitleAppsACopy}
+            onUpdateSectionTitleOffice={setSectionTitleOfficeACopy}
           />
         </div>
       )}
