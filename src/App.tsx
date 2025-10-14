@@ -1394,7 +1394,7 @@ export default function App() {
     })
   }
 
-  const hasChangesA = settingsA !== undefined && (
+  const hasChangesA = (
     JSON.stringify(currentSettingsA) !== JSON.stringify(currentSavedSettingsA) ||
     JSON.stringify(currentTextConfigA) !== JSON.stringify(currentSavedTextConfigA)
   )
@@ -1427,7 +1427,7 @@ export default function App() {
     })
   }
 
-  const hasChangesB = settingsB !== undefined && (
+  const hasChangesB = (
     JSON.stringify(currentSettingsB) !== JSON.stringify(currentSavedSettingsB) ||
     JSON.stringify(currentTextConfigB) !== JSON.stringify(currentSavedTextConfigB)
   )
@@ -1460,7 +1460,7 @@ export default function App() {
     })
   }
 
-  const hasChangesSeparated = settingsSeparated !== undefined && (
+  const hasChangesSeparated = (
     JSON.stringify(currentSettingsSeparated) !== JSON.stringify(currentSavedSettingsSeparated) ||
     JSON.stringify(currentTextConfigSeparated) !== JSON.stringify(currentSavedTextConfigSeparated)
   )
@@ -1493,7 +1493,7 @@ export default function App() {
     })
   }
 
-  const hasChangesUnified = settingsUnified !== undefined && (
+  const hasChangesUnified = (
     JSON.stringify(currentSettingsUnified) !== JSON.stringify(currentSavedSettingsUnified) ||
     JSON.stringify(currentTextConfigUnified) !== JSON.stringify(currentSavedTextConfigUnified)
   )
@@ -1526,7 +1526,7 @@ export default function App() {
     })
   }
 
-  const hasChangesEnhanced = settingsEnhanced !== undefined && (
+  const hasChangesEnhanced = (
     JSON.stringify(currentSettingsEnhanced) !== JSON.stringify(currentSavedSettingsEnhanced) ||
     JSON.stringify(currentTextConfigEnhanced) !== JSON.stringify(currentSavedTextConfigEnhanced)
   )
