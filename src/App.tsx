@@ -846,7 +846,7 @@ function EnhancedVersion({
                     onCheckedChange={(checked) => updateSettings({ enablePerDeviceAccess: !!checked })}
                     className="mt-0.5"
                   />
-                  <Label htmlFor="enhanced-per-device-access" className="font-medium cursor-pointer text-base leading-tight">Allow per device enrollment in Office applications</Label>
+                  <Label htmlFor="enhanced-per-device-access" className="font-medium cursor-pointer text-base leading-tight">Allow user enrollment in Frontier</Label>
                 </div>
                 <div className="text-muted-foreground ml-6 mt-1 text-sm">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on. User choices are device specific.</div>
 
