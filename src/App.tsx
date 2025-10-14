@@ -976,7 +976,7 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">Allow users to turn on Frontier in apps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">Apps like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1281,28 +1281,28 @@ export default function App() {
   const [selectedVersion, setSelectedVersion] = useState<DisplayVersion>('enhanced-v1')
   
   // Settings for Option A
-  const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-option-a', getDefaultSettings('enhanced-v1'))
-  const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-option-a', getDefaultSettings('enhanced-v1'))
-  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', getInitialTextConfig())
-  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', getInitialTextConfig())
+  const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-option-a-v2', getDefaultSettings('enhanced-v1'))
+  const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-option-a-v2', getDefaultSettings('enhanced-v1'))
+  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a-v2', getInitialTextConfig())
+  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a-v2', getInitialTextConfig())
   
   // Settings for Option A Copy
-  const [settingsACopy, setSettingsACopy] = useKV<Settings>('frontier-settings-option-a-copy', getDefaultSettings('enhanced-v1'))
-  const [savedSettingsACopy, setSavedSettingsACopy] = useKV<Settings>('frontier-saved-settings-option-a-copy', getDefaultSettings('enhanced-v1'))
-  const [textConfigACopy, setTextConfigACopy] = useKV<TextConfig>('frontier-text-config-option-a-copy', getInitialTextConfig())
-  const [savedTextConfigACopy, setSavedTextConfigACopy] = useKV<TextConfig>('frontier-saved-text-config-option-a-copy', getInitialTextConfig())
+  const [settingsACopy, setSettingsACopy] = useKV<Settings>('frontier-settings-option-a-copy-v2', getDefaultSettings('enhanced-v1'))
+  const [savedSettingsACopy, setSavedSettingsACopy] = useKV<Settings>('frontier-saved-settings-option-a-copy-v2', getDefaultSettings('enhanced-v1'))
+  const [textConfigACopy, setTextConfigACopy] = useKV<TextConfig>('frontier-text-config-option-a-copy-v2', getInitialTextConfig())
+  const [savedTextConfigACopy, setSavedTextConfigACopy] = useKV<TextConfig>('frontier-saved-text-config-option-a-copy-v2', getInitialTextConfig())
   
   // Settings for Unified (C)
-  const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-v7-unified', getDefaultSettings('unified'))
-  const [savedSettingsUnified, setSavedSettingsUnified] = useKV<Settings>('frontier-saved-settings-v7-unified', getDefaultSettings('unified'))
-  const [textConfigUnified, setTextConfigUnified] = useKV<TextConfig>('frontier-text-config-v7-unified', getInitialTextConfig())
-  const [savedTextConfigUnified, setSavedTextConfigUnified] = useKV<TextConfig>('frontier-saved-text-config-v7-unified', getInitialTextConfig())
+  const [settingsUnified, setSettingsUnified] = useKV<Settings>('frontier-settings-v8-unified', getDefaultSettings('unified'))
+  const [savedSettingsUnified, setSavedSettingsUnified] = useKV<Settings>('frontier-saved-settings-v8-unified', getDefaultSettings('unified'))
+  const [textConfigUnified, setTextConfigUnified] = useKV<TextConfig>('frontier-text-config-v8-unified', getInitialTextConfig())
+  const [savedTextConfigUnified, setSavedTextConfigUnified] = useKV<TextConfig>('frontier-saved-text-config-v8-unified', getInitialTextConfig())
   
   // Settings for Enhanced (D)
-  const [settingsEnhanced, setSettingsEnhanced] = useKV<Settings>('frontier-settings-v7-enhanced', getDefaultSettings('enhanced'))
-  const [savedSettingsEnhanced, setSavedSettingsEnhanced] = useKV<Settings>('frontier-saved-settings-v7-enhanced', getDefaultSettings('enhanced'))
-  const [textConfigEnhanced, setTextConfigEnhanced] = useKV<TextConfig>('frontier-text-config-v7-enhanced', getInitialTextConfig())
-  const [savedTextConfigEnhanced, setSavedTextConfigEnhanced] = useKV<TextConfig>('frontier-saved-text-config-v7-enhanced', getInitialTextConfig())
+  const [settingsEnhanced, setSettingsEnhanced] = useKV<Settings>('frontier-settings-v8-enhanced', getDefaultSettings('enhanced'))
+  const [savedSettingsEnhanced, setSavedSettingsEnhanced] = useKV<Settings>('frontier-saved-settings-v8-enhanced', getDefaultSettings('enhanced'))
+  const [textConfigEnhanced, setTextConfigEnhanced] = useKV<TextConfig>('frontier-text-config-v8-enhanced', getInitialTextConfig())
+  const [savedTextConfigEnhanced, setSavedTextConfigEnhanced] = useKV<TextConfig>('frontier-saved-text-config-v8-enhanced', getInitialTextConfig())
 
   // Deep merge utility for nested objects
   const deepMerge = (target: any, source: any): any => {
@@ -1372,13 +1372,13 @@ export default function App() {
   }
   
   // Option A state
-  const currentSettingsA = { ...getDefaultSettings('enhanced-v1'), ...settingsA }
-  const currentSavedSettingsA = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsA }
+  const currentSettingsA = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced-v1'), ...settingsA }))
+  const currentSavedSettingsA = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced-v1'), ...savedSettingsA }))
   const currentTextConfigA = mergeTextConfig(getInitialTextConfig(), textConfigA)
   const currentSavedTextConfigA = mergeTextConfig(getInitialTextConfig(), savedTextConfigA)
   
   const updateSettingsA = (updates: Partial<Settings>) => {
-    setSettingsA(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
+    setSettingsA(current => JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates })))
   }
 
   const updateTextConfigA = (updates: Partial<TextConfig>) => {
@@ -1394,24 +1394,24 @@ export default function App() {
   )
 
   const handleSaveA = () => {
-    setSavedSettingsA(currentSettingsA)
-    setSavedTextConfigA(currentTextConfigA)
+    setSavedSettingsA(JSON.parse(JSON.stringify(currentSettingsA)))
+    setSavedTextConfigA(JSON.parse(JSON.stringify(currentTextConfigA)))
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsA = () => {
-    setSettingsA(currentSavedSettingsA)
-    setTextConfigA(currentSavedTextConfigA)
+    setSettingsA(JSON.parse(JSON.stringify(currentSavedSettingsA)))
+    setTextConfigA(JSON.parse(JSON.stringify(currentSavedTextConfigA)))
   }
   
   // Option A Copy state
-  const currentSettingsACopy = { ...getDefaultSettings('enhanced-v1'), ...settingsACopy }
-  const currentSavedSettingsACopy = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsACopy }
+  const currentSettingsACopy = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced-v1'), ...settingsACopy }))
+  const currentSavedSettingsACopy = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced-v1'), ...savedSettingsACopy }))
   const currentTextConfigACopy = mergeTextConfig(getInitialTextConfig(), textConfigACopy)
   const currentSavedTextConfigACopy = mergeTextConfig(getInitialTextConfig(), savedTextConfigACopy)
   
   const updateSettingsACopy = (updates: Partial<Settings>) => {
-    setSettingsACopy(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
+    setSettingsACopy(current => JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates })))
   }
 
   const updateTextConfigACopy = (updates: Partial<TextConfig>) => {
@@ -1427,24 +1427,24 @@ export default function App() {
   )
 
   const handleSaveACopy = () => {
-    setSavedSettingsACopy(currentSettingsACopy)
-    setSavedTextConfigACopy(currentTextConfigACopy)
+    setSavedSettingsACopy(JSON.parse(JSON.stringify(currentSettingsACopy)))
+    setSavedTextConfigACopy(JSON.parse(JSON.stringify(currentTextConfigACopy)))
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsACopy = () => {
-    setSettingsACopy(currentSavedSettingsACopy)
-    setTextConfigACopy(currentSavedTextConfigACopy)
+    setSettingsACopy(JSON.parse(JSON.stringify(currentSavedSettingsACopy)))
+    setTextConfigACopy(JSON.parse(JSON.stringify(currentSavedTextConfigACopy)))
   }
   
   // Unified version (C) state
-  const currentSettingsUnified = { ...getDefaultSettings('unified'), ...settingsUnified }
-  const currentSavedSettingsUnified = { ...getDefaultSettings('unified'), ...savedSettingsUnified }
+  const currentSettingsUnified = JSON.parse(JSON.stringify({ ...getDefaultSettings('unified'), ...settingsUnified }))
+  const currentSavedSettingsUnified = JSON.parse(JSON.stringify({ ...getDefaultSettings('unified'), ...savedSettingsUnified }))
   const currentTextConfigUnified = mergeTextConfig(getInitialTextConfig(), textConfigUnified)
   const currentSavedTextConfigUnified = mergeTextConfig(getInitialTextConfig(), savedTextConfigUnified)
   
   const updateSettingsUnified = (updates: Partial<Settings>) => {
-    setSettingsUnified(current => ({ ...getDefaultSettings('unified'), ...current, ...updates }))
+    setSettingsUnified(current => JSON.parse(JSON.stringify({ ...getDefaultSettings('unified'), ...current, ...updates })))
   }
 
   const updateTextConfigUnified = (updates: Partial<TextConfig>) => {
@@ -1460,24 +1460,24 @@ export default function App() {
   )
 
   const handleSaveUnified = () => {
-    setSavedSettingsUnified(currentSettingsUnified)
-    setSavedTextConfigUnified(currentTextConfigUnified)
+    setSavedSettingsUnified(JSON.parse(JSON.stringify(currentSettingsUnified)))
+    setSavedTextConfigUnified(JSON.parse(JSON.stringify(currentTextConfigUnified)))
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsUnified = () => {
-    setSettingsUnified(currentSavedSettingsUnified)
-    setTextConfigUnified(currentSavedTextConfigUnified)
+    setSettingsUnified(JSON.parse(JSON.stringify(currentSavedSettingsUnified)))
+    setTextConfigUnified(JSON.parse(JSON.stringify(currentSavedTextConfigUnified)))
   }
   
   // Enhanced version (D) state
-  const currentSettingsEnhanced = { ...getDefaultSettings('enhanced'), ...settingsEnhanced }
-  const currentSavedSettingsEnhanced = { ...getDefaultSettings('enhanced'), ...savedSettingsEnhanced }
+  const currentSettingsEnhanced = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...settingsEnhanced }))
+  const currentSavedSettingsEnhanced = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...savedSettingsEnhanced }))
   const currentTextConfigEnhanced = mergeTextConfig(getInitialTextConfig(), textConfigEnhanced)
   const currentSavedTextConfigEnhanced = mergeTextConfig(getInitialTextConfig(), savedTextConfigEnhanced)
   
   const updateSettingsEnhanced = (updates: Partial<Settings>) => {
-    setSettingsEnhanced(current => ({ ...getDefaultSettings('enhanced'), ...current, ...updates }))
+    setSettingsEnhanced(current => JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...current, ...updates })))
   }
 
   const updateTextConfigEnhanced = (updates: Partial<TextConfig>) => {
@@ -1493,14 +1493,14 @@ export default function App() {
   )
 
   const handleSaveEnhanced = () => {
-    setSavedSettingsEnhanced(currentSettingsEnhanced)
-    setSavedTextConfigEnhanced(currentTextConfigEnhanced)
+    setSavedSettingsEnhanced(JSON.parse(JSON.stringify(currentSettingsEnhanced)))
+    setSavedTextConfigEnhanced(JSON.parse(JSON.stringify(currentTextConfigEnhanced)))
     toast.success('Settings saved successfully')
   }
 
   const resetToDefaultsEnhanced = () => {
-    setSettingsEnhanced(currentSavedSettingsEnhanced)
-    setTextConfigEnhanced(currentSavedTextConfigEnhanced)
+    setSettingsEnhanced(JSON.parse(JSON.stringify(currentSavedSettingsEnhanced)))
+    setTextConfigEnhanced(JSON.parse(JSON.stringify(currentSavedTextConfigEnhanced)))
   }
 
   return (
