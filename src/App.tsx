@@ -976,7 +976,7 @@ function EnhancedV1Version({
 
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
-                <h3 className="font-medium mb-2">Office Apps like Word, Excel, PowerPoint</h3>
+                <h3 className="font-medium mb-2">Allow user opt-in for Office apps like Word, Excel, PowerPoint</h3>
                 <p className="text-sm text-muted-foreground mb-4">By default, Frontier features are turned off in Office applications, but all users can choose to turn them on</p>
               </div>
 
@@ -1278,14 +1278,14 @@ export default function App() {
   // Settings for Option A (left module)
   const [settingsA, setSettingsA] = useKV<Settings>('frontier-settings-option-a', getDefaultSettings('enhanced-v1'))
   const [savedSettingsA, setSavedSettingsA] = useKV<Settings>('frontier-saved-settings-option-a', getDefaultSettings('enhanced-v1'))
-  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', STATIC_TEXT_CONFIGS)
-  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', STATIC_TEXT_CONFIGS)
+  const [textConfigA, setTextConfigA] = useKV<TextConfig>('frontier-text-config-option-a', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
+  const [savedTextConfigA, setSavedTextConfigA] = useKV<TextConfig>('frontier-saved-text-config-option-a', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
   
   // Settings for Option B (right module)
   const [settingsB, setSettingsB] = useKV<Settings>('frontier-settings-option-b', getDefaultSettings('enhanced-v1'))
   const [savedSettingsB, setSavedSettingsB] = useKV<Settings>('frontier-saved-settings-option-b', getDefaultSettings('enhanced-v1'))
-  const [textConfigB, setTextConfigB] = useKV<TextConfig>('frontier-text-config-option-b', STATIC_TEXT_CONFIGS)
-  const [savedTextConfigB, setSavedTextConfigB] = useKV<TextConfig>('frontier-saved-text-config-option-b', STATIC_TEXT_CONFIGS)
+  const [textConfigB, setTextConfigB] = useKV<TextConfig>('frontier-text-config-option-b', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
+  const [savedTextConfigB, setSavedTextConfigB] = useKV<TextConfig>('frontier-saved-text-config-option-b', JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)))
   
   // Settings for other versions (C, D, E)
   const [settings, setSettings] = useKV<Settings>(`frontier-settings-v7-${selectedVersion}`, getDefaultSettings(selectedVersion))
@@ -1295,33 +1295,51 @@ export default function App() {
 
   // Deep merge text config to ensure all nested properties exist
   const mergeTextConfig = (base: TextConfig, override: any): TextConfig => {
-    if (!override) return base
+    if (!override) return JSON.parse(JSON.stringify(base))
     
-    const result = { ...base }
+    const result = JSON.parse(JSON.stringify(base))
     
     if (override.unified) {
       result.unified = {
-        apps: { ...base.unified.apps, ...override.unified.apps },
+        apps: { 
+          labels: { ...base.unified.apps.labels, ...(override.unified.apps?.labels || {}) },
+          descriptions: { ...base.unified.apps.descriptions, ...(override.unified.apps?.descriptions || {}) }
+        },
         agents: { ...base.unified.agents, ...override.unified.agents }
       }
     }
     if (override.separated) {
       result.separated = {
-        office: { ...base.separated.office, ...override.separated.office },
-        webApps: { ...base.separated.webApps, ...override.separated.webApps },
+        office: { 
+          labels: { ...base.separated.office.labels, ...(override.separated.office?.labels || {}) },
+          descriptions: { ...base.separated.office.descriptions, ...(override.separated.office?.descriptions || {}) }
+        },
+        webApps: { 
+          labels: { ...base.separated.webApps.labels, ...(override.separated.webApps?.labels || {}) },
+          descriptions: { ...base.separated.webApps.descriptions, ...(override.separated.webApps?.descriptions || {}) }
+        },
         agents: { ...base.separated.agents, ...override.separated.agents }
       }
     }
     if (override.enhanced) {
       result.enhanced = {
-        apps: { ...base.enhanced.apps, ...override.enhanced.apps },
+        apps: { 
+          labels: { ...base.enhanced.apps.labels, ...(override.enhanced.apps?.labels || {}) },
+          descriptions: { ...base.enhanced.apps.descriptions, ...(override.enhanced.apps?.descriptions || {}) }
+        },
         agents: { ...base.enhanced.agents, ...override.enhanced.agents }
       }
     }
     if (override['enhanced-v1']) {
       result['enhanced-v1'] = {
-        apps: { ...base['enhanced-v1'].apps, ...override['enhanced-v1'].apps },
-        office: { ...base['enhanced-v1'].office, ...override['enhanced-v1'].office },
+        apps: { 
+          labels: { ...base['enhanced-v1'].apps.labels, ...(override['enhanced-v1'].apps?.labels || {}) },
+          descriptions: { ...base['enhanced-v1'].apps.descriptions, ...(override['enhanced-v1'].apps?.descriptions || {}) }
+        },
+        office: { 
+          labels: { ...base['enhanced-v1'].office.labels, ...(override['enhanced-v1'].office?.labels || {}) },
+          descriptions: { ...base['enhanced-v1'].office.descriptions, ...(override['enhanced-v1'].office?.descriptions || {}) }
+        },
         agents: { ...base['enhanced-v1'].agents, ...override['enhanced-v1'].agents }
       }
     }
@@ -1332,15 +1350,18 @@ export default function App() {
   // Option A state
   const currentSettingsA = { ...getDefaultSettings('enhanced-v1'), ...settingsA }
   const currentSavedSettingsA = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsA }
-  const currentTextConfigA = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigA)
-  const currentSavedTextConfigA = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigA)
+  const currentTextConfigA = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), textConfigA)
+  const currentSavedTextConfigA = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), savedTextConfigA)
   
   const updateSettingsA = (updates: Partial<Settings>) => {
     setSettingsA(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
   }
 
   const updateTextConfigA = (updates: Partial<TextConfig>) => {
-    setTextConfigA(current => mergeTextConfig(STATIC_TEXT_CONFIGS, { ...current, ...updates }))
+    setTextConfigA(current => {
+      const merged = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), current)
+      return mergeTextConfig(merged, updates)
+    })
   }
 
   const hasChangesA = settingsA !== undefined && (
@@ -1363,15 +1384,18 @@ export default function App() {
   // Option B state
   const currentSettingsB = { ...getDefaultSettings('enhanced-v1'), ...settingsB }
   const currentSavedSettingsB = { ...getDefaultSettings('enhanced-v1'), ...savedSettingsB }
-  const currentTextConfigB = mergeTextConfig(STATIC_TEXT_CONFIGS, textConfigB)
-  const currentSavedTextConfigB = mergeTextConfig(STATIC_TEXT_CONFIGS, savedTextConfigB)
+  const currentTextConfigB = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), textConfigB)
+  const currentSavedTextConfigB = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), savedTextConfigB)
   
   const updateSettingsB = (updates: Partial<Settings>) => {
     setSettingsB(current => ({ ...getDefaultSettings('enhanced-v1'), ...current, ...updates }))
   }
 
   const updateTextConfigB = (updates: Partial<TextConfig>) => {
-    setTextConfigB(current => mergeTextConfig(STATIC_TEXT_CONFIGS, { ...current, ...updates }))
+    setTextConfigB(current => {
+      const merged = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), current)
+      return mergeTextConfig(merged, updates)
+    })
   }
 
   const hasChangesB = settingsB !== undefined && (
@@ -1402,7 +1426,10 @@ export default function App() {
   }
 
   const updateTextConfig = (updates: Partial<TextConfig>) => {
-    setTextConfig(current => mergeTextConfig(STATIC_TEXT_CONFIGS, { ...current, ...updates }))
+    setTextConfig(current => {
+      const merged = mergeTextConfig(JSON.parse(JSON.stringify(STATIC_TEXT_CONFIGS)), current)
+      return mergeTextConfig(merged, updates)
+    })
   }
 
   const hasChanges = settings !== undefined && (
