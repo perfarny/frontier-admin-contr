@@ -529,7 +529,6 @@ function UnifiedVersion({
       <CardContent className="flex flex-col flex-1">
         <div className="flex-1 flex flex-col space-y-4 mt-6">
           <div>
-            <h3 className="font-medium mb-2">Apps</h3>
             <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features.</p>
           </div>
 
