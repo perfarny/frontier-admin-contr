@@ -518,19 +518,17 @@ function UnifiedVersion({
   updateTextConfig: (updates: Partial<TextConfig>) => void
 }) {
   return (
-    <Card className="w-[672px] h-[780px]">
-      <CardHeader className="space-y-3">
+    <Card className="w-[672px]">
+      <CardHeader className="space-y-2 pb-4">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
-        <div className="text-sm text-muted-foreground space-y-2">
+        <div className="text-sm text-muted-foreground">
           <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p>
-</p>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col flex-1">
-        <div className="flex-1 flex flex-col space-y-4 mt-6">
+      <CardContent className="flex flex-col">
+        <div className="flex flex-col space-y-4">
           <div>
-            <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features.</p>
+            <p className="text-sm text-muted-foreground mb-3">Select which users automatically get Frontier features.</p>
           </div>
 
           <AccessControl
@@ -556,7 +554,7 @@ function UnifiedVersion({
             })}
           />
         </div>
-        <div className="border-t pt-4 flex justify-end gap-2">
+        <div className="border-t pt-4 mt-6 flex justify-end gap-2">
           <Button 
             variant="outline" 
             onClick={resetToDefaults} 
