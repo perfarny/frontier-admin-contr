@@ -539,7 +539,7 @@ function UnifiedVersion({
             <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
               <div>
                 <h3 className="font-medium mb-2">Apps</h3>
-                <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features in their M365 applications.</p>
+                <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features.</p>
               </div>
 
               <AccessControl
