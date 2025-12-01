@@ -523,7 +523,7 @@ function UnifiedVersion({
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground space-y-2">
           <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. Configure access settings below for where users can experience Frontier.</p>
-          <p>To get the most out of the Frontier program, we recommend turning it on for both apps and agents.</p>
+          <p>To</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
