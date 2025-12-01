@@ -517,8 +517,6 @@ function UnifiedVersion({
   textConfig: TextConfig
   updateTextConfig: (updates: Partial<TextConfig>) => void
 }) {
-  const [activeTab, setActiveTab] = useState('apps')
-
   return (
     <Card className="w-[672px] h-[780px]">
       <CardHeader className="space-y-3">
@@ -529,73 +527,34 @@ function UnifiedVersion({
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
-        <div className="flex-1 flex flex-col">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="apps" className="cursor-pointer">Apps</TabsTrigger>
-              <TabsTrigger value="agents" className="cursor-pointer">Agents</TabsTrigger>
-            </TabsList>
+        <div className="flex-1 flex flex-col space-y-4 mt-6">
+          <div>
+            <h3 className="font-medium mb-2">Apps</h3>
+            <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features.</p>
+          </div>
 
-            <TabsContent value="apps" className="space-y-4 mt-6 flex-1">
-              <div>
-                <h3 className="font-medium mb-2">Apps</h3>
-                <p className="text-sm text-muted-foreground mb-4">Select which users automatically get Frontier features.</p>
-              </div>
-
-              <AccessControl
-                value={settings.allApps}
-                onChange={(value) => updateSettings({ allApps: value, allAppsGroups: value !== 'specific-groups' ? [] : settings.allAppsGroups })}
-                groups={settings.allAppsGroups}
-                onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
-                onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
-                prefix="unified-apps"
-                labels={textConfig.unified.apps.labels}
-                descriptions={textConfig.unified.apps.descriptions}
-                onUpdateLabels={(labels) => updateTextConfig({
-                  unified: {
-                    ...textConfig.unified,
-                    apps: { ...textConfig.unified.apps, labels }
-                  }
-                })}
-                onUpdateDescriptions={(descriptions) => updateTextConfig({
-                  unified: {
-                    ...textConfig.unified,
-                    apps: { ...textConfig.unified.apps, descriptions }
-                  }
-                })}
-              />
-            </TabsContent>
-
-            <TabsContent value="agents" className="space-y-4 mt-6 flex-1">
-              <div>
-                <h3 className="font-bold mb-2">
-                  <EditableText
-                    value={textConfig.unified.agents.title}
-                    onChange={(newValue) => updateTextConfig({
-                      unified: {
-                        ...textConfig.unified,
-                        agents: { ...textConfig.unified.agents, title: newValue }
-                      }
-                    })}
-                    className="font-bold"
-                  />
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  <EditableText
-                    value={textConfig.unified.agents.description}
-                    onChange={(newValue) => updateTextConfig({
-                      unified: {
-                        ...textConfig.unified,
-                        agents: { ...textConfig.unified.agents, description: newValue }
-                      }
-                    })}
-                    className="text-sm text-muted-foreground"
-                    isDescription={true}
-                  />
-                </p>
-              </div>
-            </TabsContent>
-          </Tabs>
+          <AccessControl
+            value={settings.allApps}
+            onChange={(value) => updateSettings({ allApps: value, allAppsGroups: value !== 'specific-groups' ? [] : settings.allAppsGroups })}
+            groups={settings.allAppsGroups}
+            onAddGroup={(group) => updateSettings({ allAppsGroups: [...settings.allAppsGroups, group] })}
+            onRemoveGroup={(index) => updateSettings({ allAppsGroups: settings.allAppsGroups.filter((_, i) => i !== index) })}
+            prefix="unified-apps"
+            labels={textConfig.unified.apps.labels}
+            descriptions={textConfig.unified.apps.descriptions}
+            onUpdateLabels={(labels) => updateTextConfig({
+              unified: {
+                ...textConfig.unified,
+                apps: { ...textConfig.unified.apps, labels }
+              }
+            })}
+            onUpdateDescriptions={(descriptions) => updateTextConfig({
+              unified: {
+                ...textConfig.unified,
+                apps: { ...textConfig.unified.apps, descriptions }
+              }
+            })}
+          />
         </div>
         <div className="border-t pt-4 flex justify-end gap-2">
           <Button 
