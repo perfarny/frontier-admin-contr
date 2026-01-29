@@ -266,21 +266,21 @@ function EditableText({ value, onChange, className = '', isDescription = false }
 // Default settings for different versions
 const getDefaultSettings = (version: VersionType): Settings => {
   switch (version) {
-    case 'unified': // A. No Toggle
+    case 'unified': // C. No Toggle
       return {
-        // Version A uses allApps for its unified Apps setting
+        // Version C uses allApps for its unified Apps setting - always default to 'no-access'
         allApps: 'no-access',
         allAppsGroups: [],
-        // Version B settings (not used in Version A)
+        // Version B settings (not used in Version C)
         webApps: 'no-access',
         webGroups: [],
         officeWin32: 'no-access',
         officeGroups: [],
-        // Version C settings (not used in Version A)
+        // Version C settings (not used in Version C)
         enablePerDeviceAccess: false,
         perDeviceAccessType: 'all-users',
         perDeviceGroups: [],
-        // Version C v1 settings (not used in Version A)
+        // Version C v1 settings (not used in Version C)
         officeAppsAccess: 'no-access',
         officeAppsGroups: []
       }
@@ -354,12 +354,14 @@ interface GroupManagerProps {
 
 function GroupManager({ groups, onAddGroup, onRemoveGroup, placeholder = "Enter group name", inputId }: GroupManagerProps) {
   const [inputValue, setInputValue] = useState('')
+  const [hasTyped, setHasTyped] = useState(false)
 
   const handleAdd = () => {
     const trimmed = inputValue.trim()
     if (trimmed && !groups.includes(trimmed)) {
       onAddGroup(trimmed)
       setInputValue('')
+      setHasTyped(false)
     }
   }
 
@@ -370,14 +372,21 @@ function GroupManager({ groups, onAddGroup, onRemoveGroup, placeholder = "Enter 
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value)
+    if (!hasTyped && e.target.value.length > 0) {
+      setHasTyped(true)
+    }
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex gap-2">
         <Input
           id={inputId}
-          placeholder={placeholder}
+          placeholder={hasTyped ? "" : placeholder}
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleChange}
           onKeyDown={handleKeyDown}
           className="flex-1"
         />
@@ -418,6 +427,7 @@ interface AccessControlProps {
   descriptions: RadioButtonDescriptions
   onUpdateLabels: (labels: RadioButtonLabels) => void
   onUpdateDescriptions: (descriptions: RadioButtonDescriptions) => void
+  placeholder?: string
 }
 
 function AccessControl({
@@ -430,7 +440,8 @@ function AccessControl({
   labels,
   descriptions,
   onUpdateLabels,
-  onUpdateDescriptions
+  onUpdateDescriptions,
+  placeholder = "Enter group name"
 }: AccessControlProps) {
   return (
     <RadioGroup value={value} onValueChange={(v) => onChange(v as AccessLevel)} className="space-y-3">
@@ -492,6 +503,7 @@ function AccessControl({
             onAddGroup={onAddGroup}
             onRemoveGroup={onRemoveGroup}
             inputId={`${prefix}-group-input`}
+            placeholder={placeholder}
           />
         </div>
       )}
@@ -552,6 +564,7 @@ function UnifiedVersion({
                 apps: { ...textConfig.unified.apps, descriptions }
               }
             })}
+            placeholder="Enter group and / or user names"
           />
         </div>
         <div className="border-t pt-4 mt-6 flex justify-end gap-2">
