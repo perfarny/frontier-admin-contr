@@ -575,14 +575,6 @@ function UnifiedVersion({
         </div>
         <div className="border-t pt-4 mt-6 flex justify-end gap-2">
           <Button 
-            variant="outline" 
-            onClick={resetToDefaults} 
-            className="border-black"
-            disabled={!hasChanges}
-          >
-            Cancel
-          </Button>
-          <Button 
             onClick={onSave}
             variant={hasChanges ? "default" : "outline"}
             className={hasChanges ? "" : "border-black"}
