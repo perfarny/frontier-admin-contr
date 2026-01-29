@@ -1563,6 +1563,19 @@ export default function App() {
     setSettingsUnified(JSON.parse(JSON.stringify(currentSavedSettingsUnified)))
     setTextConfigUnified(JSON.parse(JSON.stringify(currentSavedTextConfigUnified)))
   }
+
+  const publishTextUpdatesUnified = () => {
+    const config = currentSavedTextConfigUnified.unified
+    
+    Object.assign(STATIC_TEXT_CONFIGS.unified.apps.labels, config.apps.labels)
+    Object.assign(STATIC_TEXT_CONFIGS.unified.apps.descriptions, config.apps.descriptions)
+    Object.assign(STATIC_TEXT_CONFIGS.unified.agents, config.agents)
+    
+    setSavedTextConfigUnified(getInitialTextConfig())
+    setTextConfigUnified(getInitialTextConfig())
+    
+    toast.success('Text updates published to static config!')
+  }
   
   // Enhanced version (D) state
   const currentSettingsEnhanced = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...settingsEnhanced }))
@@ -1672,15 +1685,22 @@ export default function App() {
         </div>
       )}
       {selectedVersion === 'unified' && (
-        <UnifiedVersion 
-          settings={currentSettingsUnified} 
-          updateSettings={updateSettingsUnified} 
-          resetToDefaults={resetToDefaultsUnified} 
-          hasChanges={hasChangesUnified} 
-          onSave={handleSaveUnified}
-          textConfig={currentTextConfigUnified}
-          updateTextConfig={updateTextConfigUnified}
-        />
+        <div className="flex flex-col gap-4">
+          <UnifiedVersion 
+            settings={currentSettingsUnified} 
+            updateSettings={updateSettingsUnified} 
+            resetToDefaults={resetToDefaultsUnified} 
+            hasChanges={hasChangesUnified} 
+            onSave={handleSaveUnified}
+            textConfig={currentTextConfigUnified}
+            updateTextConfig={updateTextConfigUnified}
+          />
+          {isDevelopment && (
+            <Button onClick={publishTextUpdatesUnified} variant="secondary" className="w-fit mx-auto">
+              Publish Text Updates to Static Config
+            </Button>
+          )}
+        </div>
       )}
       {selectedVersion === 'enhanced' && (
         <EnhancedVersion 
