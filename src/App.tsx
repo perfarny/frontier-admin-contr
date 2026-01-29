@@ -1570,13 +1570,8 @@ export default function App() {
     Object.assign(STATIC_TEXT_CONFIGS.unified.apps.labels, config.apps.labels)
     Object.assign(STATIC_TEXT_CONFIGS.unified.apps.descriptions, config.apps.descriptions)
     Object.assign(STATIC_TEXT_CONFIGS.unified.agents, config.agents)
-  // Enhanced version (D) state
-  const currentSettingsEnhanced = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...settingsEnhanced }))
-  const currentSavedSettingsEnhanced = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...savedSettingsEnhanced }))
-  const currentTextConfigEnhanced = mergeTextConfig(getInitialTextConfig(), textConfigEnhanced)
-  const currentSavedTextConfigEnhanced = mergeTextConfig(getInitialTextConfig(), savedTextConfigEnhanced)
-  
-  
+  }
+
   // Enhanced version (D) state
   const currentSettingsEnhanced = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...settingsEnhanced }))
   const currentSavedSettingsEnhanced = JSON.parse(JSON.stringify({ ...getDefaultSettings('enhanced'), ...savedSettingsEnhanced }))
