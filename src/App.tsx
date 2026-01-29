@@ -1570,6 +1570,8 @@ export default function App() {
     Object.assign(STATIC_TEXT_CONFIGS.unified.apps.labels, config.apps.labels)
     Object.assign(STATIC_TEXT_CONFIGS.unified.apps.descriptions, config.apps.descriptions)
     Object.assign(STATIC_TEXT_CONFIGS.unified.agents, config.agents)
+    
+    toast.success('Text updates published to static config')
   }
 
   // Enhanced version (D) state
