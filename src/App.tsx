@@ -528,7 +528,7 @@ function UnifiedVersion({
       <CardContent className="flex flex-col">
         <div className="flex flex-col space-y-4">
           <div>
-            <p className="text-sm text-muted-foreground mb-3">Select which users automatically get Frontier features.</p>
+            <p className="text-sm text-muted-foreground mb-3">Select which users automatically get Frontier features and agents in their applications. A M365 Copilot license is required to experience Frontier features and agents. </p>
           </div>
 
           <AccessControl
