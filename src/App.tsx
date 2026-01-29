@@ -1693,9 +1693,7 @@ export default function App() {
             updateTextConfig={updateTextConfigUnified}
           />
           {isDevelopment && (
-            <Button onClick={publishTextUpdatesUnified} variant="secondary" className="w-fit mx-auto">
-              Publish Text Updates to Static Config
-            </Button>
+            <Button onClick={publishTextUpdatesUnified} variant="secondary" className="w-fit mx-auto">Publish Text Updates to Static Config</Button>
           )}
         </div>
       )}
