@@ -534,7 +534,7 @@ function UnifiedVersion({
       <CardHeader className="space-y-2 pb-4">
         <CardTitle className="text-xl font-semibold">Turn on Frontier features</CardTitle>
         <div className="text-sm text-muted-foreground">
-          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability.</p>
+          <p>The Frontier program gives your organization early, hands-on access to experimental features from Microsoft. All Frontier features and agents are previews and might not be released to general availability. </p>
           <p className="mt-2">
             <a href="https://adoption.microsoft.com/en-us/copilot/frontier-program/" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
               Learn more about Copilot Frontier
