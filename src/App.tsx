@@ -656,7 +656,7 @@ function SeparatedVersion({
                   }
                 })}
               />
-            </TabsContent>
+              <div>
 
             <TabsContent value="web-apps" className="space-y-4 mt-6 flex-1">
               <div>
